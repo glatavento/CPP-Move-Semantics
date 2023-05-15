@@ -72,7 +72,7 @@ auto pi = &std::move(i); // ERROR
 
 除了基本数据类型之外，标记为 \cppinline{std::move()} 的对象仍应该像lvalue一样，允许修改它的值。另一方面，也存在一些限制，比如不能获取该地址。
 
-因此，引入了一个新的类别xvalue(“eXpire value”)来为显式标记的对象指定规则，因为这里不再需要这个值（主要是用 \cppinline{std::move()} 标记的对象）。大多数C++11前的rvalue的规则也适用于xvalue。因此，以前的rvalue变成了一个复合值类别，现在表示新的主值类别prvalue（对于以前的所有rvalue）和xvalue。关于提出这些改变的论文，请参阅http://wg21.link/n3055。
+因此，引入了一个新的类别xvalue(“eXpire value”)来为显式标记的对象指定规则，因为这里不再需要这个值（主要是用 \cppinline{std::move()} 标记的对象）。大多数C++11前的rvalue的规则也适用于xvalue。因此，以前的rvalue变成了一个复合值类别，现在表示新的主值类别prvalue（对于以前的所有rvalue）和xvalue。关于提出这些改变的论文，请参阅\url{http://wg21.link/n3055}。
 
 \subsection{C++11的值类别}
 
