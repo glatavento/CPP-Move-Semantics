@@ -3,7 +3,7 @@
 
 \subsection{C++03的示例（使用移动语义之前）}
 
-假设我们有以下代码:
+假设我们有以下代码：
 
 \filename{basics/motiv03.cpp}
 \begin{cppcode}
@@ -44,37 +44,37 @@ std::vector<std::string> v;
 \begin{cppcode}
 v = createAndInsert();
 \end{cppcode}
-	在堆栈上创建另一个vector \cppinline{coll}，并在堆上为三个元素预留内存:
+	在堆栈上创建另一个vector \cppinline{coll}，并在堆上为三个元素预留内存：
 \begin{cppcode}
 std::vector<std::string> coll;
 coll.reserve(3);
 \end{cppcode}
 	因为分配的内存没有初始化，所以元素的数量仍然是0。
-	\item 然后，用“data”初始化字符串:
+	\item 然后，用“data”初始化字符串：
 \begin{cppcode}
 std::string s = "data";
 \end{cppcode}
 	字符串类似于具有\cppinline{char}元素的vector。其实是在堆栈上创建一个对象，其中一个成员表示字符的数量（值为4），另一个指针表示字符的内存。
 
-	之后，程序的状态如下:堆栈上有三个对象:\cppinline{v}、\cppinline{coll}和\cppinline{s}。其中\cppinline{coll}和\cppinline{s}已经在堆上分配了内存:
+	之后，程序的状态如下：堆栈上有三个对象：\cppinline{v}、\cppinline{coll}和\cppinline{s}。其中\cppinline{coll}和\cppinline{s}已经在堆上分配了内存：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/1}
 	\end{center}
-	\item 下一步是将字符串放到\cppinline{coll}中:
+	\item 下一步是将字符串放到\cppinline{coll}中：
 \begin{cppcode}
 coll.push_back(s);
 \end{cppcode}
-	C++标准库中的所有容器都具有语义，能创建副本。所以，vector有了第一个元素，它是\cppinline{s}的副本:
+	C++标准库中的所有容器都具有语义，能创建副本。所以，vector有了第一个元素，它是\cppinline{s}的副本：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/2}
 	\end{center}
 	目前为止，我们还没有对这个程序进行优化。现在，我们有两个vector，\cppinline{v}和\cppinline{coll}，以及两个字符串，\cppinline{s}和它的副本，这也是\cppinline{coll}的第一个元素。它们都是独立的对象，有自己的内存。
 
-	\item 现在让我们看看下一句，创建了一个新的临时字符串，并再次将其插入vector中:
+	\item 现在让我们看看下一句，创建了一个新的临时字符串，并再次将其插入vector中：
 \begin{cppcode}
 coll.push_back(s+s);
 \end{cppcode}
-	该语句分三个步骤执行:
+	该语句分三个步骤执行：
 
 	\begin{enumerate}
 		\item 创建临时字符串s+s:
@@ -82,19 +82,19 @@ coll.push_back(s+s);
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{part1/ch1/images/3}
 		\end{center}
-		\item 将这个临时字符串插入到\cppinline{coll}中。容器创建副本，创建临时字符串的深层副本，包括分配内存:
+		\item 将这个临时字符串插入到\cppinline{coll}中。容器创建副本，创建临时字符串的深层副本，包括分配内存：
 
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{part1/ch1/images/4}
 		\end{center}
-		\item 末尾，临时字符串\cppinline{s+s}销毁:
+		\item 末尾，临时字符串\cppinline{s+s}销毁：
 
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{part1/ch1/images/5}
 		\end{center}
 		这是我们第一次生成代码执行不大合适的地方：创建临时字符串的副本后销毁临时字符串。其实，可以不必分配和释放内存，直接使用原始的临时字符串对象。
 	\end{enumerate}
-	\item 下一行中，我们再将\cppinline{s}插入\cppinline{coll}中:
+	\item 下一行中，我们再将\cppinline{s}插入\cppinline{coll}中：
 \begin{cppcode}
 coll.push_back(s);
 \end{cppcode}
@@ -115,7 +115,7 @@ coll.push_back(s);
 
 	可以使用这种优化，不过这可能会改变程序的行为。如果在vector或string对象的复制构造函数中有print语句，则会不看print语句的再次输出，这意味着这种优化改变了程序的功能。然而，这是可以的，因为在C++标准中允许这种优化，即使它有副作用。任何人都不应该知道这里有一个副本，是否执行命名返回值优化仅取决于编译器。
 
-	假设我们进行了命名返回值优化，在\cppinline{return}语句的末尾，\cppinline{coll}现在成为返回值，并调用\cppinline{s}的析构函数，释放声明\cppinline{s}时分配的内存:
+	假设我们进行了命名返回值优化，在\cppinline{return}语句的末尾，\cppinline{coll}现在成为返回值，并调用\cppinline{s}的析构函数，释放声明\cppinline{s}时分配的内存：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/7}
 	\end{center}
@@ -123,18 +123,18 @@ coll.push_back(s);
 \begin{cppcode}
 v = createAndInsert();
 \end{cppcode}
-	这里可以改进的行为:通常的赋值操作符的目标是赋予\cppinline{v}与赋值源的值相同的值。一般来说，任何值都不应该修改，并且应该独立于赋值的对象。因此，赋值操作符将创建了一个返回值的副本:
+	这里可以改进的行为：通常的赋值操作符的目标是赋予\cppinline{v}与赋值源的值相同的值。一般来说，任何值都不应该修改，并且应该独立于赋值的对象。因此，赋值操作符将创建了一个返回值的副本：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/8}
 	\end{center}
-	之后，就不再需要临时返回值了，可以销毁:
+	之后，就不再需要临时返回值了，可以销毁：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/9}
 	\end{center}
 	我们创建了一个临时对象的副本，然后立即销毁该副本的源，再次分配和释放内存。这次适用于四个分配，一个分配给vector，其余分配给每个string元素。
 \end{itemize}
 
-对于\cppinline{main()}中赋值后的状态，分配了10次内存，释放了6次。不必要的内存分配由以下原因引起:
+对于\cppinline{main()}中赋值后的状态，分配了10次内存，释放了6次。不必要的内存分配由以下原因引起：
 
 \begin{itemize}
 	\item 将临时对象插入容器
@@ -142,10 +142,10 @@ v = createAndInsert();
 	\item 将一个临时vector的值赋于其他对象
 \end{itemize}
 
-我们可以或多或少地避免这些性能损失。我们可以这样做:
+我们可以或多或少地避免这些性能损失。我们可以这样做：
 
 \begin{itemize}
-	\item 将vector作为out参数传递:
+	\item 将vector作为out参数传递：
 \begin{cppcode}
 createAndInsert(v); // let the function fill vector v
 \end{cppcode}
@@ -157,11 +157,11 @@ createAndInsert().swap(v);
 
 但是，得到的代码看起来更难看懂（除非您在复杂的代码中看到一些美），而且在插入临时对象时没有真正的解决问题。
 
-自C++11起，我们有了另一个选择:编译并运行支持移动语义的程序。
+自C++11起，我们有了另一个选择：编译并运行支持移动语义的程序。
 
 \subsection{使用C++11的例子（使用移动语义）}
 
-现在让我们用一个支持移动语义的现代C++编译器（C++11或更高版本）重新编译这个程序:
+现在让我们用一个支持移动语义的现代C++编译器（C++11或更高版本）重新编译这个程序：
 
 \filename{basics/motiv11.cpp}
 \begin{cppcode}
@@ -190,7 +190,7 @@ int main()
 }
 \end{cppcode}
 
-这里有一个小修改:将最后一个元素插入\cppinline{coll}时，添加了\cppinline{std::move()}的调用，我们将在讨论这个语句时聊聊这个更改。其他都和之前一样。
+这里有一个小修改：将最后一个元素插入\cppinline{coll}时，添加了\cppinline{std::move()}的调用，我们将在讨论这个语句时聊聊这个更改。其他都和之前一样。
 
 让我们再次通过检查堆栈和堆来了解程序的各个步骤。
 
@@ -219,11 +219,11 @@ coll.push_back(s);
 	\end{center}
 	我们有两个vector，\cppinline{v}和\cppinline{coll}，还有两个字符串，\cppinline{s}和它的副本，也就是\cppinline{coll}的第一个元素。它们都是独立的对象，有自己的内存。
 
-	\item 首先，看看创建一个新的临时字符串并将其插入vector中的语句:
+	\item 首先，看看创建一个新的临时字符串并将其插入vector中的语句：
 \begin{cppcode}
 coll.push_back(s+s);
 \end{cppcode}
-	同样，该语句分三个步骤执行:
+	同样，该语句分三个步骤执行：
 
 	\begin{enumerate}
 		\item 创建临时字符串\cppinline{s+s}:
@@ -231,12 +231,12 @@ coll.push_back(s+s);
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{part1/ch1/images/11}
 		\end{center}
-		\item 将这个临时字符串插入到\cppinline{coll}中。然而，这里发生了一些不同的事情:我们从\cppinline{s+s}中窃取了内存，并将其移动到\cppinline{coll}的新元素中。
+		\item 将这个临时字符串插入到\cppinline{coll}中。然而，这里发生了一些不同的事情：我们从\cppinline{s+s}中窃取了内存，并将其移动到\cppinline{coll}的新元素中。
 
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{part1/ch1/images/12}
 		\end{center}
-		自C++11起，我们可以获取不再需要的值。因为编译器知道在执行push_back()调用之后，临时对象\cppinline{s+s}将被销毁。因此，调用的是push_back()的另一个实现，其是对不再需要值的字符串进行复制的优化：我们复制了大小和指向内存的指针，而不是创建拷贝。然而，这种浅复制是不够的;还修改了临时对象\cppinline{s+s}，将其大小设置为0，并将nullptr赋值为新值。其实，s+s被修改了，以便呈现空字符串的状态。重要的是，它不再拥有自己的内存。
+		自C++11起，我们可以获取不再需要的值。因为编译器知道在执行push_back()调用之后，临时对象\cppinline{s+s}将被销毁。因此，调用的是push_back()的另一个实现，其是对不再需要值的字符串进行复制的优化：我们复制了大小和指向内存的指针，而不是创建拷贝。然而，这种浅复制是不够的；还修改了临时对象\cppinline{s+s}，将其大小设置为0，并将nullptr赋值为新值。其实，s+s被修改了，以便呈现空字符串的状态。重要的是，它不再拥有自己的内存。
 		\item 语句的结尾，临时字符串\cppinline{s+s}被销毁。但由于临时字符串不再是初始内存的所有者，析构函数不会释放该内存。
 
 		\begin{center}
@@ -247,19 +247,19 @@ coll.push_back(s+s);
 		这一切都是通过编译器自动完成的，编译器可以对即将死亡的对象发出信号，可以使用新实现来复制一个从源端窃取值的字符串值。这不是一个技巧，这是一种语义上的移动，通过从底层技术上将值的内存从源字符串移动到它的副本来实现。
 
 	\end{enumerate}
-	\item 下一条语句是我们为C++11版本修改的语句。将\cppinline{s}插入到\cppinline{coll}中，但是通过对要插入的字符串\cppinline{s}调用\cppinline{std::move()}，语句发生了改变:
+	\item 下一条语句是我们为C++11版本修改的语句。将\cppinline{s}插入到\cppinline{coll}中，但是通过对要插入的字符串\cppinline{s}调用\cppinline{std::move()}，语句发生了改变：
 \begin{cppcode}
 coll.push_back(std::move(s));
 \end{cppcode}
-	如果没有\cppinline{std::move()}，就会像第一次调用\cppinline{push_back()}一样：vector会创建传递的字符串\cppinline{s}的副本。这次，我们用\cppinline{std::move()}标记了\cppinline{s}，这在意味着“这里不再需要这个值”。因此，这里会使用另一个\cppinline{push_back()}实现，会在传递临时对象\cppinline{s+s}时使用。第三个元素通过将这个值的内存所有权，从\cppinline{s}转移到副本中，从而来窃取这个值:
+	如果没有\cppinline{std::move()}，就会像第一次调用\cppinline{push_back()}一样：vector会创建传递的字符串\cppinline{s}的副本。这次，我们用\cppinline{std::move()}标记了\cppinline{s}，这在意味着“这里不再需要这个值”。因此，这里会使用另一个\cppinline{push_back()}实现，会在传递临时对象\cppinline{s+s}时使用。第三个元素通过将这个值的内存所有权，从\cppinline{s}转移到副本中，从而来窃取这个值：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/14}
 	\end{center}
-	关于移动语义，请注意以下两点:
+	关于移动语义，请注意以下两点：
 
 	\begin{itemize}
 		\item[-] \cppinline{std::move(s)}在这里只表示\cppinline{s}是可移动的，只表示不再需要这个值，允许实现通过在复制值时进行一些优化（比如偷取内存）从而获益。调用者并不知道值是否进行了移动。
-		\item[-] 然而，窃取值的优化必须确保源对象仍然处于有效状态。被移动的对象既不会部分销毁，也不会完全销毁。C++标准库为它的类型进行了规定:标记为\cppinline{std::move()}的对象执行操作后，该对象处于有效，但未定义的状态。
+		\item[-] 然而，窃取值的优化必须确保源对象仍然处于有效状态。被移动的对象既不会部分销毁，也不会完全销毁。C++标准库为它的类型进行了规定：标记为\cppinline{std::move()}的对象执行操作后，该对象处于有效，但未定义的状态。
 
 		以上，就是在这条语句执行完成后会发生的事
 \begin{cppcode}
@@ -270,7 +270,7 @@ coll.push_back(std::move(s));
 		注意，它也不能保证字符串要么有旧值，要么为空，由运行时库实现者决定。通常，实现者可以对\cppinline{std::move()}操作的对象做任何事，只要保持对象的有效状态。保证的理由，稍后讨论。
 	\end{itemize}
 
-	\item \cppinline{createAndInsert()}最后的return语句为:
+	\item \cppinline{createAndInsert()}最后的return语句为：
 
 	\begin{cppcode}
 	return coll;
@@ -278,7 +278,7 @@ coll.push_back(std::move(s));
 	\end{cppcode}
 	是否生成具有指定返回值优化的代码取决于编译器，\cppinline{coll}只是成为了返回值。但是，如果不使用这种优化，return语句仍然是从即将失效的源创建对象的情况。如果没有使用指定的返回值优化，仍然会使用移动语义，返回值会从\cppinline{coll}中窃取值。最坏的情况下，必须从源文件复制成员的大小、容量和指向内存的指针（总共12或24个字节）到返回值中，并在源文件中为这些成员赋值。
 
-	我们假设进行了返回值优化。在return语句中，\cppinline{coll}成为返回值，并调用\cppinline{s}的析构函数，不再需要释放任何内存，因为内存移到了\cppinline{coll}的第三个元素中:
+	我们假设进行了返回值优化。在return语句中，\cppinline{coll}成为返回值，并调用\cppinline{s}的析构函数，不再需要释放任何内存，因为内存移到了\cppinline{coll}的第三个元素中：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/15}
 	\end{center}
@@ -286,21 +286,21 @@ coll.push_back(std::move(s));
 \begin{cppcode}
 v = createAndInsert();
 \end{cppcode}
-	同样可以从移动语义中获益:必须从一个即将销毁的临时返回值中复制（这里是赋值）一个值。
+	同样可以从移动语义中获益：必须从一个即将销毁的临时返回值中复制（这里是赋值）一个值。
 
-	现在，移动语义允许从源vector转移值的赋值操作符:
+	现在，移动语义允许从源vector转移值的赋值操作符：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/16}
 	\end{center}
 	同样，临时对象不会（部分地）销毁。它进入了某个状态，但我们不知道它的值。
 
-	但在赋值之后，语句的末尾会销毁（修改过的）临时返回值:
+	但在赋值之后，语句的末尾会销毁（修改过的）临时返回值：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch1/images/17}
 	\end{center}
 \end{itemize}
 
-最后，和之前使用移动语义时一样，但有一些事情发生了改变:节省了6个内存分配和释放。所有不必要的内存分配不再发生:
+最后，和之前使用移动语义时一样，但有一些事情发生了改变：节省了6个内存分配和释放。所有不必要的内存分配不再发生：
 
 \begin{itemize}
 	\item 将临时对象移动插入容器

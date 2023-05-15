@@ -3,7 +3,7 @@
 
 \subsection{声明noexcept的函数的规则}
 
-当声明noexcept条件时，有几个适用的规则:
+当声明noexcept条件时，有几个适用的规则：
 
 \begin{itemize}
 	\item noexcept条件必须是编译时表达式，该表达式的值可转换为bool类型。
@@ -11,7 +11,7 @@
 	\item 在类层次结构中，noexcept条件是接口的一部分。用不是noexcept的函数覆盖不是noexcept的基类函数是错误的。
 \end{itemize}
 
-例如:
+例如：
 
 \begin{cppcode}
 class Base {
@@ -30,7 +30,7 @@ class Derived : public Base {
 };
 \end{cppcode}
 
-但是，对于非虚函数，派生类成员可以使用不同的noexcept声明隐藏基类成员:
+但是，对于非虚函数，派生类成员可以使用不同的noexcept声明隐藏基类成员：
 
 \begin{cppcode}
 class Base {
@@ -46,7 +46,7 @@ class Derived : public Base {
 };
 \end{cppcode}
 
-条件在编译时计算后遵循相同的规则。例如，考虑以下类的层次结构:
+条件在编译时计算后遵循相同的规则。例如，考虑以下类的层次结构：
 
 \begin{cppcode}
 class Base {
@@ -70,7 +70,7 @@ class Derived : public Base {
 
 按照规则，当生成但未实现特殊成员函数时，将生成noexcept条件。这种情况下，如果对所有基类和非静态成员使用相应操作应该保证不抛出异常。
 
-例如:
+例如：
 
 \filename{basics/specialnoexcept.cpp}
 \begin{cppcode}
@@ -93,7 +93,7 @@ int main()
 }
 \end{cppcode}
 
-程序输出如下:
+程序输出如下：
 
 \begin{outputcode}
 true
@@ -105,7 +105,7 @@ true
 
 生成的复制构造函数和复制赋值操作符可能会抛出异常，因为复制std::string可能会抛出异常。但生成的默认构造函数、移动构造函数和移动赋值操作符保证不会抛出异常，因为类std::string的默认构造函数、移动构造函数和移动赋值操作符保证不会抛出异常。
 
-请注意，noexcept条件甚至在这些特殊成员函数使用\cppinline{=default}进行声明时也会生成。因此，如果像下面这样声明B类，效果是一样的:
+请注意，noexcept条件甚至在这些特殊成员函数使用\cppinline{=default}进行声明时也会生成。因此，如果像下面这样声明B类，效果是一样的：
 
 \begin{cppcode}
 class B
@@ -119,7 +119,7 @@ public:
 };
 \end{cppcode}
 
-当有一个默认的特殊成员函数时，可以显式地指定不同于生成的noexcept保证。例如:
+当有一个默认的特殊成员函数时，可以显式地指定不同于生成的noexcept保证。例如：
 
 \begin{cppcode}
 class C
@@ -138,7 +138,7 @@ C++20之前，如果生成的noexcept条件与指定的noexcept条件相矛盾�
 
 按照规则，析构函数总是保证在默认情况下不会抛出异常。这既适用于生成的析构函数，也适用于实现的析构函数。
 
-例如:
+例如：
 
 \begin{cppcode}
 class B

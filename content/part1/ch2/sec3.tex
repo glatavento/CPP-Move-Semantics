@@ -5,7 +5,7 @@
 
 C++标准库保证移动的对象处于有效但未定义的状态。
 
-考虑如下代码:
+考虑如下代码：
 
 \begin{cppcode}
 std::string s;
@@ -13,7 +13,7 @@ std::string s;
 coll.push_back(std::move(s));
 \end{cppcode}
 
-用\cppinline{std::move()}传递\cppinline{s}之后，可以获取字符数量，打印相应的值，甚至赋一个新值。如果不先检查字符数量，就不能打印第一个字符或任何其他字符:
+用\cppinline{std::move()}传递\cppinline{s}之后，可以获取字符数量，打印相应的值，甚至赋一个新值。如果不先检查字符数量，就不能打印第一个字符或任何其他字符：
 
 \begin{cppcode}
 foo(std::move(s)); // keeps s in a valid but unclear state
@@ -25,7 +25,7 @@ std::cout << s.front() << '\n'; // ERROR (potentially undefined behavior)
 s = "new value"; // OK
 \end{cppcode}
 
-尽管不知道具体的值，但该字符串处于一致状态。例如，\cppinline{s.size()}将返回字符数，可以遍历所有有效的索引:
+尽管不知道具体的值，但该字符串处于一致状态。例如，\cppinline{s.size()}将返回字符数，可以遍历所有有效的索引：
 
 \begin{cppcode}
 foo(std::move(s)); // keeps s in a valid but unclear state
@@ -41,7 +41,7 @@ for (int i = 0; i < s.size(); ++i) {
 
 您可能想知道为什么已移动的对象仍然是有效的对象，并且没有（部分）销毁。原因是使用了移动语义，在这些应用中再次使用已移动的对象是有意义的。
 
-例如，考虑从流中逐行读取字符串并将其移动到vector对象中的代码:
+例如，考虑从流中逐行读取字符串并将其移动到vector对象中的代码：
 
 \begin{cppcode}
 std::vector<std::string> allRows;
@@ -53,7 +53,7 @@ while (std::getline(myStream, row)) { // read next line into row
 
 每次将一行读入行后，使用\cppinline{std::move()}将\cppinline{row}的值移动到所有行的向量中。然后，s\cppinline{td::getline()}再次使用已移动的对象行来读入下一行。
 
-第二个例子，考虑一个交换两个值的泛型函数:
+第二个例子，考虑一个交换两个值的泛型函数：
 
 \begin{cppcode}
 template<typename T>
@@ -75,7 +75,7 @@ void swap(T& a, T& b)
 
 已移动的对象处于有效但未定义状态的规则，通常也适用于直接或间接自移动的对象。
 
-例如，下面的语句之后，对象\cppinline{x}通常在不知道其值的情况下是有效的:
+例如，下面的语句之后，对象\cppinline{x}通常在不知道其值的情况下是有效的：
 
 \begin{cppcode}
 x = std::move(x); // afterwards x is valid but has an unclear value

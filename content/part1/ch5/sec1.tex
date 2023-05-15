@@ -1,5 +1,5 @@
 \section{getter的返回类型}
-在C++11之前，当为复制开销很大的成员实现getter时，有以下几种选择:
+在C++11之前，当为复制开销很大的成员实现getter时，有以下几种选择：
 
 \begin{itemize}
 	\item 返回值
@@ -10,7 +10,7 @@
 
 \subsection{传值返回}
 
-按值返回的getter看起来是这样的（记住:不要使用\cppinline{const}按值返回，否则禁用移动语义）:
+按值返回的getter看起来是这样的（记住：不要使用\cppinline{const}按值返回，否则禁用移动语义）:
 
 \begin{cppcode}
 class Person
@@ -27,7 +27,7 @@ public:
 
 这段代码是安全的，但每次获取\cppinline{name}时，都可能复制\cppinline{name}。
 
-例如，只是检查是否有没名字的人会有很大的开销:
+例如，只是检查是否有没名字的人会有很大的开销：
 
 \begin{cppcode}
 std::vector<Person> coll;
@@ -43,7 +43,7 @@ for (const auto& person : coll) {
 
 \subsection{引用返回}
 
-通过引用返回的getter看起来像这样:
+通过引用返回的getter看起来像这样：
 
 \begin{cppcode}
 class Person
@@ -60,7 +60,7 @@ public:
 
 这样更快，但不安全，因为调用者必须确保返回引用的对象生命周期足够长。实际上，使用返回引用值比原始对象的时间长的话，会有生命周期上的风险。
 
-会踩入这种陷阱的一种方式是使用基于范围的for循环，如下所示:
+会踩入这种陷阱的一种方式是使用基于范围的for循环，如下所示：
 
 \begin{cppcode}
 for (char c : returnPersonByValue().getName()) { // OOPS: undefined behavior
@@ -70,7 +70,7 @@ for (char c : returnPersonByValue().getName()) { // OOPS: undefined behavior
 }
 \end{cppcode}
 
-注意，循环的右边有一个函数，它返回一个我们用getter引用的临时对象。但是，定义了基于范围的for循环，使上面的代码等价于以下代码:
+注意，循环的右边有一个函数，它返回一个我们用getter引用的临时对象。但是，定义了基于范围的for循环，使上面的代码等价于以下代码：
 
 \begin{cppcode}
 reference range = returnPersonByValue().getName();
@@ -93,7 +93,7 @@ for (auto pos = range.begin(), end = range.end(); pos != end; ++pos) {
 
 通过移动语义，就可以解决这个困境的方法。如果这样做安全，可以通过引用返回。如果遇到生命周期的问题，可以通过值返回。
 
-方法如下:
+方法如下：
 
 \begin{cppcode}
 class Person
@@ -111,14 +111,14 @@ public:
 };
 \end{cppcode}
 
-用不同的引用限定符重载getter，方法与重载带有\&\&和\cppinline{const}\&形参的函数相同:
+用不同的引用限定符重载getter，方法与重载带有\&\&和\cppinline{const}\&形参的函数相同：
 
 \begin{itemize}
 	\item 带有\&\&限定符的是有不再需要值的对象时使用（一个即将死亡的对象或用\cppinline{std::move()}标记的对象）。
 	\item 带有\cppinline{const}\&限定符的版本用于所有其他情况。总是合适的，但只是无法获得\&\&版本时的备选方案。因此，如果有一个不会销毁的对象或没标记为\cppinline{std::move()}，就会使用此函数。
 \end{itemize}
 
-现在的性能和安全性都很好:
+现在的性能和安全性都很好：
 
 \begin{cppcode}
 Person p{"Ben"};
@@ -146,7 +146,7 @@ for (char c : returnPersonByValue().getName()) { // 4) safe and fast (uses move(
 
 \subsubsection{\cppinline{std::move()}用于成员函数中}
 
-请注意，这个特性意味着即使在调用成员函数时也可以使用\cppinline{std::move()}。例如:
+请注意，这个特性意味着即使在调用成员函数时也可以使用\cppinline{std::move()}。例如：
 
 \begin{cppcode}
 void foo()

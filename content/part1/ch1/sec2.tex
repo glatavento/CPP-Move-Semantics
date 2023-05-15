@@ -14,9 +14,9 @@ class vector {
 };
 \end{cppcode}
 
-传递参数给\cppinline{push_back()}的方法只有一种:将其绑定到\cppinline{const}引用上。\cppinline{push_back()}的实现方式是在不修改参数的情况下，创建参数的副本。
+传递参数给\cppinline{push_back()}的方法只有一种：将其绑定到\cppinline{const}引用上。\cppinline{push_back()}的实现方式是在不修改参数的情况下，创建参数的副本。
 
-C++11开始，\cppinline{push_back()}有了重载:
+C++11开始，\cppinline{push_back()}有了重载：
 
 \begin{cppcode}
 template<typename T>
@@ -31,7 +31,7 @@ class vector {
 };
 \end{cppcode}
 
-第二个\cppinline{push_back()}使用了为移动语义引入的新语法。使用两个\&声明实参，不使用\cppinline{const}，这样的参数称为 \zhemph{右值引用}。只有一个\&的“普通引用”现在称为\zhemph{左值引用}。在这两个调用中，都传递了通过引用插入的值。但是，区别如下:
+第二个\cppinline{push_back()}使用了为移动语义引入的新语法。使用两个\&声明实参，不使用\cppinline{const}，这样的参数称为 \zhemph{右值引用}。只有一个\&的“普通引用”现在称为\zhemph{左值引用}。在这两个调用中，都传递了通过引用插入的值。但是，区别如下：
 
 \begin{itemize}
 	\item 使用\cppinline{push_back(const T\&)}，可以保证不修改传递的值。
@@ -48,7 +48,7 @@ class vector {
 
 \subsection{使用复制构造函数}
 
-用于传统复制语义的\cppinline{push_back(const T\&)}调用string类的复制构造函数，该构造函数初始化vector中的新元素。一个非常简单的string类实现的复制构造函数，看起来是这样的:
+用于传统复制语义的\cppinline{push_back(const T\&)}调用string类的复制构造函数，该构造函数初始化vector中的新元素。一个非常简单的string类实现的复制构造函数，看起来是这样的：
 
 \begin{cppcode}
 class string {
@@ -68,20 +68,20 @@ class string {
 };
 \end{cppcode}
 
-假设我们对值为"data"的字符串使用这个复制构造函数:
+假设我们对值为"data"的字符串使用这个复制构造函数：
 
 \begin{cppcode}
 std::string a = "data";
 std::string b = a; // create b as a copy of a
 \end{cppcode}
 
-初始化字符串a后，如下所示:
+初始化字符串a后，如下所示：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/18}
 \end{center}
 
-上面的复制构造函数将复制成员len以获取字符数，为数据指针分配新的内存，并将源a（作为s传递）中的所有字符复制到新字符串:
+上面的复制构造函数将复制成员len以获取字符数，为数据指针分配新的内存，并将源a（作为s传递）中的所有字符复制到新字符串：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/19}
@@ -89,7 +89,7 @@ std::string b = a; // create b as a copy of a
 
 \subsection{使用移动构造函数}
 
-对于移动语义，\cppinline{push_back(T\&\&)}调用相应的构造函数，即\zhemph{移动构造函数}。从现有字符串创建新字符串的构造函数，和移动语义一样，构造函数使用非\cppinline{const}右值引用(\cppinline{\&\&})作为形参:
+对于移动语义，\cppinline{push_back(T\&\&)}调用相应的构造函数，即\zhemph{移动构造函数}。从现有字符串创建新字符串的构造函数，和移动语义一样，构造函数使用非\cppinline{const}右值引用(\cppinline{\&\&})作为形参：
 
 \begin{cppcode}
 class string {
@@ -108,13 +108,13 @@ class string {
 };
 \end{cppcode}
 
-给定上述拷贝构造函数的情况:
+给定上述拷贝构造函数的情况：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/20}
 \end{center}
 
-我们可以这样调用string对象的构造函数:
+我们可以这样调用string对象的构造函数：
 
 \begin{cppcode}
 std::string c = std::move(b); // init c with the value of b (no longer needing its value here)
@@ -126,7 +126,7 @@ std::string c = std::move(b); // init c with the value of b (no longer needing i
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/21}
 \end{center}
 
-这是不够的，因为\cppinline{b}的析构函数将释放内存。因此，我们还可以修改源字符串，使其失去内存的所有权，并使其表示空字符串:
+这是不够的，因为\cppinline{b}的析构函数将释放内存。因此，我们还可以修改源字符串，使其失去内存的所有权，并使其表示空字符串：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/22}

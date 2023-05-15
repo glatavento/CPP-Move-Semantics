@@ -5,7 +5,7 @@
 
 要将带有移动语义的对象转发给函数，不仅需要绑定到rvalue引用，还需要再次使用\cppinline{std::move()}将其移动语义转发给另一个函数。
 
-例如，引用重载函数的规则:
+例如，引用重载函数的规则：
 
 \begin{cppcode}
 class X {
@@ -18,7 +18,7 @@ void foo(X&); // for variable values (out parameters)
 void foo(X&&); // for values that are no longer used (move semantics)
 \end{cppcode}
 
-调用这些函数时，有以下规则:
+调用这些函数时，有以下规则：
 
 \begin{cppcode}
 X v;
@@ -31,7 +31,7 @@ foo(std::move(v)); // calls foo(X&&)
 foo(std::move(c)); // calls foo(const X&)
 \end{cppcode}
 
-假设通过协助函数\cppinline{callFoo()}间接地调用相同的参数\cppinline{foo()}。函数还需要三个重载:
+假设通过协助函数\cppinline{callFoo()}间接地调用相同的参数\cppinline{foo()}。函数还需要三个重载：
 
 \begin{cppcode}
 void callFoo(const X& arg) { // arg binds to all const objects
@@ -45,14 +45,14 @@ void callFoo(X&& arg) { // arg binds to rvalues
 }
 \end{cppcode}
 
-这里，\cppinline{arg}都用作lvalue（具有名称的对象）。第一个版本将其作为\cppinline{const}对象转发，但其他两种情况实现了转发非\cppinline{const}参数的两种不同方式:
+这里，\cppinline{arg}都用作lvalue（具有名称的对象）。第一个版本将其作为\cppinline{const}对象转发，但其他两种情况实现了转发非\cppinline{const}参数的两种不同方式：
 
 \begin{itemize}
 	\item 声明为lvalue引用（绑定到没有移动语义的对象）的参数按原样传递。
 	\item 声明为rvalue引用（绑定到具有移动语义的对象）的参数通过\cppinline{std::move()}传递。
 \end{itemize}
 
-这可以完美地转发移动语义:对于任何通过移动语义传递的参数，保持移动语义。当遇到没有移动语义的参数时，不添加移动语义。
+这可以完美地转发移动语义：对于任何通过移动语义传递的参数，保持移动语义。当遇到没有移动语义的参数时，不添加移动语义。
 
 看下\cppinline{callFoo()}如何调用不同的\cppinline{foo()}:
 
@@ -74,7 +74,7 @@ callFoo(std::move(c)); // calls foo(const X&)
 
 \subsubsection{完美转发\cppinline{const} rvalue引用}
 
-虽然\cppinline{const} rvalue引用没有语义上的含义，但想要用\cppinline{std::move()}标记的常量对象的类型和值，还需要第四个重载:
+虽然\cppinline{const} rvalue引用没有语义上的含义，但想要用\cppinline{std::move()}标记的常量对象的类型和值，还需要第四个重载：
 
 \begin{cppcode}
 void callFoo(const X&& arg) { // arg binds to const rvalues

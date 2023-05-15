@@ -1,5 +1,5 @@
 \section{移动算法}
-C++标准库提供了一些移动元素的算法。这些算法是:
+C++标准库提供了一些移动元素的算法。这些算法是：
 
 \begin{itemize}
 	\item \textbf{std::move()}，将元素移动到另一个范围或在同一范围内向后移动（不要将此算法与\cppinline{std::move()}标记不再需要其值的对象混淆）
@@ -14,7 +14,7 @@ C++标准库提供了一些移动元素的算法。这些算法是:
 
 这些算法的效果是在迭代每个元素时调用\cppinline{std::move(elem)}对目标范围进行移动赋值。
 
-考虑以下例子:
+考虑以下例子：
 
 \filename{lib/movealgo.cpp}
 \begin{cppcode}
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 }
 \end{cppcode}
 
-当调用\cppinline{std::move()}时，将源容器的所有值赋给目标容器:
+当调用\cppinline{std::move()}时，将源容器的所有值赋给目标容器：
 
 \begin{cppcode}
 // move assign the values from coll1 to coll2
@@ -76,7 +76,7 @@ std::move(coll1.begin(), coll1.end(), // source range
 
 与覆盖算法一样，目标容器必须有足够的元素（否则就会有未定义的行为）。元素的数量不会改变（无论是在源范围还是在目标范围）。但是，源范围的元素处于“已移动”状态。因此，这个调用之后，就不知道源范围内字符串的值（除非为已移动对象指定了行为，比如只移动类型）。
 
-当调用\cppinline{std::move_backward()}算法时，将前三个元素赋值到同一个集合的末尾:
+当调用\cppinline{std::move_backward()}算法时，将前三个元素赋值到同一个集合的末尾：
 
 \begin{cppcode}
 // move assign the first three values inside coll2 to the end
@@ -98,7 +98,7 @@ coll1 (5 elems): '?' '?' '?' '?' '?'
 coll2 (5 elems): '?' '?' 'love' 'is' 'all'
 \end{outputcode}
 
-字符串移动后通常是空的，但这不能保证。实践中，我甚至在某个平台上发现了这样的输出:
+字符串移动后通常是空的，但这不能保证。实践中，我甚至在某个平台上发现了这样的输出：
 
 \begin{outputcode}
 coll1 (5 elems): 'love' 'is' 'all' 'you' 'need'
@@ -110,5 +110,5 @@ coll2 (5 elems): 'need' 'you' 'love' 'is' 'all'
 \end{outputcode}
 
 
-所以，与往常一样:使用已移动元素时要谨慎。
+所以，与往常一样：使用已移动元素时要谨慎。
 

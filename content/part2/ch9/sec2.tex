@@ -1,5 +1,5 @@
 \section{实现完美转发}
-为了避免重载具有不同值类型的参数的函数，C++引入了一种机制来实现完美转发。需要三样东西:
+为了避免重载具有不同值类型的参数的函数，C++引入了一种机制来实现完美转发。需要三样东西：
 
 \begin{enumerate}
 	\item 将调用形参作为纯rvalue引用（使用\&\&声明，但不使用\cppinline{const}或\cppinline{volatile}）。
@@ -7,7 +7,7 @@
 	\item 将形参转发给另一个函数时，可以使用\cppinline{std::forward<>()}的辅助函数，该函数在<utility>头文件中声明。
 \end{enumerate}
 
-函数的完美转发参数，如下所示:
+函数的完美转发参数，如下所示：
 
 \begin{cppcode}
 template<typename T>
@@ -16,14 +16,14 @@ void callFoo(T&& arg) {
 }
 \end{cppcode}
 
-\cppinline{std::forward<>()}实际上是一个条件性\cppinline{std::move()}，这样就得到了与上面\cppinline{callFoo()}的三个（或四个）重载等价的行为:
+\cppinline{std::forward<>()}实际上是一个条件性\cppinline{std::move()}，这样就得到了与上面\cppinline{callFoo()}的三个（或四个）重载等价的行为：
 
 \begin{itemize}
 	\item 如果传递rvalue给\cppinline{arg}，就会产生与调用\cppinline{foo(std::move(arg))}相同的效果。
 	\item 如果我们传递一个lvalue给\cppinline{arg}，就会产生与调用\cppinline{foo(arg)}相同的效果。
 \end{itemize}
 
-同样，可以完美传递两个参数:
+同样，可以完美传递两个参数：
 
 \begin{cppcode}
 template<typename T1, typename T2>
@@ -32,7 +32,7 @@ void callFoo(T1&& arg1, T2&& arg2) {
 }
 \end{cppcode}
 
-也可以\cppinline{将std::forward<>()}应用于可变参的实参，完美地将进行转发:
+也可以\cppinline{将std::forward<>()}应用于可变参的实参，完美地将进行转发：
 
 \begin{cppcode}
 template<typename... Ts>
@@ -47,7 +47,7 @@ void callFoo(Ts&&... args) {
 
 \subsection{通用（或转发）引用}
 
-首先，将\cppinline{arg}声明为rvalue引用形参:
+首先，将\cppinline{arg}声明为rvalue引用形参：
 
 \begin{cppcode}
 template<typename T>
@@ -56,11 +56,11 @@ void callFoo(T&& arg); // arg is universal/forwarding reference
 
 这可能会给人一种应该适用rvalue引用的一般规则的感觉。然而，事实并非如此。函数模板形参的rvalue引用（未限定为\cppinline{const}或\cppinline{volatile}），不遵循普通rvalue引用的规则。所以，不是一回事
 
-\subsubsection{两个术语:通用引用和转发引用}
+\subsubsection{两个术语：通用引用和转发引用}
 
-这样的引用称为通用引用。但C++标准中还使用了另一个术语:转发引用。这两个术语没有区别，只是一个历史问题，两个术语的含义是相同的。
+这样的引用称为通用引用。但C++标准中还使用了另一个术语：转发引用。这两个术语没有区别，只是一个历史问题，两个术语的含义是相同的。
 
-这两个术语都描述了通用引用/转发引用的基本面:
+这两个术语都描述了通用引用/转发引用的基本面：
 
 \begin{itemize}
 	\item 可以统一绑定到所有类型的对象（\cppinline{const}和非\cppinline{const}）和值类别。
@@ -69,7 +69,7 @@ void callFoo(T&& arg); // arg is universal/forwarding reference
 
 \subsubsection{通用引用绑定到所有值类别}
 
-通用引用的重要特性是，可以绑定到任何值类别的对象和表达式:
+通用引用的重要特性是，可以绑定到任何值类别的对象和表达式：
 
 \begin{cppcode}
 template<typename T>
@@ -123,7 +123,7 @@ callFoo(std::move(c)); // OK, arg is const X&&
 
 \subsection{\cppinline{std::forward<>()}}
 
-\cppinline{callFoo()}内部，使用如下所示的通用引用:
+\cppinline{callFoo()}内部，使用如下所示的通用引用：
 
 \begin{cppcode}
 template<typename T>
@@ -134,7 +134,7 @@ void callFoo(T&& arg) {
 
 和\cppinline{std::move()}一样，\cppinline{std::forward<>()}也定义在头文件<utility>中。
 
-\cppinline{std::forward<t>(arg)}其实是这样实现的:
+\cppinline{std::forward<t>(arg)}其实是这样实现的：
 
 \begin{itemize}
 	\item 如果传递给函数的是T类型的rvalue，则表达式等价于\cppinline{std::move(arg)}。
@@ -149,7 +149,7 @@ void callFoo(T&& arg) {
 
 注意，可以在调用成员函数时使用\cppinline{std::forward<>()}作为通用引用。记住，成员函数可能使用引用限定符对移动语义有特定的重载。如果不再需要该对象的值，可以使用\cppinline{std::forward<>()}来调用成员函数。
 
-例如，假设重载了getter来提高返回临时人员名称的性能:
+例如，假设重载了getter来提高返回临时人员名称的性能：
 
 \begin{cppcode}
 class Person
@@ -171,7 +171,7 @@ public:
 };
 \end{cppcode}
 
-采用通用引用的函数中，可以使用\cppinline{std::forward<>()}，如下所示:
+采用通用引用的函数中，可以使用\cppinline{std::forward<>()}，如下所示：
 
 \begin{cppcode}
 template<typename T>
@@ -188,7 +188,7 @@ void foo(T&& x)
 
 \subsection{完美转发的效果}
 
-结合声明通用引用的行为和\cppinline{std::forward<>()}的使用，得到了以下行为:
+结合声明通用引用的行为和\cppinline{std::forward<>()}的使用，得到了以下行为：
 
 \begin{cppcode}
 void foo(const X&); // for constant values (read-only access)
@@ -210,7 +210,7 @@ callFoo(std::move(v)); // OK, expands to foo(std::move(arg)), so it calls foo(X&
 callFoo(std::move(c)); // OK, expands to foo(std::move(arg)), so it calls foo(const X&)
 \end{cppcode}
 
-传递给callFoo()的任何参数都会变成lvalue（因为参数\cppinline{arg}是有名称的对象）。然而，\cppinline{arg}的类型取决于传递的内容:
+传递给callFoo()的任何参数都会变成lvalue（因为参数\cppinline{arg}是有名称的对象）。然而，\cppinline{arg}的类型取决于传递的内容：
 
 \begin{itemize}
 	\item 如果传递lvalue，\cppinline{arg}就是一个lvalue引用（传递非\cppinline{const} X时是X\&，传递\cppinline{const} X时是X\&）。

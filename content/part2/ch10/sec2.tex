@@ -1,18 +1,18 @@
-\section{通用或普通rvalue引用?}
+\section{通用或普通rvalue引用？}
 对普通rvalue引用和通用/转发引用使用相同的语法，这为对象是普通rvalue引用还是通用引用带来了一些有趣的情况。
 
 \subsection{泛型类型成员的rvalue引用}
 
 对模板形参的成员类型的rvalue引用不是通用引用。
 
-例如:
+例如：
 
 \begin{cppcode}
 template<typename T>
 void foo(typename T::value_type&& arg); // not a universal reference
 \end{cppcode}
 
-这里有一个完整的例子:
+这里有一个完整的例子：
 
 \filename{generic/universalmem.cpp}
 \begin{cppcode}
@@ -43,7 +43,7 @@ int main()
 
 对类模板的模板形参的rvalue引用不是通用引用。
 
-例如:
+例如：
 
 \begin{cppcode}
 template<typename T>
@@ -54,7 +54,7 @@ class C {
 };
 \end{cppcode}
 
-完整的例子:
+完整的例子：
 
 \filename{generic/universalclass.cpp}
 \begin{cppcode}
@@ -93,7 +93,7 @@ int main()
 
 对函数模板的完全特化的形参的rvalue引用不是通用引用。
 
-例如:
+例如：
 
 \begin{cppcode}
 template<typename T> // primary template
@@ -103,14 +103,14 @@ template<> // full specialization (for rvalues only)
 void foo(std::string&& arg); // - arg is not a universal reference
 \end{cppcode}
 
-对于std::string类型的lvalue，仍然会调用主模板。要特化std::string的主模板的所有情况，必须提供第二个全特化版本:
+对于std::string类型的lvalue，仍然会调用主模板。要特化std::string的主模板的所有情况，必须提供第二个全特化版本：
 
 \begin{cppcode}
 template<> // full specialization (for lvalues)
 void foo(std::string& arg);
 \end{cppcode}
 
-完整的例子:
+完整的例子：
 
 \filename{generic/universalspec.cpp}
 \begin{cppcode}
@@ -154,7 +154,7 @@ int main()
 }
 \end{cppcode}
 
-注意，必须在类定义之外声明/定义成员函数模板的全特化:
+注意，必须在类定义之外声明/定义成员函数模板的全特化：
 
 \begin{cppcode}
 template<typename T>

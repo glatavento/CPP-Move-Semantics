@@ -12,7 +12,7 @@ X v;
 const X c{ ... };
 \end{cppcode}
 
-如果提供函数\cppinline{f()}的所有重载，根据正式规则，就是下面列出所有重载:
+如果提供函数\cppinline{f()}的所有重载，根据正式规则，就是下面列出所有重载：
 
 \begin{cppcode}
 void f(const X&); // read-only access
@@ -34,7 +34,7 @@ void f(T&&); // to use perfect forwarding
 
 \subsection{用通用引用修正重载解析}
 
-重载解析中，通用引用绑定比类型转换更好，这有一个非常糟糕的副作用:如果有一个接受单个通用引用的构造函数，那么这个匹配就要比以下方式更优
+重载解析中，通用引用绑定比类型转换更好，这有一个非常糟糕的副作用：如果有一个接受单个通用引用的构造函数，那么这个匹配就要比以下方式更优
 
 \begin{itemize}
 	\item 如果传递非\cppinline{const}对象，则使用复制构造函数
@@ -43,7 +43,7 @@ void f(T&&); // to use perfect forwarding
 
 因此，实现只有一个通用引用参数的构造函数时，必须谨慎。
 
-思考下面的代码:
+思考下面的代码：
 
 \filename{generic/universalconstructor.cpp}
 \begin{cppcode}
@@ -76,7 +76,7 @@ int main()
 }
 \end{cppcode}
 
-如注释中所示，该程序有以下输出:
+如注释中所示，该程序有以下输出：
 
 \begin{outputcode}
 copy constructor
@@ -87,7 +87,7 @@ universal constructor
 
 因此，最好避免实现将第一个形参声明为通用引用，并为任意类型的实参调用的泛型构造函数。
 
-另一种选择是，传递的是类的类型（或可转换为），则以禁用构造函数的方式约束构造函数。其必须使用在复制或移动构造函数上才有效果。从C++20起，可以写成这样:
+另一种选择是，传递的是类的类型（或可转换为），则以禁用构造函数的方式约束构造函数。其必须使用在复制或移动构造函数上才有效果。从C++20起，可以写成这样：
 
 \begin{cppcode}
 class X {
@@ -101,7 +101,7 @@ class X {
 };
 \end{cppcode}
 
-C++20前，需要这样写:
+C++20前，需要这样写：
 
 \begin{cppcode}
 class X {

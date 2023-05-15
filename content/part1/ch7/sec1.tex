@@ -3,7 +3,7 @@
 
 \subsection{无noexcept的移动构造函数}
 
-下面的类，引入了带有string成员的类型，并实现了复制和移动构造函数:
+下面的类，引入了带有string成员的类型，并实现了复制和移动构造函数：
 
 \filename{basics/person.hpp}
 \begin{cppcode}
@@ -35,7 +35,7 @@ class Person {
 };
 \end{cppcode}
 
-现在创建并初始化一个\cppinline{Person}的vector，并插入一个\cppinline{Person}对象:
+现在创建并初始化一个\cppinline{Person}的vector，并插入一个\cppinline{Person}对象：
 
 \filename{basics/person.cpp}
 \begin{cppcode}
@@ -53,7 +53,7 @@ int main()
 }
 \end{cppcode}
 
-程序输出如下:
+程序输出如下：
 
 \begin{outputcode}
 COPY Wolfgang Amadeus Mozart
@@ -66,34 +66,34 @@ COPY Johann Sebastian Bach
 COPY Ludwig van Beethoven
 \end{outputcode}
 
-首先，将初始值复制到vector中（容器的std::initializer_list<>构造函数按值接受传递的参数）。因此，vector通常为三个元素分配内存:
+首先，将初始值复制到vector中（容器的std::initializer_list<>构造函数按值接受传递的参数）。因此，vector通常为三个元素分配内存：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch7/images/1}
 \end{center}
 
-接下来会发生什么:用push_back()插入第四个元素，结果如下:
+接下来会发生什么：用push_back()插入第四个元素，结果如下：
 
 \begin{itemize}
-	\item vector在内部需要更多内存，所以会分配新的内存（比如，6个元素），移动第4个字符串（创建一个临时的\cppinline{Person}并使用\cppinline{push_back()}方法将其移动到vector中），但也会将现有的元素复制到新内存中:
+	\item vector在内部需要更多内存，所以会分配新的内存（比如，6个元素），移动第4个字符串（创建一个临时的\cppinline{Person}并使用\cppinline{push_back()}方法将其移动到vector中），但也会将现有的元素复制到新内存中：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch7/images/2}
 	\end{center}
-	\item 这个操作结束时，vector销毁旧的元素，释放这些元素的旧内存，并更新成员:
+	\item 这个操作结束时，vector销毁旧的元素，释放这些元素的旧内存，并更新成员：
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch7/images/3}
 	\end{center}
 \end{itemize}
 
-问题是，为什么vector不使用移动构造函数，将元素从旧内存移动到新内存呢?
+问题是，为什么vector不使用移动构造函数，将元素从旧内存移动到新内存呢？
 
 \subsubsection{强异常安全保证}
 
-vector的重新分配不使用移动语义的原因是，\cppinline{push_back()}提供了强异常处理保证:在vector的重新分配过程中抛出异常时，C++标准库保证将vector回退到之前的状态。也就是说，\cppinline{push_back()}提供了一种保证:要么成功，要么无效。
+vector的重新分配不使用移动语义的原因是，\cppinline{push_back()}提供了强异常处理保证：在vector的重新分配过程中抛出异常时，C++标准库保证将vector回退到之前的状态。也就是说，\cppinline{push_back()}提供了一种保证：要么成功，要么无效。
 
-C++标准能够在C++98和C++03中提供这种保证，因为C++只能复制元素。如果在复制元素时出现错误，源对象仍然可用。处理异常的内部代码只需销毁创建的副本，并释放新的内存，使vector返回到之前的状态（C++标准库要求析构函数不抛出异常;否则，无法回退）。
+C++标准能够在C++98和C++03中提供这种保证，因为C++只能复制元素。如果在复制元素时出现错误，源对象仍然可用。处理异常的内部代码只需销毁创建的副本，并释放新的内存，使vector返回到之前的状态（C++标准库要求析构函数不抛出异常；否则，无法回退）。
 
-重新分配是使用移动语义的最优位置，因为只是元素从一个位置移动到另一个位置。因此，C++11希望在这里使用移动语义。但是，如果在重新分配期间抛出异常，就无法回退了。新内存中的元素已经窃取了旧内存中元素的值。因此，只是销毁新的元素还不够，还得把他们移回去。但怎么知道把移回去的时候就不会失败呢?
+重新分配是使用移动语义的最优位置，因为只是元素从一个位置移动到另一个位置。因此，C++11希望在这里使用移动语义。但是，如果在重新分配期间抛出异常，就无法回退了。新内存中的元素已经窃取了旧内存中元素的值。因此，只是销毁新的元素还不够，还得把他们移回去。但怎么知道把移回去的时候就不会失败呢？
 
 你可能会说一个移动构造函数永远不抛出异常。这可能是正确的字符串（因为我们只是移动值和指针），而是需要对象在一个有效的状态，这种状态可能需要额外的内存，所以当额外内存有问题时会丢弃状态信息（例如，基于节点的容器Visual C++实现方式）。
 
@@ -103,7 +103,7 @@ C++标准能够在C++98和C++03中提供这种保证，因为C++只能复制元�
 
 \subsection{使用noexcept的移动构造函数}
 
-因此，保证\cppinline{Person}类的移动构造函数永远不会抛出异常时，示例程序就改变了行为:
+因此，保证\cppinline{Person}类的移动构造函数永远不会抛出异常时，示例程序就改变了行为：
 
 \filename{basics/personmove.hpp}
 \begin{cppcode}
@@ -152,7 +152,7 @@ int main()
 }
 \end{cppcode}
 
-可得到以下输出:
+可得到以下输出：
 
 \begin{outputcode}
 COPY Wolfgang Amadeus Mozart
@@ -171,13 +171,13 @@ MOVE Ludwig van Beethoven
 	\includegraphics[width=0.8\textwidth]{part1/ch7/images/4}
 \end{center}
 
-然而，随着输出的最后三行可视化，vector现在使用移动构造函数将元素移动到新的重新分配的内存中:
+然而，随着输出的最后三行可视化，vector现在使用移动构造函数将元素移动到新的重新分配的内存中：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch7/images/5}
 \end{center}
 
-最后，vector只需要释放旧内存并更新其成员:
+最后，vector只需要释放旧内存并更新其成员：
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch7/images/6}
@@ -204,7 +204,7 @@ class Person {
 		...
 \end{cppcode}
 
-使用noexcept(…)，保证括号内的编译时表达式为真时不会抛出异常。这种情况下，需要两样东西来保证:
+使用noexcept(…)，保证括号内的编译时表达式为真时不会抛出异常。这种情况下，需要两样东西来保证：
 
 \begin{itemize}
 	\item 对于std::is_nothrow_move_constructible_v<std::string>（在C++20之前，必须使用std::is_nothrow_move_constructible<std::string>::value），使用标准类型特征(type)来告诉std::string的移动构造函数是否保证不抛出异常。
@@ -215,7 +215,7 @@ class Person {
 
 好消息是，如果没有自己实现移动构造函数，编译器将为你提供noexcept保证。对于所有成员都保证不抛出移动构造函数的类，生成的或默认的移动构造函数将作为整体提供保证。
 
-考虑下面的声明:
+考虑下面的声明：
 
 \filename{basics/persondefault.hpp}
 \begin{cppcode}
@@ -245,7 +245,7 @@ class Person {
 };
 \end{cppcode}
 
-这种情况下，应该生成默认的移动构造函数:
+这种情况下，应该生成默认的移动构造函数：
 
 \begin{cppcode}
 class Person {
@@ -278,7 +278,7 @@ int main()
 }
 \end{cppcode}
 
-会得到以下输出:
+会得到以下输出：
 
 \begin{outputcode}
 COPY Wolfgang Amadeus Mozart
@@ -290,14 +290,14 @@ name of coll[0]: Wolfgang Amadeus Mozart
 
 只看到初始化器列表中元素的副本。对于其他任何的操作，包括重新分配，都使用默认的移动构造函数。在重新分配的内存中，第一个人名是正确的。
 
-如果不指定任何成员函数，则具有相同的行为:
+如果不指定任何成员函数，则具有相同的行为：
 
 \begin{itemize}
 	\item 如果实现了移动构造函数，应该声明它是否，以及何时保证不会抛出异常。
 	\item 如果不需要实现移动构造函数，根本不需要指定任何东西。
 \end{itemize}
 
-如果类的性能或该类的重新分配对象很重要，开发者可能还想在编译时再次检查类的移动构造函数，是否保证不会抛出异常:
+如果类的性能或该类的重新分配对象很重要，开发者可能还想在编译时再次检查类的移动构造函数，是否保证不会抛出异常：
 
 \begin{cppcode}
 static_assert(std::is_nothrow_move_constructible_v<Person>);

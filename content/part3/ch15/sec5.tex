@@ -1,11 +1,11 @@
 \section{输入输出流的移动语义}
-IOStreams在C++98中引入，作为一种可以读写的抽象（标准I/O，文件，甚至字符串）。这是早期的设定，不可能复制这些对象（复制打开的文件的对象意味着什么，对相同的文件有两个句柄或复制文件，以及如何同步访问?）
+IOStreams在C++98中引入，作为一种可以读写的抽象（标准I/O，文件，甚至字符串）。这是早期的设定，不可能复制这些对象（复制打开的文件的对象意味着什么，对相同的文件有两个句柄或复制文件，以及如何同步访问？）
 
 自从C++11以来，移动语义允许我们移动IOStream对象，并使用临时流。
 
 \subsection{移动IOStream对象}
 
-考虑如下示例:
+考虑如下示例：
 
 \filename{lib/outfile.cpp}
 \begin{cppcode}
@@ -40,7 +40,7 @@ int main()
 }
 \end{cppcode}
 
-这里，函数openToWrite()打开并返回输出文件流:
+这里，函数openToWrite()打开并返回输出文件流：
 
 \begin{cppcode}
 std::ofstream openToWrite(const std::string& name)
@@ -58,7 +58,7 @@ auto outFile{openToWrite("iostream.tmp")}; // open file
 storeData(std::move(outFile)); // store data
 \end{cppcode}
 
-因为\cppinline{storeData()}按值接受参数，所以它有打开文件的所有权。因此，在\cppinline{storeData()}的末尾，文件关闭:
+因为\cppinline{storeData()}按值接受参数，所以它有打开文件的所有权。因此，在\cppinline{storeData()}的末尾，文件关闭：
 
 \begin{cppcode}
 void storeData(std::ofstream fstrm) // takes ownership of file (but this might change)
@@ -67,7 +67,7 @@ void storeData(std::ofstream fstrm) // takes ownership of file (but this might c
 } // closes the file
 \end{cppcode}
 
-但是，\cppinline{storeData()}也可以通过引用来获取参数，这意味着它不一定需要获取所有权。这种情况下，需要再次检查传递参数\cppinline{outFile}的状态:
+但是，\cppinline{storeData()}也可以通过引用来获取参数，这意味着它不一定需要获取所有权。这种情况下，需要再次检查传递参数\cppinline{outFile}的状态：
 
 \begin{cppcode}
 // better ensure that the file is closed:
@@ -80,21 +80,21 @@ if (!outFile.is_closed()) {
 
 \subsection{使用临时IOStreams}
 
-自C++11开始，IOStreams库也提供了函数重载来接受rvalue引用，允许接受临时对象。例如:
+自C++11开始，IOStreams库也提供了函数重载来接受rvalue引用，允许接受临时对象。例如：
 
 \begin{cppcode}
 std::string s = "hello, world";
 std::ofstream("fstream1.tmp") << s << '\n'; // OK since C++11
 \end{cppcode}
 
-甚至可以这样向流中写一个字符串字面值（使用C++11标准之前编译，其使用operator<<(const void*)输出字符串字面值的地址:
+甚至可以这样向流中写一个字符串字面值（使用C++11标准之前编译，其使用operator<<(const void*)输出字符串字面值的地址：
 
 \begin{cppcode}
 std::ofstream("fstream1.tmp") << "hello, world\n"; // correct since C++11
 // (wrote address before)
 \end{cppcode}
 
-同样，可以用临时字符串流来解析给定的字符串:
+同样，可以用临时字符串流来解析给定的字符串：
 
 \begin{cppcode}
 std::string name, firstname, lastname;
@@ -103,7 +103,7 @@ name = "Tina Turner";
 std::istringstream{name} >> firstname >> lastname; // OK since C++11
 \end{cppcode}
 
-最后，可以使用std::getline()来解析临时流的第一行:
+最后，可以使用std::getline()来解析临时流的第一行：
 
 \begin{cppcode}
 std::string multiLineString, firstLine;

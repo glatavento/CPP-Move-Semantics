@@ -11,7 +11,7 @@
 
 如果想避免重载，但又希望对\cppinline{const}和非\cppinline{const}参数有不同的行为，并支持所有值类别，就必须使用通用引用。
 
-考虑以下代码:
+考虑以下代码：
 
 \filename{generic/universalconst.cpp}
 \begin{cppcode}
@@ -47,7 +47,7 @@ int main()
 }
 \end{cppcode}
 
-该程序有以下输出:
+该程序有以下输出：
 
 \begin{outputcode}
 do some non-const stuff with the passed range
@@ -59,7 +59,7 @@ do some const stuff with the passed range
 
 代码中，用一个形参声明\cppinline{process()}作为对集合（容器、字符串等）的通用引用。与通用引用一样，可以传递所有可能值类别的字符串。
 
-\cppinline{process()}内部，可以根据实参是否为\cppinline{const}，有不同的行为。本例中，调用\cppinline{begin()}和\cppinline{end()}来传递传递的集合，将它们作为一个半开范围传递给遍历所有元素的函数:
+\cppinline{process()}内部，可以根据实参是否为\cppinline{const}，有不同的行为。本例中，调用\cppinline{begin()}和\cppinline{end()}来传递传递的集合，将它们作为一个半开范围传递给遍历所有元素的函数：
 
 \begin{cppcode}
 template<typename T>
@@ -69,13 +69,13 @@ void process(T&& coll)
 }
 \end{cppcode}
 
-但这里调用了\cppinline{iterate()}函数的不同实现:一个用于\cppinline{iterator}（能够修改元素），另一个用于\cppinline{const_iterator}（不能修改元素）。通用引用保留了传递的\cppinline{const}对象，所以调用与传递集合匹配的\cppinline{iterate()}。
+但这里调用了\cppinline{iterate()}函数的不同实现：一个用于\cppinline{iterator}（能够修改元素），另一个用于\cppinline{const_iterator}（不能修改元素）。通用引用保留了传递的\cppinline{const}对象，所以调用与传递集合匹配的\cppinline{iterate()}。
 
 注意，\cppinline{process()}内部没有使用（完美）转发。只想通用引用\cppinline{const}和非\cppinline{const}对象，甚至可以遍历所有元素后使用\cppinline{coll}。
 
 您可能会认为，应该知道在迭代元素时是否修改了它们。假设这个泛型函数允许为每个元素调用进行操作，则可以读取或修改元素，因此\cppinline{const}的正确性非常重要。
 
-注意，这里使用\cppinline{std::forward<>()}是有问题的:
+注意，这里使用\cppinline{std::forward<>()}是有问题的：
 
 \begin{cppcode}
 template<typename T>
@@ -87,7 +87,7 @@ void process(T&& coll)
 
 在两个不同的位置，声明不再需要同一对象是一切麻烦的起源，因为两个位置都可能将此解释为从对象中窃取值的原因。因此，窃取\cppinline{last}的位置可能没有获得正确的值。对于同一个对象，永远不要使用\cppinline{std::move()}或\cppinline{std::forward<>()}两次（除非该对象在第二次使用之前重新初始化）。
 
-这里只使用\cppinline{std::forward<>()}一次也是麻烦，因为不保证函数调用参数的求值顺序:
+这里只使用\cppinline{std::forward<>()}一次也是麻烦，因为不保证函数调用参数的求值顺序：
 
 \begin{cppcode}
 template<typename T>
@@ -103,7 +103,7 @@ void process(T&& coll)
 
 前面的示例演示了将参数声明为通用引用比将其完全转发给另一个函数更有用。进一步分析一下。
 
-考虑以下声明:
+考虑以下声明：
 
 \begin{cppcode}
 template<typename T>
@@ -112,7 +112,7 @@ void foo(T&& arg) {
 }
 \end{cppcode}
 
-当声明\cppinline{arg}时，有一个引用，可以统一地绑定到所有类型和值类别。对于非\cppinline{const}对象\cppinline{v}和\cppinline{const}对象\cppinline{c}，类型T和参数类型推导如下:
+当声明\cppinline{arg}时，有一个引用，可以统一地绑定到所有类型和值类别。对于非\cppinline{const}对象\cppinline{v}和\cppinline{const}对象\cppinline{c}，类型T和参数类型推导如下：
 
 \begin{table}[H]
 	\begin{tabular}{lll}
@@ -125,11 +125,11 @@ void foo(T&& arg) {
 	\end{tabular}
 \end{table}
 
-关于传递的参数的信息拆分如下:
+关于传递的参数的信息拆分如下：
 
 \begin{itemize}
-	\item \cppinline{arg}知道值及其类型，包括是否为\cppinline{const}。如果传递了lvalue，则为lvalue引用;如果传递了rvalue，则为rvalue引用。
-	\item \cppinline{T}类型拥有关于传递参数的值类别的一些信息（是传递lvalue还是rvalue）。根据特定模板类型的推导规则，如果传递了一个lvalue，T就是一个lvalue引用;否则，T不是一个引用。
+	\item \cppinline{arg}知道值及其类型，包括是否为\cppinline{const}。如果传递了lvalue，则为lvalue引用；如果传递了rvalue，则为rvalue引用。
+	\item \cppinline{T}类型拥有关于传递参数的值类别的一些信息（是传递lvalue还是rvalue）。根据特定模板类型的推导规则，如果传递了一个lvalue，T就是一个lvalue引用；否则，T不是一个引用。
 \end{itemize}
 
 调用\cppinline{std::forward<t>(arg)}将所有信息再次集合在一起，以恢复常量和值类别，以完美地转发传递的参数及其当前值。但是，如果不需要传递参数的值类别来实现完美转发，则不需要\cppinline{std::forward<>()}。
@@ -162,7 +162,7 @@ std::is_const_v<const int&> // false
 std::is_const_v<std::remove_reference_t<const int&>> // true
 \end{cppcode}
 
-说些大家不知道的:
+说些大家不知道的：
 
 \begin{itemize}
 	\item std::remove_reference_t<T> （自C++14可用）是std::remove_reference<T>::type的缩写。
@@ -171,7 +171,7 @@ std::is_const_v<std::remove_reference_t<const int&>> // true
 
 \subsubsection{依赖值类别的代码}
 
-通过使用T，可以获得/检查关于传递的值类别的信息（至少是传递了lvalue还是rvalue）。例如:
+通过使用T，可以获得/检查关于传递的值类别的信息（至少是传递了lvalue还是rvalue）。例如：
 
 \begin{cppcode}
 template<typename T>
@@ -192,7 +192,7 @@ void foo(T&& arg)
 
 普通rvalue引用和通用引用共享相同的语法，这会导致了多个问题。不仅不能确定有什么，还不能声明特定类型的通用引用。
 
-例如，声明为使用通用引用的函数:
+例如，声明为使用通用引用的函数：
 
 \begin{cppcode}
 template<typename T>
@@ -203,7 +203,7 @@ void processString(T&& arg);
 
 希望将该函数限制为只接受字符串（\cppinline{const}和非\cppinline{const}都可以，且不丢失信息），但并非轻易就能做到。
 
-因为C++20，用关键字\cppinline{require}来约束对特定类型的通用引用成为可能。但是，必须确定是否支持，以及支持哪种类型的类型转换:
+因为C++20，用关键字\cppinline{require}来约束对特定类型的通用引用成为可能。但是，必须确定是否支持，以及支持哪种类型的类型转换：
 
 \begin{itemize}
 	\item 当类型必须匹配时（不允许隐式转换）:
@@ -215,7 +215,7 @@ void processString(T&&) {
 	...
 }
 	\end{cppcode}
-	\item 允许隐式转换:
+	\item 允许隐式转换：
 
 	\begin{cppcode}
 template<typename T>
@@ -224,7 +224,7 @@ void processString(T&&) {
 	...
 }
 \end{cppcode}
-	\item 允许显式转换:
+	\item 允许显式转换：
 	\begin{cppcode}
 template<typename T>
 requires std::is_constructible_v<std::string, T>
@@ -238,7 +238,7 @@ void processString(T&&) {
 
 请参考generic/universaltype.cpp以获得所有情况的完整示例。
 
-C++20之前，需要enable_if<>类型特征，而不是require，并且不支持类型特征带有_v和_t后缀的缩写形式。例如，以下代码支持（自C++11起）隐式转换为std::string的所有类型:
+C++20之前，需要enable_if<>类型特征，而不是require，并且不支持类型特征带有_v和_t后缀的缩写形式。例如，以下代码支持（自C++11起）隐式转换为std::string的所有类型：
 
 \begin{cppcode}
 template<typename T,
@@ -249,7 +249,7 @@ std::is_convertible<T, std::string>::value
 void processString(T&& args);
 \end{cppcode}
 
-要在C++11中限制为std::string类型，我们需要:
+要在C++11中限制为std::string类型，我们需要：
 
 \begin{cppcode}
 template<typename T,
@@ -264,7 +264,7 @@ void processString(T&& arg);
 
 这里，类型trait std::decay<>用于从类型T中移除引用和一致性（类型trait std::remove_cvref<>在C++20后可用）。
 
-以类似的方式，可以约束泛型代码，让通用引用只绑定到rvalue。但是，如果有通用引用的特定语法，那么这些都不需要。例如:
+以类似的方式，可以约束泛型代码，让通用引用只绑定到rvalue。但是，如果有通用引用的特定语法，那么这些都不需要。例如：
 
 \begin{cppcode}
 void processString(std::string&&& arg); // assume &&& declares a universal reference

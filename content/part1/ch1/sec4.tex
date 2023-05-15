@@ -1,7 +1,7 @@
 \section{\cppinline{const}对象的移动语义}
 最后，不能移动用\cppinline{const}声明的对象。因为任何优化实现都要求可以修改传递的实参，如果不允许修改，就不能窃取。
 
-使用\cppinline{push_back()}的重载:
+使用\cppinline{push_back()}的重载：
 
 \begin{cppcode}
 template<typename T>
@@ -16,7 +16,7 @@ class vector {
 };
 \end{cppcode}
 
-对\cppinline{const}对象使用的函数是具有\cppinline{const\&}形参的\cppinline{push_back()}重载:
+对\cppinline{const}对象使用的函数是具有\cppinline{const\&}形参的\cppinline{push_back()}重载：
 
 \begin{cppcode}
 std::vector<std::string> coll;
@@ -33,7 +33,7 @@ coll.push_back(std::move(s)); // OK, calls push_back(const std::string&)
 
 \cppinline{const}禁用移动语义对声明返回类型也有影响。\cppinline{const}返回值不能移动。
 
-因此，从C++11开始，用\cppinline{const}返回值就不再是好的方式了（正如过去的一些风格指南所推荐的那样）。例如:
+因此，从C++11开始，用\cppinline{const}返回值就不再是好的方式了（正如过去的一些风格指南所推荐的那样）。例如：
 
 \begin{cppcode}
 const std::string getValue();

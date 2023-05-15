@@ -40,7 +40,7 @@ foo(std::move(v)); // OK, arg binds to a non-const xvalue
 foo(std::move(c)); // ERROR: can’t bind non-const rvalue reference to const xvalue
 \end{cppcode}
 
-\cppinline{foo()}中:
+\cppinline{foo()}中：
 
 \begin{itemize}
 	\item \cppinline{arg}的类型\cppinline{Coll}绝不是\cppinline{const}。
@@ -49,7 +49,7 @@ foo(std::move(c)); // ERROR: can’t bind non-const rvalue reference to const xv
 
 \subsection{函数模板形参的rvalue引用}
 
-如果函数模板形参有非\cppinline{const}/\cppinline{volatile}的rvalue引用，则可以传递所有值类别的对象。传递的实参可以是\cppinline{const}，也可以不是:
+如果函数模板形参有非\cppinline{const}/\cppinline{volatile}的rvalue引用，则可以传递所有值类别的对象。传递的实参可以是\cppinline{const}，也可以不是：
 
 \begin{cppcode}
 template<typename Coll>
@@ -70,7 +70,7 @@ foo(std::move(v)); // OK, arg binds to a non-const xvalue
 foo(std::move(c)); // OK, arg binds to a const xvalue
 \end{cppcode}
 
-\cppinline{foo()}中:
+\cppinline{foo()}中：
 
 \begin{itemize}
 	\item \cppinline{arg}的类型现在可以是\cppinline{const}，也可以不是。

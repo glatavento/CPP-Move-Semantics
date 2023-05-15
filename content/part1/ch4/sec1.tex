@@ -1,5 +1,5 @@
 \section{避免命名对象}
-移动语义允许对不再需要的值进行优化。如果编译器自动检测到从一个生命周期结束的对象中，将自动切换到移动语义。情况是这样的:
+移动语义允许对不再需要的值进行优化。如果编译器自动检测到从一个生命周期结束的对象中，将自动切换到移动语义。情况是这样的：
 
 \begin{itemize}
 	\item 传递一个临时对象，该对象将在语句之后自动销毁。
@@ -8,7 +8,7 @@
 
 另外，可以通过\cppinline{std::move()}标记对象来强制使用移动语义。
 
-让编译器来做这些工作更容易，所以移动语义的第一个建议:避免有名称的对象。
+让编译器来做这些工作更容易，所以移动语义的第一个建议：避免有名称的对象。
 
 例如：
 
@@ -17,7 +17,7 @@ MyType x{42, "hello"};
 foo(x); // x not used afterwards
 \end{cppcode}
 
-可以改成:
+可以改成：
 
 \begin{cppcode}
 foo(MyType{42,"hello"});
@@ -33,10 +33,10 @@ foo(std::move(x));
 
 \subsection{当你不能避免使用名称}
 
-有些情况下，需要为命名对象使用\cppinline{std::move()}。最典型的例子是:
+有些情况下，需要为命名对象使用\cppinline{std::move()}。最典型的例子是：
 
 \begin{itemize}
-	\item 必须多次使用一个对象。例如，可能会获得值，以便在函数或循环中处理它两次:
+	\item 必须多次使用一个对象。例如，可能会获得值，以便在函数或循环中处理它两次：
 
 	\begin{cppcode}
 std::string str{getData()};
@@ -45,7 +45,7 @@ coll1.push_back(str); // copy (still need the value of str)
 coll2.push_back(std::move(str)); // move (no longer need the value of str)
 	\end{cppcode}
 	当在同一个集合中插入值两次或调用两个不同的函数将值存储在某处时，情况也相同。
-	\item 处理参数。最常见的例子是下面的循环:
+	\item 处理参数。最常见的例子是下面的循环：
 
 	\begin{cppcode}
 // read and store line by line from myStream in coll

@@ -1,7 +1,7 @@
 \section{C++20中函数声明使用auto\&\&}
-因为C++20，也可以用auto\&\&来声明普通函数，处理方式一样:用通用引用来声明函数模板。
+因为C++20，也可以用auto\&\&来声明普通函数，处理方式一样：用通用引用来声明函数模板。
 
-如下定义:
+如下定义：
 
 \begin{cppcode}
 void callFoo(auto&& val) {
@@ -9,7 +9,7 @@ void callFoo(auto&& val) {
 }
 \end{cppcode}
 
-相当于:
+相当于：
 
 \begin{cppcode}
 template<typename T>
@@ -18,7 +18,7 @@ void callFoo(T&& val) {
 }
 \end{cppcode}
 
-还可以在这里显式地指定参数的类型。然而，与普通函数模板一样，必须用适合所传递参数的值类别的类型来限定模板形参:
+还可以在这里显式地指定参数的类型。然而，与普通函数模板一样，必须用适合所传递参数的值类别的类型来限定模板形参：
 
 \begin{cppcode}
 std::string s;

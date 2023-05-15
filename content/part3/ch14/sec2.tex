@@ -1,13 +1,13 @@
 \section{移除性算法}
 根据设计，C++算法使用迭代器来处理容器和范围的元素。然而，就像指针操作数组一样，迭代器只能读取和写入值，不能插入或删除元素。因此，“删除”算法并不是真正删除元素，只是将所有未移除元素的值移动到已处理范围的前面。
 
-例如，给定以下整数序列:
+例如，给定以下整数序列：
 
 \begin{outputcode}
 1 2 3 4 5 4 3 2 1
 \end{outputcode}
 
-调用\cppinline{std::remove()}算法来删除值为2的所有元素，修改后的序列:
+调用\cppinline{std::remove()}算法来删除值为2的所有元素，修改后的序列：
 
 \begin{outputcode}
 1 3 4 5 4 3 1 2 1
@@ -17,14 +17,14 @@
 
 可能的话，这些算法会移动，会以已移状态保留元素。本例中，如果元素是字符串，那么最后2个元素将保持不变，但最后1个元素将向前移动到2之前，以便最后一个元素处于已移动状态。
 
-因此，这些算法也可以将元素保留为已移动状态。事实上，以下算法可以创建已移动状态:
+因此，这些算法也可以将元素保留为已移动状态。事实上，以下算法可以创建已移动状态：
 
 \begin{itemize}
 	\item \cppinline{std::remove()}和\cppinline{std::remove_if()}
 	\item \cppinline{std::unique()}
 \end{itemize}
 
-看一个完整的例子，可以看到元素是否为已移动状态:
+看一个完整的例子，可以看到元素是否为已移动状态：
 
 \filename{lib/email.hpp}
 \begin{cppcode}
@@ -76,7 +76,7 @@ class Email {
 
 通过实现移动构造函数和移动赋值操作符，设置了一个成员\cppinline{movedFrom}，并在输出操作符中求值。
 
-现在让我们将该类中的一些元素放入vector中，并使用算法\cppinline{std::remove_if()}删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址:
+现在让我们将该类中的一些元素放入vector中，并使用算法\cppinline{std::remove_if()}删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址：
 
 \filename{lib/removeif.cpp}
 \begin{cppcode}
@@ -112,7 +112,7 @@ int main()
 }
 \end{cppcode}
 
-程序输出如下:
+程序输出如下：
 
 \begin{outputcode}
 remaining elements:
@@ -131,21 +131,21 @@ all elements:
 
 \subsection{移动算法中的迭代器}
 
-算法中使用移动迭代器，通常只有在算法保证每个元素只使用一次时才有意义。因此，该算法应该:
+算法中使用移动迭代器，通常只有在算法保证每个元素只使用一次时才有意义。因此，该算法应该：
 
 \begin{itemize}
 	\item 要求源的输入迭代器类别和目标的输出迭代器类别
 	\item 或者保证每个元素只使用一次（例如，为\cppinline{std::for_each()}算法指定）
 \end{itemize}
 
-对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\cppinline{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理:
+对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\cppinline{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理：
 
 \begin{itemize}
 	\item 按值接受参数，总是移动/窃取值或资源
 	\item 通过右值/通用引用参数来决定移动/窃取哪个值/资源
 \end{itemize}
 
-例如:
+例如：
 
 \filename{lib/foreachmove.cpp}
 \begin{cppcode}
@@ -183,7 +183,7 @@ int main()
 }
 \end{cppcode}
 
-代码中，将所有大小为4的元素移动到helper函数\cppinline{process()}中:
+代码中，将所有大小为4的元素移动到helper函数\cppinline{process()}中：
 
 \begin{cppcode}
 // move away only the elements processed:
@@ -208,13 +208,13 @@ coll (4 elems): "don't" "vote" "for" "liars"
 coll (4 elems): "?" "vote" "?" "?"
 \end{outputcode}
 
-最后一行是这样的:
+最后一行是这样的：
 
 \begin{outputcode}
 coll (4 elems): "" "vote" "" ""
 \end{outputcode}
 
-这里使用了辅助函数\cppinline{std::make_move_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型\cppinline{std::move_iterator}，而不需要指定元素类型:
+这里使用了辅助函数\cppinline{std::make_move_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型\cppinline{std::move_iterator}，而不需要指定元素类型：
 
 \begin{cppcode}
 std::for_each(std::move_iterator{coll.begin()},
@@ -228,7 +228,7 @@ std::move_iterator{coll.end()},
 
 \subsection{在构造函数和成员函数中移动迭代器}
 
-也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器（相同或不同类型的）。例如:
+也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器（相同或不同类型的）。例如：
 
 \filename{lib/moveitor.cpp}
 \begin{cppcode}
@@ -258,7 +258,7 @@ int main()
 }
 \end{cppcode}
 
-该程序有以下输出:（?表示未知值）:
+该程序有以下输出：（?表示未知值）:
 
 \begin{outputcode}
 src (4 elems): "?" "?" "?" "?"

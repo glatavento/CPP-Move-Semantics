@@ -1,5 +1,5 @@
 \section{默认的完美的传递}
-我们经常需要将返回值传递给另一个函数:
+我们经常需要将返回值传递给另一个函数：
 
 \begin{cppcode}
 // pass return value of compute() to process():
@@ -12,7 +12,7 @@ process(compute(t)); // OK, uses perfect forwarding of returned value
 
 \subsection{默认完美传递的细节}
 
-完整的例子:
+完整的例子：
 
 \filename{generic/perfectpassing.cpp}
 \begin{cppcode}
@@ -57,59 +57,59 @@ int main()
 \end{cppcode}
 
 \begin{itemize}
-	\item 如果\cppinline{compute()}返回一个const lvalue引用:
+	\item 如果\cppinline{compute()}返回一个const lvalue引用：
 
 \begin{cppcode}
 const std::string& computeConstLRef(const std::string& str) {
 	return str;
 }
 \end{cppcode}
-返回值的值类别是lvalue，这意味着返回值会完美转发，并与\cppinline{const} lvalue引用匹配:
+返回值的值类别是lvalue，这意味着返回值会完美转发，并与\cppinline{const} lvalue引用匹配：
 
 \begin{cppcode}
 process(computeConstLRef("tmp")); // calls process(const std::string&)
 \end{cppcode}
-\item 如果\cppinline{compute()}返回一个非\cppinline{const} lvalue引用:
+\item 如果\cppinline{compute()}返回一个非\cppinline{const} lvalue引用：
 
 \begin{cppcode}
 std::string& computeLRef(std::string& str) {
 	return str;
 }
 \end{cppcode}
-返回值的值类别是lvalue，这意味着返回值会完全转发，并与非\cppinline{const} lvalue引用的最佳匹配:
+返回值的值类别是lvalue，这意味着返回值会完全转发，并与非\cppinline{const} lvalue引用的最佳匹配：
 
 \begin{cppcode}
 std::string str{"lvalue"};
 process(computeLRef(str)); // calls process(std::string&)
 \end{cppcode}
-\item 如果\cppinline{compute()}返回rvalue引用:
+\item 如果\cppinline{compute()}返回rvalue引用：
 
 \begin{cppcode}
 std::string&& computeRRef(std::string&& str) {
 	return std::move(str);
 }
 \end{cppcode}
-返回值的值类别是xvalue，这意味着返回值会完全转发为rvalue引用，允许\cppinline{process()}窃取值:
+返回值的值类别是xvalue，这意味着返回值会完全转发为rvalue引用，允许\cppinline{process()}窃取值：
 
 \begin{cppcode}
 process(computeRRef("tmp")); // calls process(std::string&&)
 process(computeRRef(std::move(str))); // calls process(std::string&&)
 \end{cppcode}
-\item 如果\cppinline{compute()}按值返回临时对象:
+\item 如果\cppinline{compute()}按值返回临时对象：
 
 \begin{cppcode}
 std::string computeValue(const std::string& str) {
 	return str;
 }
 \end{cppcode}
-返回值的值类别是prvalue，返回值完全转发为rvalue引用，也允许\cppinline{process()}窃取值:
+返回值的值类别是prvalue，返回值完全转发为rvalue引用，也允许\cppinline{process()}窃取值：
 
 \begin{cppcode}
 process(computeValue("tmp")); // calls process(std::string&&)
 \end{cppcode}
 \end{itemize}
 
-注意，通过返回\cppinline{const}值:
+注意，通过返回\cppinline{const}值：
 
 \begin{cppcode}
 const std::string computeConstValue(const std::string& str) {
@@ -117,7 +117,7 @@ const std::string computeConstValue(const std::string& str) {
 }
 \end{cppcode}
 
-或\cppinline{const} rvalue引用:
+或\cppinline{const} rvalue引用：
 
 \begin{cppcode}
 const std::string&& computeConstRRef(std::string&& str) {
@@ -125,7 +125,7 @@ const std::string&& computeConstRRef(std::string&& str) {
 }
 \end{cppcode}
 
-再次禁用移动语义:
+再次禁用移动语义：
 
 \begin{cppcode}
 process(computeConstValue("tmp")); // calls process(const std::string&)
@@ -134,6 +134,6 @@ process(computeConstRRef("tmp")); // calls process(const std::string&)
 
 如果有\cppinline{const}\&\&的声明，可以接受这样的重载。
 
-因此:不要将value返回的值标记为\cppinline{const}，也不要将返回的非\cppinline{const} rvalue引用标记为\cppinline{const}。
+因此：不要将value返回的值标记为\cppinline{const}，也不要将返回的非\cppinline{const} rvalue引用标记为\cppinline{const}。
 
 

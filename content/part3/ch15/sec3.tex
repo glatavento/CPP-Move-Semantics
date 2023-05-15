@@ -64,7 +64,7 @@ struct pair {
 };
 \end{cppcode}
 
-因此，代码如下:
+因此，代码如下：
 
 \begin{cppcode}
 std::pair<std::string, std::string> p1{"some value", "some other value"};
@@ -75,7 +75,7 @@ std::cout << "p2: " << p2.first << '/' << p2.second << '\n';
 std::cout << "p3: " << p3.first << '/' << p3.second << '\n';
 \end{cppcode}
 
-有如下输出:
+有如下输出：
 
 \begin{outputcode}
 p1: /
@@ -83,7 +83,7 @@ p2: some value/some other value
 p3: some value/some other value
 \end{outputcode}
 
-但是，std::pair<>也可以通过处理通用/转发引用支持完美转发:
+但是，std::pair<>也可以通过处理通用/转发引用支持完美转发：
 
 \begin{cppcode}
 template<typename T1, typename T2>
@@ -94,7 +94,7 @@ struct pair {
 };
 \end{cppcode}
 
-因此，可以在初始化pair时使用移动语义。例如:
+因此，可以在初始化pair时使用移动语义。例如：
 
 \begin{cppcode}
 int val = 42;
@@ -105,14 +105,14 @@ std::cout << "s1: " << s1 << '\n';
 std::cout << "p4: " << p4.first << '/' << p4.second << '\n';
 \end{cppcode}
 
-有如下输出:
+有如下输出：
 
 \begin{outputcode}
 s1:
 p4: 42/value of s1
 \end{outputcode}
 
-相应的成员模板实现为期望的通用/转发引用:
+相应的成员模板实现为期望的通用/转发引用：
 
 \begin{cppcode}
 template<typename U, typename V>
@@ -121,7 +121,7 @@ constexpr pair::pair(U&& x, V&& y)
 }
 \end{cppcode}
 
-注意，通用引用/转发引用还意味着，只要定义了相应的类型转换，就可以创建和赋值不同的pair。例如:
+注意，通用引用/转发引用还意味着，只要定义了相应的类型转换，就可以创建和赋值不同的pair。例如：
 
 \begin{cppcode}
 std::pair<const char*, std::string> p5{"answer", "is 42"};
@@ -131,7 +131,7 @@ std::cout << "p5: " << p5.first << '/' << p5.second << '\n';
 std::cout << "p6: " << p6.first << '/' << p6.second << '\n';
 \end{cppcode}
 
-有如下输出:
+有如下输出：
 
 \begin{outputcode}
 p5: answer/
@@ -144,16 +144,16 @@ p6: answer/is 42
 
 \subsubsection{std::make_pair()}
 
-std::pair<>附带了一个方便的函数模板std::make_pair<>()，用于创建pair而不必指定成员的类型:
+std::pair<>附带了一个方便的函数模板std::make_pair<>()，用于创建pair而不必指定成员的类型：
 
 \begin{cppcode}
 auto p{std::make_pair(42, "hello")}; // creates std::pair<int, const char*>
 \end{cppcode}
 
-std::make_pair<>()是一个很好的例子，它演示了在rvalue和通用/转发引用中使用移动语义时必须考虑的另一件事。它的声明在不同的C++标准中有所不同:
+std::make_pair<>()是一个很好的例子，它演示了在rvalue和通用/转发引用中使用移动语义时必须考虑的另一件事。它的声明在不同的C++标准中有所不同：
 
 \begin{itemize}
-\item 第一个C++标准是C++98中，make_pair<>()是在命名空间std中使用引用来声明的，以避免不必要的复制:
+\item 第一个C++标准是C++98中，make_pair<>()是在命名空间std中使用引用来声明的，以避免不必要的复制：
 \begin{cppcode}
 template<typename T1, typename T2>
 pair<T1,T2> make_pair (const T1& a, const T2& b)
@@ -165,7 +165,7 @@ pair<T1,T2> make_pair (const T1& a, const T2& b)
 
 这种情况下，应该使用衰变的类型作为成员类型，这是按值传递参数时获得的类型（const char*表示字符串）。
 
-\item 因此，C++03中，函数定义改为使用按值调用:
+\item 因此，C++03中，函数定义改为使用按值调用：
 \begin{cppcode}
 template<typename T1, typename T2>
 pair<T1,T2> make_pair (T1 a, T2 b)
@@ -175,7 +175,7 @@ pair<T1,T2> make_pair (T1 a, T2 b)
 \end{cppcode}
 正如在问题解决方案的基本原理中看到的那样，“这似乎是对标准的建议小得多的更改，并且效率方面都被解决方案的优势抵消了。”
 
-\item C++11中，make_pair()必须支持移动语义，这意味着参数必须成为通用/转发引用。同样，对于引用，参数的类型不会衰减。因此，定义变更如下:
+\item C++11中，make_pair()必须支持移动语义，这意味着参数必须成为通用/转发引用。同样，对于引用，参数的类型不会衰减。因此，定义变更如下：
 \begin{cppcode}
 template<typename T1, typename T2>
 constexpr pair<typename decay<T1>::type, typename decay<T2>::type>
@@ -186,7 +186,7 @@ make_pair (T1&& a, T2&& b)
 	forward<T2>(b));
 }
 \end{cppcode}
-C++14中可以写成这样:
+C++14中可以写成这样：
 \begin{cppcode}
 template<typename T1, typename T2>
 constexpr pair<decay_t<T1>, decay_t<T2>>
@@ -207,7 +207,7 @@ std::optional<>是C++17中可用的值类型，通过“没有任何值”扩展
 
 optional对象也支持移动语义。如果将对象作为一个整体移动，状态将复制，所包含的对象（如果有的话）将移动。因此，一个已移动的对象仍然具有相同的状态，但任何值都变成未定义的。
 
-但也可以将值移进或移出所包含的对象。例如:
+但也可以将值移进或移出所包含的对象。例如：
 
 \begin{cppcode}
 std::optional<std::string> os;
@@ -219,20 +219,20 @@ std::string s3 = std::move(*os); // OK, moves
 
 注意，在最后一次调用之后，\cppinline{os}仍然有一个字符串值，但与通常的已移动对象一样，这个值未定义。因此，只要不对其值做任何假设，就可以使用它。甚至可以在那里赋一个新的字符串值。
 
-还请注意，有些重载确保临时optional可移动。考虑一个返回可选字符串的函数:
+还请注意，有些重载确保临时optional可移动。考虑一个返回可选字符串的函数：
 
 \begin{cppcode}
 std::optional<std::string> func();
 \end{cppcode}
 
-这种情况下，定义了移动值:
+这种情况下，定义了移动值：
 
 \begin{cppcode}
 std::string s4 = func().value(); // OK, moves
 std::string s5 = *func(); // OK, moves
 \end{cppcode}
 
-这种行为可以通过使用引用限定符，为相应的成员函数提供rvalue重载来实现:
+这种行为可以通过使用引用限定符，为相应的成员函数提供rvalue重载来实现：
 
 \begin{cppcode}
 namespace std {

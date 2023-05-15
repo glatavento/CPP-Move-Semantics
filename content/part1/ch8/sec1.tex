@@ -1,5 +1,5 @@
 \section{值的种类}
-要编译表达式或语句，所涉及的类型是否合适并不重要。例如，如果在赋值符的左边使用了int型字面值，则不能将int型赋值给int型字面值:
+要编译表达式或语句，所涉及的类型是否合适并不重要。例如，如果在赋值符的左边使用了int型字面值，则不能将int型赋值给int型字面值：
 
 \begin{cppcode}
 int i = 42;
@@ -30,7 +30,7 @@ x = 42; // OK, because x is an lvalue and the type matches
 42 = x; // ERROR: 42 is an rvalue and can be only on the right-hand side of an assignment
 \end{cppcode}
 
-然而，这些类别不仅重要，并且通常用于指定表达式是否以及在何处可以使用。例如:
+然而，这些类别不仅重要，并且通常用于指定表达式是否以及在何处可以使用。例如：
 
 \begin{cppcode}
 int x; // x is an lvalue when used in an expression
@@ -39,7 +39,7 @@ int* p1 = &x; // OK: & is fine for lvalues (object has a specified location)
 int* p2 = &42; // ERROR: & is not allowed for rvalues (object has no specified location)
 \end{cppcode}
 
-然而，在ANSI-C中，事情变得更加复杂。，因为声明为\cppinline{const int}的x不能放在赋值函数的左边，但仍然可以在其他只能使用左值的地方使用:
+然而，在ANSI-C中，事情变得更加复杂。，因为声明为\cppinline{const int}的x不能放在赋值函数的左边，但仍然可以在其他只能使用左值的地方使用：
 
 \begin{cppcode}
 const int c = 42; // Is c an lvalue or rvalue?
@@ -52,7 +52,7 @@ C语言中，声明为\cppinline{const int}的\cppinline{c}仍然是lvalue，因
 
 因此，在ANSI-C中，l的含义变成了定位。lvalue现在是程序中具有指定位置的对象（例如，以便您可以获取地址）。以同样的方式，rvalue现在只是一个可读的值。
 
-C++98采用了这些值类别的定义。然而，随着移动语义的引入，问题出现了:用\cppinline{std::move()}标记的对象应该有哪些值类别，用\cppinline{std::move()}标记的类的对象应该遵循以下规则:
+C++98采用了这些值类别的定义。然而，随着移动语义的引入，问题出现了：用\cppinline{std::move()}标记的对象应该有哪些值类别，用\cppinline{std::move()}标记的类的对象应该遵循以下规则：
 
 \begin{cppcode}
 std::string s;
@@ -61,7 +61,7 @@ std::move(s) = "hello"; // OK (behaves like an lvalue)
 auto ps = &std::move(s); // ERROR (behaves like an rvalue)
 \end{cppcode}
 
-但是，请注意基本数据类型(FDT)的行为:
+但是，请注意基本数据类型(FDT)的行为：
 
 \begin{cppcode}
 int i;
@@ -83,7 +83,7 @@ C++11的值类别如图8.1所示。
 	\caption{C++11的值类别}
 \end{figure}
 
-有以下主要类别:
+有以下主要类别：
 
 \begin{itemize}
 	\item lvalue （“定位值”）
@@ -91,7 +91,7 @@ C++11的值类别如图8.1所示。
 	\item xvalue （“过期值”）
 \end{itemize}
 
-综合类别为:
+综合类别为：
 
 \begin{itemize}
 	\item glvalue （“广义lvalue”）作为“左lvalue或xvalue”的常用术语
@@ -100,7 +100,7 @@ C++11的值类别如图8.1所示。
 
 \subsubsection{基本表达式的值分类}
 
-lvalue的例子有:
+lvalue的例子有：
 
 \begin{itemize}
 	\item 仅为变量、函数或数据成员（除右值的普通值成员外）的名称的表达式
@@ -110,7 +110,7 @@ lvalue的例子有:
 	\item 内置的一元操作符*的结果（即，对原始指针进行解引用所产生的结果）
 \end{itemize}
 
-prvalue的例子有:
+prvalue的例子有：
 
 \begin{itemize}
 	\item 由非字符串字面量的内置字面量组成的表达式（例如，42、true或nullptr）
@@ -119,7 +119,7 @@ prvalue的例子有:
 	\item Lambda表达式
 \end{itemize}
 
-xvalues的示例如下:
+xvalues的示例如下：
 
 \begin{itemize}
 	\item 用\cppinline{std::move()}标记对象的结果
@@ -128,7 +128,7 @@ xvalues的示例如下:
 	\item 右值的非静态值成员（见下面）
 \end{itemize}
 
-例如:
+例如：
 
 \begin{cppcode}
 class X {
@@ -144,7 +144,7 @@ f(X{}); // passes a prvalue (new syntax of creating a temporary)
 f(std::move(v)); // passes an xvalue
 \end{cppcode}
 
-说些经验法则:
+说些经验法则：
 
 \begin{itemize}
 	\item 所有用作表达式的名称都是lvalue。
@@ -154,7 +154,7 @@ f(std::move(v)); // passes an xvalue
 	\item 所有标记为\cppinline{std::move()}的对象，及其值成员都是xvalues。
 \end{itemize}
 
-严格来说，glvalues、prvalues和xvalues是表达式的术语，而不是值的术语（这意味着这些术语用词不当）。例如，变量本身不是lvalue，只有表示该变量为lvalue的表达式:
+严格来说，glvalues、prvalues和xvalues是表达式的术语，而不是值的术语（这意味着这些术语用词不当）。例如，变量本身不是lvalue，只有表示该变量为lvalue的表达式：
 
 \begin{cppcode}
 int x = 3; // here, x is a variable, not an lvalue
@@ -167,7 +167,7 @@ int y = x; // here, x is an lvalue
 
 C++17具有相同的值类别，图8.2中描述了值类别的语义。
 
-现在解释值类别有两种主要的表达方式:
+现在解释值类别有两种主要的表达方式：
 
 \begin{itemize}
 	\item glvalues: 用于长生命周期对象或函数位置的表达式
@@ -183,7 +183,7 @@ C++17具有相同的值类别，图8.2中描述了值类别的语义。
 
 \subsubsection{通过值传递prvalues}
 
-有了这个更改，即使没有定义有效的副本和有效的移动构造函数，现在也可以将prvalue作为未命名的初始值按值传递:
+有了这个更改，即使没有定义有效的副本和有效的移动构造函数，现在也可以将prvalue作为未命名的初始值按值传递：
 
 \begin{cppcode}
 class C {
@@ -212,7 +212,7 @@ C++17之前，如果没有复制或移动支持，传递prvalue（例如：\cppi
 
 C++17随后引入了一个新术语，称为具象化（未命名的临时对象），此时prvalue变成了临时对象。因此，临时物化转换是prvalue到xvalue转换（通常是隐式的）。
 
-需要glvalue（左值或xvalue）的地方使用prvalue，就会创建临时对象，并使用该prvalue初始化（记住，prvalue主要是“初始化值”），并且该prvalue会指定临时对象的xvalue。因此，在上面的例子中:
+需要glvalue（左值或xvalue）的地方使用prvalue，就会创建临时对象，并使用该prvalue初始化（记住，prvalue主要是“初始化值”），并且该prvalue会指定临时对象的xvalue。因此，在上面的例子中：
 
 \begin{cppcode}
 void f(const X& p); // accepts an expression of any value category but expects a glvalue

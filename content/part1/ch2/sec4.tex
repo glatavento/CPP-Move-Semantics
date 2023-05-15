@@ -1,5 +1,5 @@
 \section{通过引用进行重载}
-引入右值引用之后，有三种主要的引用调用方式:
+引入右值引用之后，有三种主要的引用调用方式：
 
 \begin{itemize}
 	\item \begin{cppcode}
@@ -7,7 +7,7 @@ void foo(const std::string\& arg)
 \end{cppcode}
 	将实参作为\cppinline{const}左值引用。
 
-	只有对传递的参数的读访问权。如果类型适合，可以把所有东西都传递给用这种方式声明的函数:
+	只有对传递的参数的读访问权。如果类型适合，可以把所有东西都传递给用这种方式声明的函数：
 
 	\begin{itemize}
 		\item[-] 可修改的命名对象
@@ -21,7 +21,7 @@ void foo(std::string\& arg)
 \end{cppcode}
 	将实参作为非\cppinline{const}左值引用。
 
-	对传递的参数具有写访问权限。即使类型适合，也不能再将所有内容传递给以这种方式声明的函数:
+	对传递的参数具有写访问权限。即使类型适合，也不能再将所有内容传递给以这种方式声明的函数：
 
 	\begin{itemize}
 		\item[-] 可修改的命名对象
@@ -35,7 +35,7 @@ void foo(std::string\&\& arg)
 \end{cppcode}
 	将实参作为非\cppinline{const}右值引用。
 
-	对传递的参数具有写访问权限。但是，仍然对可以传递的内容有限制:
+	对传递的参数具有写访问权限。但是，仍然对可以传递的内容有限制：
 
 	\begin{itemize}
 		\item[-] 没有名称的临时对象
@@ -48,7 +48,7 @@ void foo(std::string\&\& arg)
 
 \subsection{\cppinline{const}右值引用}
 
-从技术上讲，还有第四种调用引用的方式:
+从技术上讲，还有第四种调用引用的方式：
 
 \begin{itemize}
 	\item \begin{cppcode}
@@ -56,7 +56,7 @@ void foo(const std::string\&\& arg)
 \end{cppcode}
 	将实参作为\cppinline{const}右值引用。
 
-	对传递的参数具有读访问权，这里的限制有:
+	对传递的参数具有读访问权，这里的限制有：
 	\begin{itemize}
 		\item[-] 没有名称的临时对象
 		\item[-] 用\cppinline{std::move()}标记的\cppinline{const}或非\cppinline{const}对象
@@ -65,7 +65,7 @@ void foo(const std::string\&\& arg)
 
 然而，这种情况没有意义。作为右值引用，允许窃取值，但作为\cppinline{const}，则禁止对传递的实参进行任何修改，这本身就是矛盾的。
 
-尽管如此，创建具有这种行为的对象是非常容易的:只需用\cppinline{std::move()}标记一个\cppinline{const}对象:
+尽管如此，创建具有这种行为的对象是非常容易的：只需用\cppinline{std::move()}标记一个\cppinline{const}对象：
 
 \begin{cppcode}
 const std::string s{"data"};
@@ -73,7 +73,7 @@ const std::string s{"data"};
 foo(std::move(s)); // would call a function declared as const rvalue reference
 \end{cppcode}
 
-当声明函数返回带有\cppinline{const}的值时，这种情况可能会间接发生:
+当声明函数返回带有\cppinline{const}的值时，这种情况可能会间接发生：
 
 \begin{cppcode}
 const std::string getValue();

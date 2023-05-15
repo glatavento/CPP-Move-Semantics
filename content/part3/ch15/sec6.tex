@@ -5,7 +5,7 @@ C++标准库有两个特殊的类型，代表正在运行的线程或用于同�
 
 表示运行线程的对象（std::thread或C++20 std::jthread）可以传递，但不能复制。可以把它们放在容器里。
 
-考虑以下例子:
+考虑以下例子：
 
 \filename{lib/thread.cpp}
 \begin{cppcode}
@@ -37,7 +37,7 @@ int main()
 }
 \end{cppcode}
 
-启动两个线程，并将它们放入所有运行线程的集合中:
+启动两个线程，并将它们放入所有运行线程的集合中：
 
 \begin{cppcode}
 std::vector<std::thread> threads; // better std::jthread since C++20
@@ -62,7 +62,7 @@ for (auto& t : threads) {
 
 对于一些用于同步两个线程之间（返回）值交换的helper类型，还使用了只移动类型（future、promise和打包任务都是只移动类型）。
 
-考虑以下例子:
+考虑以下例子：
 
 \filename{lib/future.cpp}
 \begin{cppcode}
@@ -113,7 +113,7 @@ std::promise<std::string> p;
 std::future<std::string> f{p.get_future()};
 \end{cppcode}
 
-future移动到future的集合中:
+future移动到future的集合中：
 
 \begin{cppcode}
 results.push_back(std::move(f));
@@ -125,7 +125,7 @@ results.push_back(std::move(f));
 results.push_back(p.get_future());
 \end{cppcode}
 
-promise移动到已启动的线程:
+promise移动到已启动的线程：
 
 \begin{cppcode}
 std::thread t{getValue, move(p)};

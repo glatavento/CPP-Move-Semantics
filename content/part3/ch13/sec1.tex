@@ -3,9 +3,9 @@
 
 \subsection{声明只移动类型}
 
-只移动类型禁用了复制。通常，复制构造函数和复制赋值操作符会删除，而移动构造函数和移动赋值操作符会默认实现:
+只移动类型禁用了复制。通常，复制构造函数和复制赋值操作符会删除，而移动构造函数和移动赋值操作符会默认实现：
 
-例如:
+例如：
 
 \begin{cppcode}
 class MoveOnly {
@@ -26,7 +26,7 @@ public:
 
 \subsection{使用只移动类型}
 
-通过上面的声明，可以创建和移动对象，但不能复制。例如:
+通过上面的声明，可以创建和移动对象，但不能复制。例如：
 
 \begin{cppcode}
 std::vector<MoveOnly> coll;
@@ -38,7 +38,7 @@ coll.push_back(mo); // ERROR: can’t copy mo into coll
 coll.push_back(std::move(mo)); // OK, moves mo into coll
 \end{cppcode}
 
-要将只移动元素的值移出容器，需要使用\cppinline{std::move()}作为元素的引用。例如:
+要将只移动元素的值移出容器，需要使用\cppinline{std::move()}作为元素的引用。例如：
 
 \begin{cppcode}
 mo = std::move(coll[0]); // move assign first element (still there with moved-from state)
@@ -46,7 +46,7 @@ mo = std::move(coll[0]); // move assign first element (still there with moved-fr
 
 但请记住，调用之后元素仍然在容器中，状态为已移动。
 
-循环中，也可以移除所有元素:
+循环中，也可以移除所有元素：
 
 \begin{cppcode}
 for (auto& elem : coll) { // note: non-const reference
@@ -56,14 +56,14 @@ for (auto& elem : coll) { // note: non-const reference
 
 同样的，元素仍然在容器中，状态为已移动。
 
-对于只移动类型，有两个不可能操作:
+对于只移动类型，有两个不可能操作：
 
 \begin{itemize}
-\item 不能使用std::initializer_lists，因为其是按值传递的，这需要复制元素:
+\item 不能使用std::initializer_lists，因为其是按值传递的，这需要复制元素：
 \begin{cppcode}
 std::vector<MoveOnly> coll{ MoveOnly{}, ... }; // ERROR
 \end{cppcode}
-\item 通过引用迭代，可以访问容器中所有只允许移动的元素:
+\item 通过引用迭代，可以访问容器中所有只允许移动的元素：
 \begin{cppcode}
 std::vector<MoveOnly> coll;
 ...
@@ -81,7 +81,7 @@ for (auto elem : coll) { // ERROR: can’t copy move-only elements
 
 \subsection{将只移动对象作为参数传递}
 
-如果使用了移动语义，可以通过值传递和返回只移动的对象:
+如果使用了移动语义，可以通过值传递和返回只移动的对象：
 
 \begin{cppcode}
 void sink(MoveOnly arg); // sink() takes ownership of the passed argument
@@ -106,7 +106,7 @@ sink(std::move(mo)); // OK, might move mo to something inside sink()
 
 Scott Meyers和Herb Sutter（C++社区的两位主要作者）讨论了应该如何声明只移动类型的接收器函数。Herb的立场是通过值来取参数，Scott的立场是通过rvalue引用来取参数。
 
-据我所知，他们后来一致认为最好采用rvalue引用的方法。然而，真正的答案不重要。\cppinline{std::move()}的规则也应该适用于这里:如果用\cppinline{std::move()}传递只移动的对象，可能会丢失值，也可能不会。如果放弃所有权很重要（希望确保文件已关闭、线程已停止或相关的资源已释放），请在调用后使用相应语句直接明示。例如:
+据我所知，他们后来一致认为最好采用rvalue引用的方法。然而，真正的答案不重要。\cppinline{std::move()}的规则也应该适用于这里：如果用\cppinline{std::move()}传递只移动的对象，可能会丢失值，也可能不会。如果放弃所有权很重要（希望确保文件已关闭、线程已停止或相关的资源已释放），请在调用后使用相应语句直接明示。例如：
 
 \begin{cppcode}
 MoveOnly mo;
@@ -122,7 +122,7 @@ mo.close(); // or mo.reset() or mo.release() or so
 
 还可以实现按值返回（新的）只移动对象的源函数，这意味着将所有权传递给函数的调用者。
 
-如果以这种方式返回一个局部对象，就会自动使用移动语义:
+如果以这种方式返回一个局部对象，就会自动使用移动语义：
 
 \begin{cppcode}
 MoveOnly source()
@@ -141,7 +141,7 @@ MoveOnly m{source()}; // takes ownership of the associated value/resource
 
 只移动对象处于已移动状态时，通常不再拥有自己的资源。这是一个已定义的状态，该类型的用户应该能够对其进行双重检查。有时，移动操作只是交换内部数据，以便移动赋值将另一个资源分配给已移动对象（例如，流类这样做）。
 
-C++标准库使用不同的方式和名称来检查不再拥有资源的“已移动”状态。例如，正校验（是否仍拥有资源?）可能如下所示:
+C++标准库使用不同的方式和名称来检查不再拥有资源的“已移动”状态。例如，正校验（是否仍拥有资源？）可能如下所示：
 
 \begin{itemize}
 	\item if(s.is_open())是文件流

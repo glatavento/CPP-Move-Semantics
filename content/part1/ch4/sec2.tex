@@ -1,5 +1,5 @@
 \section{避免不必要的\cppinline{std::move()}}
-如果支持的话，按值返回本地对象会自动使用移动语义。然而，为了安全起见，开发者可能会尝试使用显式\cppinline{std::move()}强制执行:
+如果支持的话，按值返回本地对象会自动使用移动语义。然而，为了安全起见，开发者可能会尝试使用显式\cppinline{std::move()}强制执行：
 
 \begin{cppcode}
 std::string foo()
@@ -23,13 +23,13 @@ std::string foo()
 }
 \end{cppcode}
 
-临时对象时使用\cppinline{std::move()}是多余的。对于按值返回对象的c\cppinline{reateString()}函数，应该只使用返回值:
+临时对象时使用\cppinline{std::move()}是多余的。对于按值返回对象的c\cppinline{reateString()}函数，应该只使用返回值：
 
 \begin{cppcode}
 std::string s{createString()}; // OK
 \end{cppcode}
 
-而不是用\cppinline{std::move()}再次标记:
+而不是用\cppinline{std::move()}再次标记：
 
 \begin{cppcode}
 std::string s{std::move(createString())}; // BAD: don’t do this

@@ -3,7 +3,7 @@
 
 \subsection{特殊的成员函数}
 
-首先简单地看看特殊成员函数，因为它以不同的方式使用。C++标准将以下6种操作定义为特殊成员函数:
+首先简单地看看特殊成员函数，因为它以不同的方式使用。C++标准将以下6种操作定义为特殊成员函数：
 
 \begin{itemize}
 	\item 默认构造函数
@@ -16,7 +16,7 @@
 
 然而，在许多情况下，我们只讨论其中5个操作，因为默认构造函数与其他5个（或C++11之前的3个）操作略有不同。其他5个操作通常没有声明，并且具有更复杂的依赖关系。因此，请了解特殊成员函数的含义（到目前为止，我一直试图避免使用这个术语）。
 
-图3.1概述了什么时候会根据声明的构造函数和特殊成员函数，自动生成特殊成员函数:
+图3.1概述了什么时候会根据声明的构造函数和特殊成员函数，自动生成特殊成员函数：
 
 \begin{figure}
 	\includegraphics[width=0.8\textwidth]{part1/ch3/images/1}
@@ -24,7 +24,7 @@
 \end{figure}
 
 
-可以在这个表格中看到一些基本的规则:
+可以在这个表格中看到一些基本的规则：
 
 \begin{itemize}
 	\item 只有在没有用户声明其他构造函数的情况下，才会自动声明默认构造函数。
@@ -36,7 +36,7 @@
 
 在默认编译情况下，为类生成复制和移动特殊成员函数。
 
-假设类\cppinline{Person}的声明如下:
+假设类\cppinline{Person}的声明如下：
 
 \begin{cppcode}
 class Person {
@@ -51,7 +51,7 @@ public:
 };
 \end{cppcode}
 
-这种情况下，\cppinline{Person}可以复制和移动:
+这种情况下，\cppinline{Person}可以复制和移动：
 
 \begin{cppcode}
 std::vector<Person> coll;
@@ -63,9 +63,9 @@ coll.push_back(std::move(p)); // OK, moves p
 
 \subsection{已声明的复制禁用移动（启用退阶）}
 
-在声明复制特殊成员函数（或析构函数）时，禁用了移动特殊成员函数的自动生成:
+在声明复制特殊成员函数（或析构函数）时，禁用了移动特殊成员函数的自动生成：
 
-假设\cppinline{Person}的声明如下:
+假设\cppinline{Person}的声明如下：
 
 \begin{cppcode}
 class Person {
@@ -80,7 +80,7 @@ public:
 };
 \end{cppcode}
 
-因为退阶机制是有效的，所以复制和移动\cppinline{Person}可以编译，但移动是作为复制执行的:
+因为退阶机制是有效的，所以复制和移动\cppinline{Person}可以编译，但移动是作为复制执行的：
 
 \begin{cppcode}
 std::vector<Person> coll;
@@ -100,7 +100,7 @@ coll.push_back(std::move(p)); // OK, copies p
 
 换句话说，如果移动构造函数或移动赋值操作符显式声明（使用\cppinline{=default}实现、生成，或使用\cppinline{=delete}禁用），那么通过使用\cppinline{=delete}声明，就禁用了调用复制构造函数和复制赋值操作符。
 
-假设\cppinline{Person}的声明如下:
+假设\cppinline{Person}的声明如下：
 
 \begin{cppcode}
 class Person {
@@ -115,7 +115,7 @@ class Person {
 };
 \end{cppcode}
 
-本例中，我们有一个只移动类型。Person可以移动，但不能复制:
+本例中，我们有一个只移动类型。Person可以移动，但不能复制：
 
 \begin{cppcode}
 std::vector<Person> coll;
@@ -127,7 +127,7 @@ coll.push_back(std::move(p)); // OK, moves p
 coll.push_back(Person{"Ben", "Cook"}); // OK, moves temporary person into coll
 \end{cppcode}
 
-同样，使用\cppinline{=default}声明特殊成员函数与根本不声明不同。调用的后果更加严重:复制对象的尝试将无法编译。
+同样，使用\cppinline{=default}声明特殊成员函数与根本不声明不同。调用的后果更加严重：复制对象的尝试将无法编译。
 
 支持移动操作但不支持复制操作的类是有意义的。可以使用这种只移动类型传递资源的所有权或句柄，而无需共享或复制。在C++标准库中也有一些只移动的类型（例如，输入输出流、线程和\cppinline{std::unique_ptr<>}），详细信息请参见关于仅移动类型的章节。
 
@@ -153,7 +153,7 @@ coll.push_back(std::move(p)); // ERROR: moving disabled
 
 通过声明复制被删除的特殊成员函数，可以获得相同的效果，这可能不会让其他程序员感到困惑。
 
-删除移动操作和启用复制操作真的没有意义:
+删除移动操作和启用复制操作真的没有意义：
 
 \begin{cppcode}
 class Person {
@@ -176,7 +176,7 @@ coll.push_back(std::move(p)); // ERROR: moving disabled
 
 这种情况下，\cppinline{=delete}禁用了退阶机制（因此也与根本不声明它不同）。编译器找到该声明并报告该调用为错误。
 
-支持复制但在调用移动时失败的类型没有任何意义。对于此类的用户，复制有时可行，有时不行。作为指导原则:永不\cppinline{=delete}特殊的移动成员函数。如果想要同时禁用复制和移动，删除复制的特殊成员函数就足够了。
+支持复制但在调用移动时失败的类型没有任何意义。对于此类的用户，复制有时可行，有时不行。作为指导原则：永不\cppinline{=delete}特殊的移动成员函数。如果想要同时禁用复制和移动，删除复制的特殊成员函数就足够了。
 
 \subsection{禁用移动语义与启用复制语义}
 
@@ -194,7 +194,7 @@ public:
 };
 \end{cppcode}
 
-因为没有发现生成的特殊的移动成员函数，所以现在会复制临时的\cppinline{Customer}，甚至标记为\cppinline{std::move()}的\cppinline{Customer}对象:
+因为没有发现生成的特殊的移动成员函数，所以现在会复制临时的\cppinline{Customer}，甚至标记为\cppinline{std::move()}的\cppinline{Customer}对象：
 
 \begin{cppcode}
 std::vector<Customer> customers;
@@ -211,7 +211,7 @@ customers.push_back(std::move(customers[0])); // OK, falls back to copying
 
 如果某个类型的移动语义不可用或已被删除，则这不会影响具有此类型成员的类的移动语义的生成。生成的默认移动构造函数和赋值操作符逐个成员决定是复制还是移动它。如果移动不可能（即使移动操作被删除），则生成一个副本（如果可能的话）。
 
-例如，以下类:
+例如，以下类：
 
 \begin{cppcode}
 class Customer {
@@ -225,7 +225,7 @@ public:
 };
 \end{cppcode}
 
-如果这个类被另一个类中的成员使用:
+如果这个类被另一个类中的成员使用：
 
 \begin{cppcode}
 class Invoice {
@@ -247,7 +247,7 @@ Invoice i1{std::move(i)}; // OK, moves id, copies cust
 
 现在我们可以总结特殊成员函数的新规则（何时生成它们以及它们的行为方式）。
 
-例如，假设有以下派生类:
+例如，假设有以下派生类：
 
 \begin{cppcode}
 class MyClass : public Base
@@ -262,14 +262,14 @@ private:
 
 \subsubsection{复制构造函数}
 
-当应用以下所有内容时，将自动生成复制构造函数:
+当应用以下所有内容时，将自动生成复制构造函数：
 
 \begin{itemize}
 	\item 用户没有声明移动构造函数
 	\item 用户没有声明移动赋值操作符
 \end{itemize}
 
-如果生成（隐式或使用\cppinline{=default}），复制构造函数具有以下行为:
+如果生成（隐式或使用\cppinline{=default}），复制构造函数具有以下行为：
 
 \begin{cppcode}
 MyClass(const MyClass& obj) noexcept-specifier
@@ -283,7 +283,7 @@ MyClass(const MyClass& obj) noexcept-specifier
 
 \subsubsection{移动构造函数}
 
-移动构造函数在应用以下所有条件时自动生成:
+移动构造函数在应用以下所有条件时自动生成：
 
 \begin{itemize}
 	\item 用户没有声明复制构造函数
@@ -292,7 +292,7 @@ MyClass(const MyClass& obj) noexcept-specifier
 	\item 用户没有声明析构函数
 \end{itemize}
 
-如果生成（隐式或使用\cppinline{=default}），移动构造函数具有以下行为:
+如果生成（隐式或使用\cppinline{=default}），移动构造函数具有以下行为：
 
 \begin{cppcode}
 MyClass(MyClass&& obj) noexcept-specifier
@@ -306,14 +306,14 @@ MyClass(MyClass&& obj) noexcept-specifier
 
 \subsubsection{复制赋值运算符}
 
-复制赋值操作符在应用以下所有条件时自动生成:
+复制赋值操作符在应用以下所有条件时自动生成：
 
 \begin{itemize}
 	\item 用户没有声明移动构造函数
 	\item 用户没有声明移动赋值操作符
 \end{itemize}
 
-如果生成（隐式或使用\cppinline{=default}），复制赋值操作符大致具有以下行为:
+如果生成（隐式或使用\cppinline{=default}），复制赋值操作符大致具有以下行为：
 
 \begin{cppcode}
 MyClass& operator= (const MyClass& obj) noexcept-specifier {
@@ -323,7 +323,7 @@ MyClass& operator= (const MyClass& obj) noexcept-specifier {
 }
 \end{cppcode}
 
-生成的复制赋值操作符，首先对传递的源对象调用基类的最佳匹配赋值操作符（记住，与复制构造函数相比，赋值操作符不是自上而下调用的;它们在实现中调用基类赋值操作符）。然后，为其类的成员进行分配（同样使用最佳匹配）。
+生成的复制赋值操作符，首先对传递的源对象调用基类的最佳匹配赋值操作符（记住，与复制构造函数相比，赋值操作符不是自上而下调用的；它们在实现中调用基类赋值操作符）。然后，为其类的成员进行分配（同样使用最佳匹配）。
 
 注意，生成的赋值操作符不会检查对象对自赋值。如果这很重要，必须自己实现操作符。
 
@@ -331,7 +331,7 @@ MyClass& operator= (const MyClass& obj) noexcept-specifier {
 
 \subsubsection{移动赋值操作符}
 
-移动赋值操作符在以下所有条件都适用时自动生成:
+移动赋值操作符在以下所有条件都适用时自动生成：
 
 \begin{itemize}
 	\item 用户没有声明复制构造函数
@@ -340,7 +340,7 @@ MyClass& operator= (const MyClass& obj) noexcept-specifier {
 	\item 用户没有声明析构函数
 \end{itemize}
 
-如果生成（隐式或使用\cppinline{=default}），移动赋值操作符大致具有以下行为:
+如果生成（隐式或使用\cppinline{=default}），移动赋值操作符大致具有以下行为：
 
 \begin{cppcode}
 MyClass& operator= (MyClass&& obj) noexcept-specifier {
@@ -352,7 +352,7 @@ MyClass& operator= (MyClass&& obj) noexcept-specifier {
 
 生成的移动赋值操作符，首先为传递的源对象调用基类的最佳匹配的移动赋值操作符，用\cppinline{std::move()}标记来传递移动语义。然后它移动分配它的类的所有成员（同样使用最佳匹配）。
 
-你可能想知道，为什么在源对象标记为\cppinline{std::move()}之后，我们仍然使用对象obj的成员:
+你可能想知道，为什么在源对象标记为\cppinline{std::move()}之后，我们仍然使用对象obj的成员：
 
 \begin{cppcode}
 Base::operator=(std::move(obj)); // - perform move assignments for base class members
@@ -366,7 +366,7 @@ Base::operator=(std::move(obj)); // - perform move assignments for base class me
 
 \subsubsection{其他特殊成员函数}
 
-其他特殊成员函数对移动语义没有那么重要的作用:
+其他特殊成员函数对移动语义没有那么重要的作用：
 
 \begin{itemize}
 	\item 析构函数对于移动语义没有什么特别之处，除了声明禁用了移动操作的自动生成。

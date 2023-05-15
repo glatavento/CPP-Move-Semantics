@@ -1,7 +1,7 @@
 \section{字符串的移动语义}
 字符串是可以分配内存来保存其值的对象。因此，可以对其使用移动语义。
 
-书中已经有了几个关于字符串如何支持移动语义的例子:
+书中已经有了几个关于字符串如何支持移动语义的例子：
 
 \begin{itemize}
 	\item 将字符串移动到某个vector中
@@ -16,7 +16,7 @@
 
 字符串的容量（当前可用于该值的内存）通常不会减少。只有移动操作、swap()或shrink_to_fit()可以减小容量。
 
-考虑下面例子:
+考虑下面例子：
 
 \filename{lib/stringmoveassign.cpp}
 \begin{cppcode}
@@ -57,7 +57,7 @@ std::string s1{"short"};
 std::string s2{"a string with an extraordinarily long value"};
 \end{cppcode}
 
-可能会得到如下输出:
+可能会得到如下输出：
 
 \begin{itemize}
 	\item 平台 A:
@@ -83,7 +83,7 @@ std::string s3{std::move(s1)};
 std::string s4{std::move(s2)};
 \end{cppcode}
 
-会得到这样的结果:
+会得到这样的结果：
 
 \begin{itemize}
 	\item 平台 A:
@@ -104,7 +104,7 @@ s4 capa: 47 ('a string with an extraordinarily long value')
 
 注意，这里不能保证\cppinline{s1}变成空的。C++标准库只保证从字符串中移动的字符串处于有效但未指定的状态，这意味着\cppinline{s1}的值仍然可以是“short”，或是其他值。
 
-移动时分配不同的字符串值可能会缩小容量。示例程序的最后两个步骤基本上执行:
+移动时分配不同的字符串值可能会缩小容量。示例程序的最后两个步骤基本上执行：
 
 \begin{cppcode}
 std::string s4{"a string with an extraordinarily long value"};
@@ -112,10 +112,10 @@ std::string s5{"quite a reasonable value"};
 s4 = std::move(s5);
 \end{cppcode}
 
-在实践中会有以下输出:
+在实践中会有以下输出：
 
 \begin{itemize}
-	\item 内存交换:
+	\item 内存交换：
 	\begin{outputcode}
 - s4 capa: 43 ('a string with an extraordinarily long value')
 s5 capa: 24 ('quite a reasonable value')

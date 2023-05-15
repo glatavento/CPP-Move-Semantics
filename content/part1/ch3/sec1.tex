@@ -1,5 +1,5 @@
 \section{普通类中移动语义}
-假设有一个相当简单的类，其中的成员类型的移动语义可以让其不一样:
+假设有一个相当简单的类，其中的成员类型的移动语义可以让其不一样：
 
 \filename{basics/customer.hpp}
 \begin{cppcode}
@@ -59,7 +59,7 @@ private:
 
 好消息是，这样的类通常自动支持移动语义。自C++11以来，编译器通常会生成移动构造函数和移动赋值操作符（类似于自动生成复制构造函数和复制赋值操作符）。
 
-这样会有以下效果:
+这样会有以下效果：
 
 \begin{itemize}
 	\item 按值返回本地\cppinline{Customer}将使用移动语义（如果它没有优化掉的话）。
@@ -68,7 +68,7 @@ private:
 	\item 通过值传递一个标有\cppinline{std::move()}的\cppinline{Customer}对象将使用移动语义（如果它没有被优化掉的话）。
 \end{itemize}
 
-例如:
+例如：
 
 \filename{basics/customer1.cpp}
 \begin{cppcode}
@@ -101,20 +101,20 @@ int main()
 }
 \end{cppcode}
 
-这里，创建并初始化一个\cppinline{customer c}（为了避免SSO，我们使用一个相当长的名称）。初始化\cppinline{c}后，第一个输出如下:
+这里，创建并初始化一个\cppinline{customer c}（为了避免SSO，我们使用一个相当长的名称）。初始化\cppinline{c}后，第一个输出如下：
 
 \begin{outputcode}
 c: [Wolfgang Amadeus Mozart: 0 8 15 ]
 \end{outputcode}
 
-然后将这个\cppinline{customer}插入到vector中两次:复制一次，移动一次:
+然后将这个\cppinline{customer}插入到vector中两次：复制一次，移动一次：
 
 \begin{cppcode}
 customers.push_back(c); // copy into the vector
 customers.push_back(std::move(c)); // move into the vector
 \end{cppcode}
 
-然后，\cppinline{c}的输出:
+然后，\cppinline{c}的输出：
 
 \begin{outputcode}
 c: [: ]
@@ -123,12 +123,12 @@ c: [: ]
 第二次调用push_back()时，名称和值都移到了vector的第二个元素中。但是，已移动的对象处于有效但未定义的状态。因此，第二个输出可以有任何值\cppinline{name}和\cppinline{values}:
 
 \begin{itemize}
-	\item 可能仍然有相同的值:
+	\item 可能仍然有相同的值：
 
 	\begin{outputcode}
 c: [Wolfgang Amadeus Mozart: 0 8 15 ]
 	\end{outputcode}
-	\item 可能有完全不同的值:
+	\item 可能有完全不同的值：
 
 	\begin{outputcode}
 c: [value was moved away: 0 ]
@@ -137,7 +137,7 @@ c: [value was moved away: 0 ]
 
 然而，移动语义是为了优化性能而提供，而分配不同的值并不一定是提高性能，所以在实现中通常把字符串和vector都设为空。
 
-任何情况下，我们都可以看到为\cppinline{Customer}类自动启用了移动语义。出于同样的原因，可以保证以下代码的高效:
+任何情况下，我们都可以看到为\cppinline{Customer}类自动启用了移动语义。出于同样的原因，可以保证以下代码的高效：
 
 \begin{cppcode}
 Customer createCustomer()
@@ -154,10 +154,10 @@ customers.push_back(createCustomer()); // uses move semantics
 
 详见basics/customer2.cpp的示例。
 
-自从C++11以来，类中能使用移动语义的成员，就会使用移动语义。这些类有:
+自从C++11以来，类中能使用移动语义的成员，就会使用移动语义。这些类有：
 
 \begin{itemize}
-	\item 从不需要的源创建新对象，则使用成员的移动构造函数:
+	\item 从不需要的源创建新对象，则使用成员的移动构造函数：
 
 	\begin{cppcode}
 Customer c1{ ... }
@@ -173,18 +173,18 @@ c2 = std::move(c1); // move assign members of c1 to members of c2
 	\end{cppcode}
 \end{itemize}
 
-注意，通过显式实现以下改进，这样的类可以从移动语义获益:
+注意，通过显式实现以下改进，这样的类可以从移动语义获益：
 
 \begin{itemize}
 	\item 初始化成员时使用移动语义
 	\item 使用移动语义使获取函数既安全又快速
 \end{itemize}
 
-\subsection{什么时候使用自启动移动语义的类?}
+\subsection{什么时候使用自启动移动语义的类？}
 
-编译器可以自动生成特殊的移动成员函数（移动构造函数和移动赋值操作符）。然而，也有一些限制。约束是编译器必须假定生成操作是正确的。正确的做法是优化正常的复制行为:移动成员，而不是复制成员。
+编译器可以自动生成特殊的移动成员函数（移动构造函数和移动赋值操作符）。然而，也有一些限制。约束是编译器必须假定生成操作是正确的。正确的做法是优化正常的复制行为：移动成员，而不是复制成员。
 
-如果类改变了复制或赋值的常规行为，那么在优化这些操作时可能也必须做一些不同的事情。因此，当用户声明以下至少一个特殊成员函数时，将禁用移动操作的自动生成:
+如果类改变了复制或赋值的常规行为，那么在优化这些操作时可能也必须做一些不同的事情。因此，当用户声明以下至少一个特殊成员函数时，将禁用移动操作的自动生成：
 
 \begin{itemize}
 	\item 复制构造函数
@@ -193,7 +193,7 @@ c2 = std::move(c1); // move assign members of c1 to members of c2
 	\item 析构函数
 \end{itemize}
 
-注意，是“用户声明”。任何形式的复制构造函数、复制赋值操作符或析构函数的显式声明都禁用移动语义。例如，如果实现了一个什么也不做的析构函数，就禁用了移动语义:
+注意，是“用户声明”。任何形式的复制构造函数、复制赋值操作符或析构函数的显式声明都禁用移动语义。例如，如果实现了一个什么也不做的析构函数，就禁用了移动语义：
 
 \begin{cppcode}
 class Customer {
@@ -203,7 +203,7 @@ class Customer {
 };
 \end{cppcode}
 
-即使下面的声明也足以禁用移动语义:
+即使下面的声明也足以禁用移动语义：
 
 \begin{cppcode}
 class Customer {
@@ -216,7 +216,7 @@ class Customer {
 
 因此没有特定的需要，就不要实现或声明析构函数（很多程序员都没有遵循这一规则）。
 
-这也意味着默认情况下，多态基类禁用了移动语义:
+这也意味着默认情况下，多态基类禁用了移动语义：
 
 \begin{cppcode}
 class Base {
@@ -230,7 +230,7 @@ class Base {
 
 \subsection{生成的移动操作有负面影响的情况}
 
-请注意，生成的移动操作可能会引入问题，即使生成的复制操作工作正确。特别是在以下情况，必须小心:
+请注意，生成的移动操作可能会引入问题，即使生成的复制操作工作正确。特别是在以下情况，必须小心：
 
 \begin{itemize}
 	\item 对成员变量有限制
@@ -242,7 +242,7 @@ class Base {
 	\item 对象没有默认构造
 \end{itemize}
 
-可能出现的问题是，已移动的对象可能不再有效:可能破坏不变量，或者对象的析构函数失败。例如，本章中的\cppinline{Customer}类的对象可能会有空名称（即使我们有断言来避免这种情况）。关于已移动的那一章将对此进行详细讨论。
+可能出现的问题是，已移动的对象可能不再有效：可能破坏不变量，或者对象的析构函数失败。例如，本章中的\cppinline{Customer}类的对象可能会有空名称（即使我们有断言来避免这种情况）。关于已移动的那一章将对此进行详细讨论。
 
 
 

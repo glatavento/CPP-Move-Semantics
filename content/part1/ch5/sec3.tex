@@ -7,7 +7,7 @@
 
 更好地使用引用限定符的方式是修改赋值操作符的实现。如http://wg21.link/n2819中建议的那样，在可能的地方使用引用限定符声明赋值操作符可能会更好。
 
-例如，字符串的赋值操作符声明如下:
+例如，字符串的赋值操作符声明如下：
 
 \begin{cppcode}
 namespace std {
@@ -23,7 +23,7 @@ namespace std {
 }
 \end{cppcode}
 
-这允许将新值赋给临时字符串:
+这允许将新值赋给临时字符串：
 
 \begin{cppcode}
 std::string getString();
@@ -32,7 +32,7 @@ getString() = "hello"; // OK
 foo(getString() = ""); // passes string instead of bool
 \end{cppcode}
 
-考虑用引用限定符声明赋值操作符:
+考虑用引用限定符声明赋值操作符：
 
 \begin{cppcode}
 namespace std {
@@ -48,7 +48,7 @@ namespace std {
 }
 \end{cppcode}
 
-代码将不再编译:
+代码将不再编译：
 
 \begin{cppcode}
 std::string getString();
@@ -57,7 +57,7 @@ getString() = "hello"; // ERROR
 foo(getString() = ""); // ERROR
 \end{cppcode}
 
-注意，特别是对于可以用作布尔值的类型，将有助于找到如下错误:
+注意，特别是对于可以用作布尔值的类型，将有助于找到如下错误：
 
 \begin{cppcode}
 std::optional<int> getValue();
@@ -67,9 +67,9 @@ if (getValue() = 0) { // OOPS: compiles although = is used instead of ==
 }
 \end{cppcode}
 
-其实，会给临时对象返回基本类型的属性:右值。
+其实，会给临时对象返回基本类型的属性：右值。
 
-注意，所有这些修改C++标准的建议都被拒绝了，主要是考虑向后兼容性。然而，在实现自己的类时，可以使用以下改进的方式:
+注意，所有这些修改C++标准的建议都被拒绝了，主要是考虑向后兼容性。然而，在实现自己的类时，可以使用以下改进的方式：
 
 \begin{cppcode}
 class MyType {
@@ -92,7 +92,7 @@ public:
 
 如getter示例所示，引用限定符也可以而且应该在返回对对象的引用时使用。这样，可以减少访问已销毁临时对象的成员的风险。
 
-同样，标准字符串的当前声明可以作为一个例子:
+同样，标准字符串的当前声明可以作为一个例子：
 
 \begin{cppcode}
 namespace std {
@@ -114,7 +114,7 @@ namespace std {
 }
 \end{cppcode}
 
-相反，下面的重载会更好一些:
+相反，下面的重载会更好一些：
 
 \begin{cppcode}
 namespace std {
