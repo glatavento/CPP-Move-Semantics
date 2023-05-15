@@ -1,33 +1,32 @@
-根据设计，C++算法使用迭代器来处理容器和范围的元素。然而，就像指针操作数组一样，迭代器只能读取和写入值，不能插入或删除元素。因此，“删除”算法并不是真正删除元素，只是将所有未移除元素的值移动到已处理范围的前面。\par
+根据设计，C++算法使用迭代器来处理容器和范围的元素。然而，就像指针操作数组一样，迭代器只能读取和写入值，不能插入或删除元素。因此，“删除”算法并不是真正删除元素，只是将所有未移除元素的值移动到已处理范围的前面。
 
-例如，给定以下整数序列:\par
+例如，给定以下整数序列:
 
-\begin{tcolorbox}[colback=white,colframe=black]
+\begin{shell}
 1 2 3 4 5 4 3 2 1
-\end{tcolorbox}	
+\end{shell}	
 
-调用\textit{std::remove()}算法来删除值为2的所有元素，修改后的序列:\par
+调用\textit{std::remove()}算法来删除值为2的所有元素，修改后的序列:
 
-\begin{tcolorbox}[colback=white,colframe=black]
+\begin{shell}
 1 3 4 5 4 3 1 2 1
-\end{tcolorbox}	
+\end{shell}	
 
-所有不是2的元素都移到前面，作为新的结束(“last”元素后面的位置)，返回2的位置。\par
+所有不是2的元素都移到前面，作为新的结束(“last”元素后面的位置)，返回2的位置。
 
-可能的话，这些算法会移动，会以已移状态保留元素。本例中，如果元素是字符串，那么最后2个元素将保持不变，但最后1个元素将向前移动到2之前，以便最后一个元素处于已移动状态。\par
+可能的话，这些算法会移动，会以已移状态保留元素。本例中，如果元素是字符串，那么最后2个元素将保持不变，但最后1个元素将向前移动到2之前，以便最后一个元素处于已移动状态。
 
-因此，这些算法也可以将元素保留为已移动状态。事实上，以下算法可以创建已移动状态:\par
+因此，这些算法也可以将元素保留为已移动状态。事实上，以下算法可以创建已移动状态:
 
 \begin{itemize}
-	\item \textit{std::remove()}和\textit{std::remove\_if()}
+	\item \textit{std::remove()}和\textit{std::remove_if()}
 	\item \textit{std::unique()}
 \end{itemize}
 
-看一个完整的例子，可以看到元素是否为已移动状态:\par
+看一个完整的例子，可以看到元素是否为已移动状态:
 
-{\color{red}{lib/email.hpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/email.hpp}
+\begin{cppcode}
 #include <iostream>
 #include <cassert>
 #include <string>
@@ -72,15 +71,14 @@ class Email {
 		return strm << (e.movedFrom ? "MOVED-FROM" : e.value);
 	}
 };
-\end{lstlisting}
+\end{cppcode}
 
-通过实现移动构造函数和移动赋值操作符，设置了一个成员\textit{movedFrom}，并在输出操作符中求值。\par
+通过实现移动构造函数和移动赋值操作符，设置了一个成员\textit{movedFrom}，并在输出操作符中求值。
 
-现在让我们将该类中的一些元素放入vector中，并使用算法\textit{std::remove\_if()}删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址:\par
+现在让我们将该类中的一些元素放入vector中，并使用算法\textit{std::remove_if()}删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址:
 
-{\color{red}{lib/removeif.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/removeif.cpp}
+\begin{cppcode}
 #include "email.hpp"
 #include <iostream>
 #include <string>
@@ -111,47 +109,45 @@ int main()
 		std::cout << " '" << elem << "'\n";
 	}
 }
-\end{lstlisting}
+\end{cppcode}
 
-程序输出如下:\par
+程序输出如下:
 
-\begin{tcolorbox}[colback=white,colframe=black]
-remaining elements: \\
-"jill@company.com" \\
-"hana@company.com" \\
-all elements: \\
-"jill@company.com" \\
-"hana@company.com" \\
-"sarah@domain.de" \\
+\begin{shell}
+remaining elements: _
+"jill@company.com" _
+"hana@company.com" _
+all elements: _
+"jill@company.com" _
+"hana@company.com" _
+"sarah@domain.de" _
 "MOVED-FROM"
-\end{tcolorbox}	
+\end{shell}	
 
-“删除”以“.de”结尾的元素之后，新的结束位置是第二个元素后面的位置。但在容器中，第三个元素没有移动，第四个元素处于已移动状态，因为它移动赋值给了第二个元素(之前移动到第一个元素)。\par
+“删除”以“.de”结尾的元素之后，新的结束位置是第二个元素后面的位置。但在容器中，第三个元素没有移动，第四个元素处于已移动状态，因为它移动赋值给了第二个元素(之前移动到第一个元素)。
 
-使用这些已移动对象时要小心，原因在关于已移动状态的章节中已经讨论过了。\par
+使用这些已移动对象时要小心，原因在关于已移动状态的章节中已经讨论过了。
 
-\hspace*{\fill} \par %插入空行
-\textbf{14.3.1 移动算法中的迭代器}
+\subsection{移动算法中的迭代器}
 
-算法中使用移动迭代器，通常只有在算法保证每个元素只使用一次时才有意义。因此，该算法应该:\par
+算法中使用移动迭代器，通常只有在算法保证每个元素只使用一次时才有意义。因此，该算法应该:
 
 \begin{itemize}
 	\item 要求源的输入迭代器类别和目标的输出迭代器类别
-	\item 或者保证每个元素只使用一次(例如，为\textit{std::for\_each()}算法指定)
+	\item 或者保证每个元素只使用一次(例如，为\textit{std::for_each()}算法指定)
 \end{itemize}
 
-对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\textit{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理:\par
+对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\textit{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理:
 
 \begin{itemize}
 	\item 按值接受参数，总是移动/窃取值或资源
 	\item 通过右值/通用引用参数来决定移动/窃取哪个值/资源
 \end{itemize}
 
-例如:\par
+例如:
 
-{\color{red}{lib/foreachmove.cpp}}|\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/foreachmove.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <vector>
@@ -184,11 +180,11 @@ int main()
 	});
 	print("coll", coll);
 }
-\end{lstlisting}
+\end{cppcode}
 
-代码中，将所有大小为4的元素移动到helper函数\textit{process()}中:\par
+代码中，将所有大小为4的元素移动到helper函数\textit{process()}中:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 // move away only the elements processed:
 std::for_each(std::make_move_iterator(coll.begin()),
 std::make_move_iterator(coll.end()),
@@ -197,29 +193,29 @@ std::make_move_iterator(coll.end()),
 		process(std::move(elem));
 	}
 });
-\end{lstlisting}
+\end{cppcode}
 
-为此，将标记的元素(移动迭代器标记为\textit{std::move()})通过通用引用传递给\textit{process()}，并将其与\textit{std::move()}一起传递给\textit{process()}。因为\textit{process()}按值接受参数，所以值实际上已经移走。\par
+为此，将标记的元素(移动迭代器标记为\textit{std::move()})通过通用引用传递给\textit{process()}，并将其与\textit{std::move()}一起传递给\textit{process()}。因为\textit{process()}按值接受参数，所以值实际上已经移走。
 
-因此，所有大小不为4的元素都从容器\textit{coll}中的对象中移出。该程序的输出如下(?表示未知值):\par
+因此，所有大小不为4的元素都从容器\textit{coll}中的对象中移出。该程序的输出如下(?表示未知值):
 
-\begin{tcolorbox}[colback=white,colframe=black]
-coll (4 elems): "don't" "vote" "for" "liars" \\
-- process(don't) \\
-- process(for) \\
-- process(liars) \\
+\begin{shell}
+coll (4 elems): "don't" "vote" "for" "liars" _
+- process(don't) _
+- process(for) _
+- process(liars) _
 coll (4 elems): "?" "vote" "?" "?"
-\end{tcolorbox}
+\end{shell}
 
-最后一行是这样的:\par
+最后一行是这样的:
 
-\begin{tcolorbox}[colback=white,colframe=black]
+\begin{shell}
 coll (4 elems): "" "vote" "" ""
-\end{tcolorbox}
+\end{shell}
 
-这里使用了辅助函数\textit{std::make\_move\_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型\textit{std::move\_iterator}，而不需要指定元素类型:\par
+这里使用了辅助函数\textit{std::make_move_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型\textit{std::move_iterator}，而不需要指定元素类型:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::for_each(std::move_iterator{coll.begin()},
 std::move_iterator{coll.end()},
 [] (auto&& elem) {
@@ -227,16 +223,14 @@ std::move_iterator{coll.end()},
 		process(std::move(elem));
 	}
 });
-\end{lstlisting}
+\end{cppcode}
 
-\hspace*{\fill} \par %插入空行
-\textbf{14.3.2 在构造函数和成员函数中移动迭代器}
+\subsection{在构造函数和成员函数中移动迭代器}
 
-也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器(相同或不同类型的)。例如:\par
+也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器(相同或不同类型的)。例如:
 
-{\color{red}{lib/moveitor.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/moveitor.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <list>
@@ -261,16 +255,16 @@ int main()
 	print("src", src);
 	print("vec", vec);
 }
-\end{lstlisting}
+\end{cppcode}
 
-该程序有以下输出:(?表示未知值):\par
+该程序有以下输出:(?表示未知值):
 
-\begin{tcolorbox}[colback=white,colframe=black]
-src (4 elems): "?" "?" "?" "?" \\
+\begin{shell}
+src (4 elems): "?" "?" "?" "?" _
 vec (4 elems): "don't" "vote" "for" "liars"
-\end{tcolorbox}
+\end{shell}
 
-请再次注意，源容器中的元素数量没有改变。所有元素会移动到初始化的新容器中。因此，源范围中的元素随后处于已移动状态，所以不知道它们的值。\par
+请再次注意，源容器中的元素数量没有改变。所有元素会移动到初始化的新容器中。因此，源范围中的元素随后处于已移动状态，所以不知道它们的值。
 
 
 

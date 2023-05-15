@@ -1,15 +1,14 @@
-引用限定符允许对特定类别的对象调用函数时，以不同的方式实现函数。目标是在为不再需要其值的对象，调用不同的成员函数。\par
+引用限定符允许对特定类别的对象调用函数时，以不同的方式实现函数。目标是在为不再需要其值的对象，调用不同的成员函数。
 
-虽然确实有这个特性，但没有使用。可以(也应该)用它来确保修改对象的操作，不会让即将销毁的临时对象调用。\par
+虽然确实有这个特性，但没有使用。可以(也应该)用它来确保修改对象的操作，不会让即将销毁的临时对象调用。
 
-\hspace*{\fill} \par %插入空行
-\textbf{5.3.1 赋值操作符的引用限定符}
+\subsection{赋值操作符的引用限定符}
 
-更好地使用引用限定符的方式是修改赋值操作符的实现。如http://wg21.link/n2819中建议的那样，在可能的地方使用引用限定符声明赋值操作符可能会更好。\par
+更好地使用引用限定符的方式是修改赋值操作符的实现。如http://wg21.link/n2819中建议的那样，在可能的地方使用引用限定符声明赋值操作符可能会更好。
 
-例如，字符串的赋值操作符声明如下:\par
+例如，字符串的赋值操作符声明如下:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 namespace std {
 	template<typename charT, ... >
 	class basic_string {
@@ -21,20 +20,20 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cppcode}
 
-这允许将新值赋给临时字符串:\par
+这允许将新值赋给临时字符串:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::string getString();
 
 getString() = "hello"; // OK
 foo(getString() = ""); // passes string instead of bool
-\end{lstlisting}
+\end{cppcode}
 
-考虑用引用限定符声明赋值操作符:\par
+考虑用引用限定符声明赋值操作符:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 namespace std {
 	template<typename charT, ... >
 	class basic_string {
@@ -46,32 +45,32 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cppcode}
 
-代码将不再编译:\par
+代码将不再编译:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::string getString();
 
 getString() = "hello"; // ERROR
 foo(getString() = ""); // ERROR
-\end{lstlisting}
+\end{cppcode}
 
-注意，特别是对于可以用作布尔值的类型，将有助于找到如下错误:\par
+注意，特别是对于可以用作布尔值的类型，将有助于找到如下错误:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::optional<int> getValue();
 
 if (getValue() = 0) { // OOPS: compiles although = is used instead of ==
 	...
 }
-\end{lstlisting}
+\end{cppcode}
 
-其实，会给临时对象返回基本类型的属性:右值。\par
+其实，会给临时对象返回基本类型的属性:右值。
 
-注意，所有这些修改C++标准的建议都被拒绝了，主要是考虑向后兼容性。然而，在实现自己的类时，可以使用以下改进的方式:\par
+注意，所有这些修改C++标准的建议都被拒绝了，主要是考虑向后兼容性。然而，在实现自己的类时，可以使用以下改进的方式:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 class MyType {
 public:
 	...
@@ -84,18 +83,17 @@ public:
 	MyType(MyType&&) =default;
 	...
 };
-\end{lstlisting}
+\end{cppcode}
 
-通常，对可能修改对象的成员函数执行此操作。\par
+通常，对可能修改对象的成员函数执行此操作。
 
-\hspace*{\fill} \par %插入空行
-\textbf{5.3.2 其他成员函数的引用限定符}
+\subsection{其他成员函数的引用限定符}
 
-如getter示例所示，引用限定符也可以而且应该在返回对对象的引用时使用。这样，可以减少访问已销毁临时对象的成员的风险。\par
+如getter示例所示，引用限定符也可以而且应该在返回对对象的引用时使用。这样，可以减少访问已销毁临时对象的成员的风险。
 
-同样，标准字符串的当前声明可以作为一个例子:\par
+同样，标准字符串的当前声明可以作为一个例子:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 namespace std {
 	template<typename charT, ... >
 	class basic_string {
@@ -113,11 +111,11 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cppcode}
 
-相反，下面的重载会更好一些:\par
+相反，下面的重载会更好一些:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 namespace std {
 	template<typename charT, ... >
 	class basic_string {
@@ -139,9 +137,9 @@ namespace std {
 		...
 	};
 }
-\end{lstlisting}
+\end{cppcode}
 
-同样，由于向后兼容性，C++标准中相应的更改可能会成为一个问题。但可以为自定义的类型提供这些重载。这种情况下，不要忘记右值引用的实现可以移出大型成员。\par
+同样，由于向后兼容性，C++标准中相应的更改可能会成为一个问题。但可以为自定义的类型提供这些重载。这种情况下，不要忘记右值引用的实现可以移出大型成员。
 
 
 

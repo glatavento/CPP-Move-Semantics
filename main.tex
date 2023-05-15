@@ -1,0 +1,131 @@
+\documentclass[11pt, onecolumn, oneside]{ctexbook}
+
+\usepackage{xpatch,mathtools}
+\usepackage[a5paper, scale=0.8]{geometry}
+\usepackage{subfiles,graphicx,enumitem,titlesec,pdfpages}
+% \usepackage{tabularx,booktabs,multirow}
+\usepackage{tabularray}
+\usepackage[most]{tcolorbox}
+\usepackage[pdfusetitle]{hyperref}
+\usepackage{bookmark,xurl}
+\usepackage{minted}
+
+\title{C++ Move Semantics: The Complete Guide}
+\author{作者：Nicolai M. Josuttis  \and 译者：陈晓伟}
+\date{\today}
+
+\ExplSyntaxOn
+
+% Remove newpage after \part
+\assignpagestyle { \part } { empty }
+\titleclass   { \part } { top }
+\titleformat  { \part } [ display ]              % shape
+                        { \Huge\bfseries }       % format
+                        { 第 \zhdig{part} 部分 }  % label
+                        { 0.5em }                % sep
+                        {}                       % before-code
+                        []                       % after-code
+\titlespacing { \part } { 0pt }  % left
+                        { 0pt }  % before-sep
+                        { 2em }  % after-sep
+                      % []       % right-sep
+\xpatchcmd { \@endpart } { \vfil\newpage } {} {} {}
+\xpatchcmd { \@endpart } { \newpage      } {} {} {}
+
+% Setup fonts
+\setmainfont { Libertinus~Serif }
+\setsansfont { Libertinus~Sans  }
+\setmonofont { Iosevka~Slab     }
+
+% Setup hyperlinks
+\hypersetup { breaklinks=true }
+
+% Setup lists
+\SetLabelAlign { EmCenter } { \makebox [ 1em ] { #1 } }
+\setlist { nosep }
+\setlist [ itemize    ] { labelsep=0pt, labelwidth=1em, leftmargin=1em, align=EmCenter }
+\setlist [ itemize, 1 ] { leftmargin=3em }
+\setlist [ itemize, 2 ] { label=◦ }
+\SetEnumitemKey { noindent } { leftmargin=1em }
+
+% Setup tblr
+\UseTblrLibrary { varwidth }
+\SetTblrInner [ talltblr, longtblr ] { hlines, rows={m}, row{1} = {c, font=\bfseries, cmd={}} }
+\SetTblrInner [ longtblr ] { rowhead=1, measure=vbox }
+\DefTblrTemplate { contfoot-text } { normal } { 续下页  }
+\DefTblrTemplate { conthead-text } { normal } { （接前页） }
+\SetTblrTemplate { contfoot-text } { normal }
+\SetTblrTemplate { conthead-text } { normal }
+\SetTblrTemplate { caption-sep   } { empty  } % Remove : after table number
+
+% Macros to escape subscript
+\NewDocumentCommand { \makesubletter } {}
+{ \char_set_catcode_letter:N         _ }
+\NewDocumentCommand { \makesubsub } {}
+{ \char_set_catcode_math_subscript:N _ }
+
+% Setup minted
+\setminted { obeytabs, tabsize=2, breaklines=true, fontsize=\footnotesize, frame=single }
+\setmintedinline { breaklines=true, breakbefore=_ }
+\newminted { cpp } { linenos=true }
+\newminted [ shell ] { text } { linenos=true }
+\newmintinline { cpp } {}
+\newmintinline { text } {}
+\NewDocumentCommand { \cppcomma } { m }
+{ \seq_set_from_clist:Nn \l_tmpa_seq { #1 }
+  \int_set:Nn \l_tmpa_int { \seq_count:N \l_tmpa_seq }
+  \int_step_inline:nnn { 1 } { \l_tmpa_int - 1 }
+  { \exp_args:Nx \cppinline { \seq_item:Nn \l_tmpa_seq { ##1 } } \\ }
+  \exp_args:Nx \cppinline { \seq_item:Nn \l_tmpa_seq { \l_tmpa_int } } }
+
+% Def note & important note
+\NewDocumentEnvironment { note } { }
+{ \begin { tcolorbox } [breakable,enhanced~jigsaw,colback=blue!5!white,colframe=blue!75!black,title={Note}] }
+{ \end   { tcolorbox } }
+
+\NewDocumentEnvironment { important } { }
+{ \begin { tcolorbox } [breakable,enhanced~jigsaw,colback=blue!5!white,colframe=blue!75!black,title={重要的Note}] }
+{ \end   { tcolorbox } }
+
+\ExplSyntaxOff
+
+\begin{document}
+
+\makesubletter
+
+\includepdf{cover.pdf}
+\maketitle
+
+% 前言部分
+\frontmatter
+\setcounter{secnumdepth}{0}
+
+\subfile{frontmatter/Description.tex}
+\subfile{frontmatter/Credits.tex}
+\subfile{frontmatter/Preface.tex}
+
+% 目录
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{目录}
+\tableofcontents
+
+% % 正文部分
+\mainmatter
+\setcounter{secnumdepth}{2}
+
+\subfile{content/part1.tex}
+\subfile{content/part2.tex}
+\subfile{content/part3.tex}
+
+% 后记部分
+\backmatter
+\bookmarksetup{startatroot}
+\setcounter{secnumdepth}{0}
+\subfile{backmatter/Closing-Notes.tex}
+\subfile{backmatter/Assignment-Answers.tex}
+
+\makesubsub
+
+\end{document}
+

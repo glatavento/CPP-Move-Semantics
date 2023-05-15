@@ -1,15 +1,13 @@
-C++标准库有两个特殊的类型，代表正在运行的线程或用于同步。其中一些既不能复制也不能移动(例如，原子类型或条件变量)。然而，其中一些是只移动类型。让我们从移动语义的角度来看一些细节。\par
+C++标准库有两个特殊的类型，代表正在运行的线程或用于同步。其中一些既不能复制也不能移动(例如，原子类型或条件变量)。然而，其中一些是只移动类型。让我们从移动语义的角度来看一些细节。
 
-\hspace*{\fill} \par %插入空行
-\textbf{15.6.1 std::thread<>和std::jthread<>}
+\subsection{std::thread<>和std::jthread<>}
 
-表示运行线程的对象(std::thread或C++20 std::jthread)可以传递，但不能复制。可以把它们放在容器里。\par
+表示运行线程的对象(std::thread或C++20 std::jthread)可以传递，但不能复制。可以把它们放在容器里。
 
-考虑以下例子:\par
+考虑以下例子:
 
-{\color{red}{lib/thread.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/thread.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -36,39 +34,37 @@ int main()
 		t.join();
 	}
 }
-\end{lstlisting}
+\end{cppcode}
 
-启动两个线程，并将它们放入所有运行线程的集合中:\par
+启动两个线程，并将它们放入所有运行线程的集合中:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::vector<std::thread> threads; // better std::jthread since C++20
 
 std::string someArg{"black lives matter"};
 threads.push_back(std::thread{doThis, someArg});
 threads.push_back(std::thread{doThat, std::move(someArg)});
-\end{lstlisting}
+\end{cppcode}
 
-通过声明std::thread类型的对象(从C++20开始，最好使用std::jthread)来启动一个线程，并将临时对象移动到线程中。在可调用对象(函数, Lambda, 函数对象)的参数后面，可以传递额外的参数，这些参数在线程启动时传递给可调用对象。默认情况下，线程类的构造函数会复制这些参数。使用\textit{std::move()}切换到移动语义。因此，\textit{doThis()}获得传递给\textit{someArg}字符串的副本，而\textit{doThat()}获得该字符串的移动值。\par
+通过声明std::thread类型的对象(从C++20开始，最好使用std::jthread)来启动一个线程，并将临时对象移动到线程中。在可调用对象(函数, Lambda, 函数对象)的参数后面，可以传递额外的参数，这些参数在线程启动时传递给可调用对象。默认情况下，线程类的构造函数会复制这些参数。使用\textit{std::move()}切换到移动语义。因此，\textit{doThis()}获得传递给\textit{someArg}字符串的副本，而\textit{doThat()}获得该字符串的移动值。
 
-最后，等待所有线程的结束(使用std::thread时，这是避免段错误的必要条件):\par
+最后，等待所有线程的结束(使用std::thread时，这是避免段错误的必要条件):
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 // wait for all threads to end:
 for (auto& t : threads) {
 	t.join();
 }
-\end{lstlisting}
+\end{cppcode}
 
-\hspace*{\fill} \par %插入空行
-\textbf{15.6.2 Future, Promise和打包任务}
+\subsection{Future, Promise和打包任务}
 
-对于一些用于同步两个线程之间(返回)值交换的helper类型，还使用了只移动类型(future、promise和打包任务都是只移动类型)。\par
+对于一些用于同步两个线程之间(返回)值交换的helper类型，还使用了只移动类型(future、promise和打包任务都是只移动类型)。
 
-考虑以下例子:\par
+考虑以下例子:
 
-{\color{red}{lib/future.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{lib/future.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <vector>
@@ -107,45 +103,45 @@ int main()
 		std::cout << fut.get() << '\n';
 	}
 }
-\end{lstlisting}
+\end{cppcode}
 
-main()中，首先创建了promise，即能够将结果(值或异常)发送给能够读取它的关联future:\par
+main()中，首先创建了promise，即能够将结果(值或异常)发送给能够读取它的关联future:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::promise<std::string> p;
 std::future<std::string> f{p.get_future()};
-\end{lstlisting}
+\end{cppcode}
 
-future移动到future的集合中:\par
+future移动到future的集合中:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 results.push_back(std::move(f));
-\end{lstlisting}
+\end{cppcode}
 
-也可以将\textit{p.get\_future()}的结果直接传递给\textit{push\_back()}:\par
+也可以将\textit{p.get_future()}的结果直接传递给\textit{push_back()}:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 results.push_back(p.get_future());
-\end{lstlisting}
+\end{cppcode}
 
-promise移动到已启动的线程:\par
+promise移动到已启动的线程:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 std::thread t{getValue, move(p)};
-\end{lstlisting}
+\end{cppcode}
 
-线程将作为\textit{getValue()}的参数，\textit{getValue()}按值接受传递的promise:\par
+线程将作为\textit{getValue()}的参数，\textit{getValue()}按值接受传递的promise:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 void getValue(std::promise<std::string> p)
 {
 	...
 }
-\end{lstlisting}
+\end{cppcode}
 
-通过这种方式，getValue()接收promise的所有权，并在线程结束时销毁通信机制的源.\par
+通过这种方式，getValue()接收promise的所有权，并在线程结束时销毁通信机制的源.
 
-getValue()也可以通过引用的方式获取promise，因为启动的线程保存着已移动的promise值，直到结束为止。\par
+getValue()也可以通过引用的方式获取promise，因为启动的线程保存着已移动的promise值，直到结束为止。
 
 
 

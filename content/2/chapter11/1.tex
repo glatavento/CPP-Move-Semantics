@@ -1,22 +1,20 @@
-我们经常需要将返回值传递给另一个函数:\par
+我们经常需要将返回值传递给另一个函数:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 // pass return value of compute() to process():
 process(compute(t)); // OK, uses perfect forwarding of returned value
-\end{lstlisting}
+\end{cppcode}
 
-非泛型代码中，需要知道所涉及的类型。然而，泛型代码中，也希望\textit{compute()}的返回值完全传递给\textit{process()}。\par
+非泛型代码中，需要知道所涉及的类型。然而，泛型代码中，也希望\textit{compute()}的返回值完全传递给\textit{process()}。
 
-好消息是：如果直接将返回值传递给另一个函数，该值会完美传递，保持其类型和值类别。不必担心移动语义(如果支持将自动使用)。\par
+好消息是：如果直接将返回值传递给另一个函数，该值会完美传递，保持其类型和值类别。不必担心移动语义(如果支持将自动使用)。
 
-\hspace*{\fill} \par %插入空行
-\textbf{11.1.1 默认完美传递的细节}
+\subsection{默认完美传递的细节}
 
-完整的例子:\par
+完整的例子:
 
-{\color{red}{generic/perfectpassing.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{generic/perfectpassing.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 
@@ -55,78 +53,86 @@ int main()
 	
 	process(computeValue("tmp")); // calls process(std::string&&)
 }
-\end{lstlisting}
+\end{cppcode}
 
 \begin{itemize}
-	\item 如果\textit{compute()}返回一个const lvalue引用:\par
-	\begin{lstlisting}[caption={}]
-	const std::string& computeConstLRef(const std::string& str) {
-		return str;
-	}
-	\end{lstlisting}
-	返回值的值类别是lvalue，这意味着返回值会完美转发，并与\textit{const} lvalue引用匹配:\par
-	\begin{lstlisting}[caption={}]
-	process(computeConstLRef("tmp")); // calls process(const std::string&)
-	\end{lstlisting}
-	\item 如果\textit{compute()}返回一个非\textit{const} lvalue引用:\par
-	\begin{lstlisting}[caption={}]
-	std::string& computeLRef(std::string& str) {
-		return str;
-	}
-	\end{lstlisting}
-	返回值的值类别是lvalue，这意味着返回值会完全转发，并与非\textit{const} lvalue引用的最佳匹配:\par
-	\begin{lstlisting}[caption={}]
-	std::string str{"lvalue"};
-	process(computeLRef(str)); // calls process(std::string&)
-	\end{lstlisting}
-	\item 如果\textit{compute()}返回rvalue引用:\par
-	\begin{lstlisting}[caption={}]
-	std::string&& computeRRef(std::string&& str) {
-		return std::move(str);
-	}
-	\end{lstlisting}
-	返回值的值类别是xvalue，这意味着返回值会完全转发为rvalue引用，允许\textit{process()}窃取值:\par
-	\begin{lstlisting}[caption={}]
-	process(computeRRef("tmp")); // calls process(std::string&&)
-	process(computeRRef(std::move(str))); // calls process(std::string&&)
-	\end{lstlisting}
-	\item 如果\textit{compute()}按值返回临时对象:\par
-	\begin{lstlisting}[caption={}]
-	std::string computeValue(const std::string& str) {
-		return str;
-	}
-	\end{lstlisting}
-	返回值的值类别是prvalue，返回值完全转发为rvalue引用，也允许\textit{process()}窃取值:\par
-	\begin{lstlisting}[caption={}]
-	process(computeValue("tmp")); // calls process(std::string&&)
-	\end{lstlisting}
+	\item 如果\textit{compute()}返回一个const lvalue引用:
+
+\begin{cppcode}
+const std::string& computeConstLRef(const std::string& str) {
+	return str;
+}
+\end{cppcode}
+返回值的值类别是lvalue，这意味着返回值会完美转发，并与\textit{const} lvalue引用匹配:
+
+\begin{cppcode}
+process(computeConstLRef("tmp")); // calls process(const std::string&)
+\end{cppcode}
+\item 如果\textit{compute()}返回一个非\textit{const} lvalue引用:
+
+\begin{cppcode}
+std::string& computeLRef(std::string& str) {
+	return str;
+}
+\end{cppcode}
+返回值的值类别是lvalue，这意味着返回值会完全转发，并与非\textit{const} lvalue引用的最佳匹配:
+
+\begin{cppcode}
+std::string str{"lvalue"};
+process(computeLRef(str)); // calls process(std::string&)
+\end{cppcode}
+\item 如果\textit{compute()}返回rvalue引用:
+
+\begin{cppcode}
+std::string&& computeRRef(std::string&& str) {
+	return std::move(str);
+}
+\end{cppcode}
+返回值的值类别是xvalue，这意味着返回值会完全转发为rvalue引用，允许\textit{process()}窃取值:
+
+\begin{cppcode}
+process(computeRRef("tmp")); // calls process(std::string&&)
+process(computeRRef(std::move(str))); // calls process(std::string&&)
+\end{cppcode}
+\item 如果\textit{compute()}按值返回临时对象:
+
+\begin{cppcode}
+std::string computeValue(const std::string& str) {
+	return str;
+}
+\end{cppcode}
+返回值的值类别是prvalue，返回值完全转发为rvalue引用，也允许\textit{process()}窃取值:
+
+\begin{cppcode}
+process(computeValue("tmp")); // calls process(std::string&&)
+\end{cppcode}
 \end{itemize}
 
-注意，通过返回\textit{const}值:\par
+注意，通过返回\textit{const}值:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 const std::string computeConstValue(const std::string& str) {
 	return str;
 }
-\end{lstlisting}
+\end{cppcode}
 
-或\textit{const} rvalue引用:\par
+或\textit{const} rvalue引用:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 const std::string&& computeConstRRef(std::string&& str) {
 	return std::move(str);
 }
-\end{lstlisting}
+\end{cppcode}
 
-再次禁用移动语义:\par
+再次禁用移动语义:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 process(computeConstValue("tmp")); // calls process(const std::string&)
 process(computeConstRRef("tmp")); // calls process(const std::string&)
-\end{lstlisting}
+\end{cppcode}
 
-如果有\textit{const}\&\&的声明，可以接受这样的重载。\par
+如果有\textit{const}\&\&的声明，可以接受这样的重载。
 
-因此:不要将value返回的值标记为\textit{const}，也不要将返回的非\textit{const} rvalue引用标记为\textit{const}。\par
+因此:不要将value返回的值标记为\textit{const}，也不要将返回的非\textit{const} rvalue引用标记为\textit{const}。
 
 

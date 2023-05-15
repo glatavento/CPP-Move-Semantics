@@ -1,22 +1,20 @@
-对普通rvalue引用和通用/转发引用使用相同的语法，这为对象是普通rvalue引用还是通用引用带来了一些有趣的情况。\par
+对普通rvalue引用和通用/转发引用使用相同的语法，这为对象是普通rvalue引用还是通用引用带来了一些有趣的情况。
 
-\hspace*{\fill} \par %插入空行
-\textbf{10.2.1 泛型类型成员的rvalue引用}
+\subsection{泛型类型成员的rvalue引用}
 
-对模板形参的成员类型的rvalue引用不是通用引用。\par
+对模板形参的成员类型的rvalue引用不是通用引用。
 
-例如:\par
+例如:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 template<typename T>
 void foo(typename T::value_type&& arg); // not a universal reference
-\end{lstlisting}
+\end{cppcode}
 
-这里有一个完整的例子:\par
+这里有一个完整的例子:
 
-{\color{red}{generic/universalmem.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{generic/universalmem.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <vector>
@@ -38,29 +36,27 @@ int main()
 	insert(coll, std::move(str)); // OK
 	...
 }
-\end{lstlisting}
+\end{cppcode}
 
-\hspace*{\fill} \par %插入空行
-\textbf{10.2.2 类模板中参数的rvalue引用}
+\subsection{类模板中参数的rvalue引用}
 
-对类模板的模板形参的rvalue引用不是通用引用。\par
+对类模板的模板形参的rvalue引用不是通用引用。
 
-例如:\par
+例如:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 template<typename T>
 class C {
 	T&& member; // member is not a universal reference
 	...
 	void foo(T&& arg); // arg is not a universal reference
 };
-\end{lstlisting}
+\end{cppcode}
 
-完整的例子:\par
+完整的例子:
 
-{\color{red}{generic/universalclass.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{generic/universalclass.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <vector>
@@ -88,37 +84,35 @@ int main()
 	coll.insert(std::move(str)); // OK
 	...
 }
-\end{lstlisting}
+\end{cppcode}
 
-通常，类模板中的函数不遵循函数模板规则。就是\textit{temploid}，泛型代码在实例化类时遵循普通函数的规则。\par
+通常，类模板中的函数不遵循函数模板规则。就是\textit{temploid}，泛型代码在实例化类时遵循普通函数的规则。
 
-\hspace*{\fill} \par %插入空行
-\textbf{10.2.3 完全特化中参数的rvalue引用}
+\subsection{完全特化中参数的rvalue引用}
 
-对函数模板的完全特化的形参的rvalue引用不是通用引用。\par
+对函数模板的完全特化的形参的rvalue引用不是通用引用。
 
-例如:\par
+例如:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 template<typename T> // primary template
 void foo(T&& arg); // - arg is a universal reference
 ...
 template<> // full specialization (for rvalues only)
 void foo(std::string&& arg); // - arg is not a universal reference
-\end{lstlisting}
+\end{cppcode}
 
-对于std::string类型的lvalue，仍然会调用主模板。要特化std::string的主模板的所有情况，必须提供第二个全特化版本:\par
+对于std::string类型的lvalue，仍然会调用主模板。要特化std::string的主模板的所有情况，必须提供第二个全特化版本:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 template<> // full specialization (for lvalues)
 void foo(std::string& arg);
-\end{lstlisting}
+\end{cppcode}
 
-完整的例子:\par
+完整的例子:
 
-{\color{red}{generic/universalspec.cpp}}\par
-
-\begin{lstlisting}[caption={}]
+\filename{generic/universalspec.cpp}
+\begin{cppcode}
 #include <iostream>
 #include <string>
 #include <vector>
@@ -157,11 +151,11 @@ int main()
 	insert(coll, std::move(str)); // calls full specialization for rvalues
 	...
 }
-\end{lstlisting}
+\end{cppcode}
 
-注意，必须在类定义之外声明/定义成员函数模板的全特化:\par
+注意，必须在类定义之外声明/定义成员函数模板的全特化:
 
-\begin{lstlisting}[caption={}]
+\begin{cppcode}
 template<typename T>
 class Cont {
 	...
@@ -190,7 +184,7 @@ void Cont<std::string>::insert<>(const std::string& v)
 {
 	coll.push_back(v);
 }
-\end{lstlisting}
+\end{cppcode}
 
 
 
