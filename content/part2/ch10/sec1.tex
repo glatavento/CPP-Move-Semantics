@@ -38,7 +38,7 @@ int main()
 {
 	std::string v{"v"};
 	const std::string c{"c"};
-	
+
 	process(v); // coll binds to a non-const lvalue, iterators passed
 	process(c); // coll binds to a const lvalue, const_iterators passed
 	process(std::string{"t"}); // coll binds to a non-const prvalue, iterators passed
@@ -49,13 +49,13 @@ int main()
 
 该程序有以下输出:
 
-\begin{shell}
-do some non-const stuff with the passed range _
-do some const stuff with the passed range _
-do some non-const stuff with the passed range _
-do some non-const stuff with the passed range _
+\begin{outputcode}
+do some non-const stuff with the passed range
 do some const stuff with the passed range
-\end{shell}
+do some non-const stuff with the passed range
+do some non-const stuff with the passed range
+do some const stuff with the passed range
+\end{outputcode}
 
 代码中，用一个形参声明\textit{process()}作为对集合(容器、字符串等)的通用引用。与通用引用一样，可以传递所有可能值类别的字符串。
 

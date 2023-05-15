@@ -178,7 +178,7 @@ template<typename T>
 void foo(T&& x)
 {
 	x.print(); // OK, no need to forward the passed value category
-	
+
 	x.getName(); // calls getName() const&
 	std::forward<T>(x).getName(); // calls getName() && for rvalues (OK, no longer need x)
 }

@@ -86,13 +86,13 @@ int main()
 		c.addValue(val);
 	}
 	std::cout << "c: " << c << '\n'; // print value of initialized c
-	
+
 	// insert the customer twice into a collection of customers:
 	std::vector<Customer> customers;
 	customers.push_back(c); // copy into the vector
 	customers.push_back(std::move(c)); // move into the vector
 	std::cout << "c: " << c << '\n'; // print value of moved-from c
-	
+
 	// print all customers in the collection:
 	std::cout << "customers:\n";
 	for (const Customer& cust : customers) {
@@ -103,9 +103,9 @@ int main()
 
 这里，创建并初始化一个\textit{customer c}(为了避免SSO，我们使用一个相当长的名称)。初始化\textit{c}后，第一个输出如下:
 
-\begin{shell}
+\begin{outputcode}
 c: [Wolfgang Amadeus Mozart: 0 8 15 ]
-\end{shell}
+\end{outputcode}
 
 然后将这个\textit{customer}插入到vector中两次:复制一次，移动一次:
 
@@ -116,23 +116,23 @@ customers.push_back(std::move(c)); // move into the vector
 
 然后，\textit{c}的输出:
 
-\begin{shell}
+\begin{outputcode}
 c: [: ]
-\end{shell}
+\end{outputcode}
 
 第二次调用push_back()时，名称和值都移到了vector的第二个元素中。但是，已移动的对象处于有效但未定义的状态。因此，第二个输出可以有任何值\textit{name}和\textit{values}:
 
 \begin{itemize}
 	\item 可能仍然有相同的值:
 
-	\begin{shell}
-	c: [Wolfgang Amadeus Mozart: 0 8 15 ]
-	\end{shell}
+	\begin{outputcode}
+c: [Wolfgang Amadeus Mozart: 0 8 15 ]
+	\end{outputcode}
 	\item 可能有完全不同的值:
 
-	\begin{shell}
-	c: [value was moved away: 0 ]
-	\end{shell}
+	\begin{outputcode}
+c: [value was moved away: 0 ]
+	\end{outputcode}
 \end{itemize}
 
 然而，移动语义是为了优化性能而提供，而分配不同的值并不一定是提高性能，所以在实现中通常把字符串和vector都设为空。

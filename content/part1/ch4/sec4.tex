@@ -111,7 +111,7 @@ int main()
 	Polygon p0{"Poly1", {Coord{1,1}, Coord{1,9}, Coord{9,9}, Coord{9,1}}};
 	Polygon p1{p0}; // copy
 	Polygon p2{std::move(p0)}; // move
-	
+
 	p0.draw();
 	p1.draw();
 	p2.draw();
@@ -120,11 +120,11 @@ int main()
 
 这个程序有以下输出:
 
-\begin{shell}
-polygon '' over _
-polygon 'Poly1' over (1,1) (1,9) (9,9) (9,1) _
-polygon 'Poly1' over (1,1) (1,9) (9,9) (9,1) 
-\end{shell}
+\begin{outputcode}
+polygon '' over
+polygon 'Poly1' over (1,1) (1,9) (9,9) (9,1)
+polygon 'Poly1' over (1,1) (1,9) (9,9) (9,1)
+\end{outputcode}
 
 对于这两个成员，\textit{name}和\textit{points}，值都从\textit{p0}移动到\textit{p2}。
 

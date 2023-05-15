@@ -18,10 +18,10 @@
 
 图3.1概述了什么时候会根据声明的构造函数和特殊成员函数，自动生成特殊成员函数:
 
-\begin{picture}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter3/images/1}
+\begin{figure}
+	\includegraphics[width=0.8\textwidth]{part1/ch3/images/1}
 	\caption{自动生成特殊成员函数的规则}
-\end{picture}
+\end{figure}
 
 
 可以在这个表格中看到一些基本的规则:
@@ -44,9 +44,9 @@ class Person {
 public:
 	...
 	// NO copy constructor/assignment declared
-	
+
 	// NO move constructor/assignment declared
-	
+
 	// NO destructor declared
 };
 \end{cppcode}
@@ -75,7 +75,7 @@ public:
 	// copy constructor/assignment declared:
 	Person(const Person&) = default;
 	Person& operator=(const Person&) = default;
-	
+
 	// NO move constructor/assignment declared
 };
 \end{cppcode}
@@ -108,7 +108,7 @@ class Person {
 	public:
 	...
 	// NO copy constructor declared
-	
+
 	// move constructor/assignment declared:
 	Person(Person&&) = default;
 	Person& operator=(Person&&) = default;
@@ -162,7 +162,7 @@ class Person {
 	// copy constructor explicitly declared:
 	Person(const Person& p) = default;
 	Person& operator=(const Person&) = default;
-	
+
 	// move constructor/assignment declared as deleted:
 	Person(Person&&) = delete;
 	Person& operator=(Person&&) = delete;

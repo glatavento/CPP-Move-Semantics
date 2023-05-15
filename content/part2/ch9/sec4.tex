@@ -1,4 +1,4 @@
-\section{使用通用引用的重载}}
+\section{使用通用引用的重载}
 已经讨论了将对象绑定到普通引用时的规则。现在，在引入通用引用之后，必须扩展这些规则。
 
 再次假设有一个类X，有一个非\textit{const}变量\textit{v}，有一个\textit{const}变量\textit{c}:
@@ -25,7 +25,7 @@ void f(T&&); // to use perfect forwarding
 
 \subsubsection{表 9.1. 绑定所有引用规则}
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/2/chapter9/images/1}
+	\includegraphics[width=0.8\textwidth]{part2/ch9/images/1}
 \end{center}
 
 同样，这些数字列出了重载解析的优先级(最小的数字具有最高的优先级)，以便确定重载时调用了哪个函数。
@@ -68,7 +68,7 @@ int main()
 {
 	X xv;
 	const X xc;
-	
+
 	X xcc{xc}; // OK: calls copy constructor
 	X xvc{xv}; // OOPS: calls universal constructor
 	X xvm{std::move(xv)}; // OK: calls move constructor
@@ -78,12 +78,12 @@ int main()
 
 如注释中所示，该程序有以下输出:
 
-\begin{shell}
-copy constructor _
-universal constructor _
-move constructor _
+\begin{outputcode}
+copy constructor
 universal constructor
-\end{shell}
+move constructor
+universal constructor
+\end{outputcode}
 
 因此，最好避免实现将第一个形参声明为通用引用，并为任意类型的实参调用的泛型构造函数。
 

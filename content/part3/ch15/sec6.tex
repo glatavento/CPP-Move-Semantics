@@ -23,13 +23,13 @@ void doThat(const std::string& arg) {
 int main()
 {
 	std::vector<std::thread> threads; // better std::jthread since C++20
-	
+
 	// start a couple of threads:
 	std::string someArg{"Black Lives Matter"};
 	threads.push_back(std::thread{doThis, someArg});
 	threads.push_back(std::thread{doThat, std::move(someArg)});
 	...
-	
+
 	// wait for all threads to end:
 	for (auto& t : threads) {
 		t.join();
@@ -88,17 +88,17 @@ void getValue(std::promise<std::string> p)
 int main()
 {
 	std::vector<std::future<std::string>> results;
-	
+
 	// create promise and future to deal with outcome of the thread started:
 	std::promise<std::string> p;
 	std::future<std::string> f{p.get_future()};
 	results.push_back(std::move(f));
-	
+
 	// start thread and move the promise to it:
 	std::thread t{getValue, move(p)};
 	t.detach(); // would not be necessary for std::jthread
 	...
-	
+
 	// wait for all threads to end:
 	for (auto& fut : results) {
 		std::cout << fut.get() << '\n';

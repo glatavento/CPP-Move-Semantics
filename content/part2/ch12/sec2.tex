@@ -100,16 +100,16 @@ std::string&& returnArg(std::string&& arg)
 int main()
 {
 	auto s = call(nextString); // call() returns temporary object
-	
+
 	auto&& ref = call(returnArg, std::move(s)); // call() returns rvalue reference to s
 	std::cout << "s: " << s << '\n';
 	std::cout << "ref: " << ref << '\n';
-	
+
 	auto str = std::move(ref); // move value from s and ref to str
 	std::cout << "s: " << s << '\n';
 	std::cout << "ref: " << ref << '\n';
 	std::cout << "str: " << str << '\n';
-	
+
 	call(print, std::cout, str) << '\n'; // call() returns reference to std::cout
 }
 \end{cppcode}
@@ -130,10 +130,10 @@ auto&& ref = call(returnArg, std::move(s));
 
 函数调用带有\textit{std::move()}标记的函数\textit{returnArg()}。\textit{returnArg()}将传递的参数作为右值引用返回，然后\textit{call()}完美地返回给调用者来初始化ref。str仍然有它的值，并且ref会对其进行引用:
 
-\begin{shell}
-s: Let's dance _
+\begin{outputcode}
+s: Let's dance
 ref: Let's dance
-\end{shell}
+\end{outputcode}
 
 使用
 
@@ -143,11 +143,11 @@ auto str = std::move(ref);
 
 将\textit{s}和\textit{ref}的值移动到\textit{str}，得到以下状态:
 
-\begin{shell}
-s: _
-ref: _
+\begin{outputcode}
+s:
+ref:
 str: Let's dance
-\end{shell}
+\end{outputcode}
 
 当调用
 

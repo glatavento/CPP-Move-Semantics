@@ -78,7 +78,7 @@ public:
 	// disable assigning value to temporary objects:
 	MyType& operator=(const MyType& str) & =default;
 	MyType& operator=(MyType&& str) & =default;
-	
+
 	// because this disables the copy/move constructor, also:
 	MyType(const MyType&) =default;
 	MyType(MyType&&) =default;
@@ -104,7 +104,7 @@ namespace std {
 		constexpr charT& operator[](size_type pos);
 		constexpr const charT& at(size_type n) const;
 		constexpr charT& at(size_type n);
-		
+
 		constexpr const charT& front() const;
 		constexpr charT& front();
 		constexpr const charT& back() const;
@@ -128,7 +128,7 @@ namespace std {
 		constexpr const charT& at(size_type n) const&;
 		constexpr charT& at(size_type n) &;
 		constexpr charT at(size_type n) &&;
-		
+
 		constexpr const charT& front() const&;
 		constexpr charT& front() &;
 		constexpr charT front() &&;

@@ -15,11 +15,11 @@ std::vector<std::string> createAndInsert()
 	std::vector<std::string> coll; // create vector of strings
 	coll.reserve(3); // reserve memory for 3 elements
 	std::string s = "data"; // create string object
-	
+
 	coll.push_back(s); // insert string object
 	coll.push_back(s+s); // insert temporary string
 	coll.push_back(s); // insert string
-	
+
 	return coll; // return vector of strings
 }
 
@@ -58,7 +58,7 @@ std::string s = "data";
 
 	之后，程序的状态如下:堆栈上有三个对象:\textit{v}、\textit{coll}和\textit{s}。其中\textit{coll}和\textit{s}已经在堆上分配了内存:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/1}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/1}
 	\end{center}
 	\item 下一步是将字符串放到\textit{coll}中:
 \begin{cppcode}
@@ -66,7 +66,7 @@ coll.push_back(s);
 \end{cppcode}
 	C++标准库中的所有容器都具有语义，能创建副本。所以，vector有了第一个元素，它是\textit{s}的副本:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/2}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/2}
 	\end{center}
 	目前为止，我们还没有对这个程序进行优化。现在，我们有两个vector，\textit{v}和\textit{coll}，以及两个字符串，\textit{s}和它的副本，这也是\textit{coll}的第一个元素。它们都是独立的对象，有自己的内存。
 
@@ -80,17 +80,17 @@ coll.push_back(s+s);
 		\item 创建临时字符串s+s:
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/3}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/3}
 		\end{center}
 		\item 将这个临时字符串插入到\textit{coll}中。容器创建副本，创建临时字符串的深层副本，包括分配内存:
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/4}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/4}
 		\end{center}
 		\item 末尾，临时字符串\textit{s+s}销毁:
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/5}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/5}
 		\end{center}
 		这是我们第一次生成代码执行不大合适的地方：创建临时字符串的副本后销毁临时字符串。其实，可以不必分配和释放内存，直接使用原始的临时字符串对象。
 	\end{enumerate}
@@ -100,7 +100,7 @@ coll.push_back(s);
 \end{cppcode}
 	\textit{coll}继续拷贝\textit{s}:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/6}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/6}
 	\end{center}
 	这也是需要优化：一些优化技巧可以使用\textit{s}作为vector的新元素。
 	\item 在\textit{createAndInsert()}的末尾，使用\textit{return}:
@@ -117,7 +117,7 @@ coll.push_back(s);
 
 	假设我们进行了命名返回值优化，在\textit{return}语句的末尾，\textit{coll}现在成为返回值，并调用\textit{s}的析构函数，释放声明\textit{s}时分配的内存:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/7}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/7}
 	\end{center}
 	\item 最后，将返回值赋给\textit{v}:
 \begin{cppcode}
@@ -125,11 +125,11 @@ v = createAndInsert();
 \end{cppcode}
 	这里可以改进的行为:通常的赋值操作符的目标是赋予\textit{v}与赋值源的值相同的值。一般来说，任何值都不应该修改，并且应该独立于赋值的对象。因此，赋值操作符将创建了一个返回值的副本:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/8}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/8}
 	\end{center}
 	之后，就不再需要临时返回值了，可以销毁:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/9}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/9}
 	\end{center}
 	我们创建了一个临时对象的副本，然后立即销毁该副本的源，再次分配和释放内存。这次适用于四个分配，一个分配给vector，其余分配给每个string元素。
 \end{itemize}
@@ -173,11 +173,11 @@ std::vector<std::string> createAndInsert()
 	std::vector<std::string> coll; // create vector of strings
 	coll.reserve(3); // reserve memory for 3 elements
 	std::string s = "data"; // create string object
-	
+
 	coll.push_back(s); // insert string object
 	coll.push_back(s+s); // insert temporary string
 	coll.push_back(std::move(s)); // insert string (we no longer need the value of s)
-	
+
 	return coll; // return vector of strings
 }
 
@@ -215,7 +215,7 @@ coll.push_back(s);
 \end{cppcode}
 	目前为止，还没有什么需要优化的，程序状态与C++03相同：
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/10}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/10}
 	\end{center}
 	我们有两个vector，\textit{v}和\textit{coll}，还有两个字符串，\textit{s}和它的副本，也就是\textit{coll}的第一个元素。它们都是独立的对象，有自己的内存。
 
@@ -229,18 +229,18 @@ coll.push_back(s+s);
 		\item 创建临时字符串\textit{s+s}:
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/11}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/11}
 		\end{center}
 		\item 将这个临时字符串插入到\textit{coll}中。然而，这里发生了一些不同的事情:我们从\textit{s+s}中窃取了内存，并将其移动到\textit{coll}的新元素中。
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/12}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/12}
 		\end{center}
 		自C++11起，我们可以获取不再需要的值。因为编译器知道在执行push_back()调用之后，临时对象\textit{s+s}将被销毁。因此，调用的是push_back()的另一个实现，其是对不再需要值的字符串进行复制的优化：我们复制了大小和指向内存的指针，而不是创建拷贝。然而，这种浅复制是不够的;还修改了临时对象\textit{s+s}，将其大小设置为0，并将nullptr赋值为新值。其实，s+s被修改了，以便呈现空字符串的状态。重要的是，它不再拥有自己的内存。
 		\item 语句的结尾，临时字符串\textit{s+s}被销毁。但由于临时字符串不再是初始内存的所有者，析构函数不会释放该内存。
 
 		\begin{center}
-			\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/13}
+			\includegraphics[width=0.8\textwidth]{part1/ch1/images/13}
 		\end{center}
 		我们优化了复制过程，将\textit{s+s}的内存所有权转移到它在vector中的副本。
 
@@ -253,7 +253,7 @@ coll.push_back(std::move(s));
 \end{cppcode}
 	如果没有\textit{std::move()}，就会像第一次调用\textit{push_back()}一样：vector会创建传递的字符串\textit{s}的副本。这次，我们用\textit{std::move()}标记了\textit{s}，这在意味着“这里不再需要这个值”。因此，这里会使用另一个\textit{push_back()}实现，会在传递临时对象\textit{s+s}时使用。第三个元素通过将这个值的内存所有权，从\textit{s}转移到副本中，从而来窃取这个值:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/14}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/14}
 	\end{center}
 	关于移动语义，请注意以下两点:
 
@@ -269,7 +269,7 @@ coll.push_back(std::move(s));
 
 		注意，它也不能保证字符串要么有旧值，要么为空，由运行时库实现者决定。通常，实现者可以对\textit{std::move()}操作的对象做任何事，只要保持对象的有效状态。保证的理由，稍后讨论。
 	\end{itemize}
-	
+
 	\item \textit{createAndInsert()}最后的return语句为:
 
 	\begin{cppcode}
@@ -280,7 +280,7 @@ coll.push_back(std::move(s));
 
 	我们假设进行了返回值优化。在return语句中，\textit{coll}成为返回值，并调用\textit{s}的析构函数，不再需要释放任何内存，因为内存移到了\textit{coll}的第三个元素中:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/15}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/15}
 	\end{center}
 	\item 最后，来给\textit{v}赋值：
 \begin{cppcode}
@@ -290,13 +290,13 @@ v = createAndInsert();
 
 	现在，移动语义允许从源vector转移值的赋值操作符:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/16}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/16}
 	\end{center}
 	同样，临时对象不会(部分地)销毁。它进入了某个状态，但我们不知道它的值。
 
 	但在赋值之后，语句的末尾会销毁(修改过的)临时返回值:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/17}
+		\includegraphics[width=0.8\textwidth]{part1/ch1/images/17}
 	\end{center}
 \end{itemize}
 

@@ -9,7 +9,7 @@
 \usepackage{tocvsec2}
 
 \usepackage{tabularx}
-\usepackage{booktabs} 
+\usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{bbding}
 \usepackage{float}
@@ -59,61 +59,61 @@
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 \lstset{
-	backgroundcolor=\color{blue!3!white}, 
-	basicstyle = \footnotesize,       
-	breakatwhitespace = false,        
-	breaklines = true,                 
-	captionpos = b,                    
+	backgroundcolor=\color{blue!3!white},
+	basicstyle = \footnotesize,
+	breakatwhitespace = false,
+	breaklines = true,
+	captionpos = b,
 	commentstyle = \color{mygreen}\bfseries,
-	extendedchars = false,             
-	frame =shadowbox, 
+	extendedchars = false,
+	frame =shadowbox,
 	framerule=0.5pt,
 	keepspaces=true,
 	keywordstyle=\color{blue}\bfseries, % keyword style
 	language = C++,                     % the language of code
-	otherkeywords={string}, 
-	numbers=left, 
+	otherkeywords={string},
+	numbers=left,
 	numbersep=5pt,
 	numberstyle=\tiny\color{mygray},
-	rulecolor=\color{black},         
-	showspaces=false,  
-	showstringspaces=false, 
-	showtabs=false,    
-	stepnumber=1,         
+	rulecolor=\color{black},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	stepnumber=1,
 	stringstyle=\color{mymauve},        % string literal style
-	tabsize=2,          
-	title=\lstname                      
+	tabsize=2,
+	title=\lstname
 }
 
 \begin{document}
 	%\maketitle
-	
+
 	\begin{center}
 		\includegraphics[width=1.\textwidth]{cover}
 		\newpage
 		\huge
-		\textbf{C++ Move Semantics} 
+		\textbf{C++ Move Semantics}
 		\\[9pt]
 		\normalsize
 		The Complete Guide
 		\\[10pt]
-		\normalsize 
+		\normalsize
 		作者: Nicolai M. Josuttis
 		\\[8pt]
 		\normalsize
 		译者；陈晓伟
 	\end{center}
-	
+
 	\newpage
-	
+
 	\tableofcontents
 	\newpage
-	
+
 	%前言和关于本书
 	\pagestyle{empty}
 	\subfile{content/Preface.tex}
 	\subfile{content/About_This_Book.tex}
 
 	\setsecnumdepth{section}
-	
+
 \end{document}

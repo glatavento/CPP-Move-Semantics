@@ -1,0 +1,50 @@
+\documentclass{ctexart}
+
+\usepackage{zhlipsum, enumitem}
+
+\ExplSyntaxOn
+
+\SetLabelAlign { WdCenter } { \makebox [ \labelwidth ] { #1 } }
+\setlist { nosep,
+           leftmargin=\labelwidth,
+           itemindent=0pt,
+           labelsep=0pt,
+           align=WdCenter }
+\setlist [ itemize    ] { labelwidth=1em }
+\setlist [ itemize, 1 ] { leftmargin=3em }
+\setlist [ itemize, 2 ] { label=◦ }
+\setlist [ enumerate    ] { labelwidth=2em }
+\setlist [ enumerate, 1 ] { label={(\arabic*)} }
+\SetEnumitemKey { noindent } { leftmargin=1em }
+
+\ExplSyntaxOff
+
+
+\begin{document}
+\zhlipsum[1]
+\begin{itemize}[noindent]
+  \item \zhlipsum[1]
+  \item \zhlipsum[1]
+  \item \begin{itemize}
+          \item \zhlipsum[1]
+          \item \zhlipsum[1]
+        \end{itemize}
+\end{itemize}
+\zhlipsum[1]
+\begin{enumerate}
+  \item \zhlipsum[1]
+  \item \zhlipsum[1]
+  \begin{enumerate}
+    \item \zhlipsum[1]
+    \item \zhlipsum[1]
+  \end{enumerate}
+\begin{itemize}
+  \item \zhlipsum[1]
+  \item \zhlipsum[1]
+  \item \begin{itemize}
+          \item \zhlipsum[1]
+          \item \zhlipsum[1]
+        \end{itemize}
+\end{itemize}
+\end{enumerate}
+\end{document}

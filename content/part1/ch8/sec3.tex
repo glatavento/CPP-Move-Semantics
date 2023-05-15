@@ -55,11 +55,11 @@ void f(const X&&); // no clear semantic meaning
 表8.1 绑定引用规则表
 
 \begin{center}
-	\includegraphics[width=0.8\textwidth]{content/1/chapter8/images/3}
+	\includegraphics[width=0.8\textwidth]{part1/ch8/images/3}
 \end{center}
 
 \begin{itemize}
-	\item 非\textit{const} lvalue引用只接受非\textit{const} lvalue。 
+	\item 非\textit{const} lvalue引用只接受非\textit{const} lvalue。
 	\item rvalue引用只接受非\textit{const} rvalue。
 	\item \textit{const} lvalue引用可以接受所有内容，并在没有提供其他重载的情况下充当备选机制。
 \end{itemize}
@@ -67,7 +67,7 @@ void f(const X&&); // no clear semantic meaning
 下面是从表中提取的移动语义的备选机制规则:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter8/images/4}
+	\includegraphics[width=0.6\textwidth]{part1/ch8/images/4}
 \end{center}
 
 如果向函数传递rvalue(临时对象或标记为\textit{std::move()}的对象)，而移动语义没有特定的实现(通过接受rvalue引用声明)，则使用通常的复制语义，\textit{const}\&接受实参。

@@ -98,7 +98,7 @@
     \subfile{content/1/chapter8/6.tex}
     \subsubsection{8.7 总结}
     \subfile{content/1/chapter8/7.tex}
-    
+
 \section{Part II: 泛型代码中的移动语义}
 \subfile{content/2/Part-2.tex}
 \subsection{9 完美转发}
@@ -109,7 +109,7 @@
     \subfile{content/2/chapter9/2.tex}
     \subsubsection{9.3 右值引用与通用引用}
     \subfile{content/2/chapter9/3.tex}
-    \subsubsection{9.4 使用通用引用的重载}		
+    \subsubsection{9.4 使用通用引用的重载}
     \subfile{content/2/chapter9/4.tex}
     \subsubsection{9.5 Lambda中的完美转发}
     \subfile{content/2/chapter9/5.tex}
@@ -149,7 +149,7 @@
     \subfile{content/2/chapter12/2.tex}
     \subsubsection{12.3 总结}
     \subfile{content/2/chapter12/3.tex}
-    
+
 \section{Part III: C++标准库中的移动语义}
 \subfile{content/3/Part-3.tex}
 \subsection{13 只移动类型}

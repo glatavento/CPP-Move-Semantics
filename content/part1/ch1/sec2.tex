@@ -31,9 +31,7 @@ class vector {
 };
 \end{cppcode}
 
-第二个\textit{push_back()}使用了为移动语义引入的新语法。使用两个\&声明实参，不使用\textit{const}，这样的参数称为\begin{cppcode}
-右值引用}}。只有一个\&的“普通引用”现在称为\textit{\textbf{左值引用
-\end{cppcode}。在这两个调用中，都传递了通过引用插入的值。但是，区别如下:
+第二个\textit{push_back()}使用了为移动语义引入的新语法。使用两个\&声明实参，不使用\textit{const}，这样的参数称为 \zhemph{右值引用}。只有一个\&的“普通引用”现在称为\zhemph{左值引用}。在这两个调用中，都传递了通过引用插入的值。但是，区别如下:
 
 \begin{itemize}
 	\item 使用\textit{push_back(const T\&)}，可以保证不修改传递的值。
@@ -80,20 +78,18 @@ std::string b = a; // create b as a copy of a
 初始化字符串a后，如下所示:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/18}
+	\includegraphics[width=0.8\textwidth]{part1/ch1/images/18}
 \end{center}
 
 上面的复制构造函数将复制成员len以获取字符数，为数据指针分配新的内存，并将源a(作为s传递)中的所有字符复制到新字符串:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/19}
+	\includegraphics[width=0.8\textwidth]{part1/ch1/images/19}
 \end{center}
 
 \subsection{使用移动构造函数}
 
-对于移动语义，\textit{push_back(T\&\&)}调用相应的构造函数，即\begin{cppcode}
-移动构造函数
-\end{cppcode}。从现有字符串创建新字符串的构造函数，和移动语义一样，构造函数使用非\textit{const}右值引用(\textit{\&\&})作为形参:
+对于移动语义，\textit{push_back(T\&\&)}调用相应的构造函数，即\zhemph{移动构造函数}。从现有字符串创建新字符串的构造函数，和移动语义一样，构造函数使用非\textit{const}右值引用(\textit{\&\&})作为形参:
 
 \begin{cppcode}
 class string {
@@ -115,7 +111,7 @@ class string {
 给定上述拷贝构造函数的情况:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/20}
+	\includegraphics[width=0.8\textwidth]{part1/ch1/images/20}
 \end{center}
 
 我们可以这样调用string对象的构造函数:
@@ -127,13 +123,13 @@ std::string c = std::move(b); // init c with the value of b (no longer needing i
 移动构造函数首先复制成员len和data，这意味着新字符串获得\textit{b}值的所有权(作为\textit{s}传递)。
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/21}
+	\includegraphics[width=0.8\textwidth]{part1/ch1/images/21}
 \end{center}
 
 这是不够的，因为\textit{b}的析构函数将释放内存。因此，我们还可以修改源字符串，使其失去内存的所有权，并使其表示空字符串:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter1/images/22}
+	\includegraphics[width=0.8\textwidth]{part1/ch1/images/22}
 \end{center}
 
 结果是，\textit{c}现在有了\textit{b}的值，而且\textit{b}是空字符串。注意，唯一的保证是\textit{b}随后处于有效但未定义的状态。根据C++库中移动构造函数的实现方式，可能不为空(但通常是空的，因为这是提高性能的最简单和最好的方法)。

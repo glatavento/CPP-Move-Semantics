@@ -179,9 +179,9 @@ int main()
 	std::cout << "is1 and is2 before move:\n";
 	is1.dump();
 	is2.dump();
-	
+
 	is2 = std::move(is1);
-	
+
 	std::cout << "is1 and is2 after move:\n";
 	is1.dump();
 	is2.dump();
@@ -190,14 +190,14 @@ int main()
 
 程序有以下输出(已移动符串可能会变成空):
 
-\begin{shell}
-is1 and is2 before move: _
- [42/'42'] _
- [0/'0'] _
-is1 and is2 after move: _
- [42/''] _
+\begin{outputcode}
+is1 and is2 before move:
  [42/'42']
-\end{shell}
+ [0/'0']
+is1 and is2 after move:
+ [42/'']
+ [42/'42']
+\end{outputcode}
 
 也就是说，自动生成的移动操作打破了两个成员匹配的不变量。
 

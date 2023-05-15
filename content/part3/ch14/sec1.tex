@@ -38,10 +38,10 @@ int main(int argc, char** argv)
 {
 	std::list<std::string> coll1 { "love", "is", "all", "you", "need" };
 	std::vector<std::string> coll2;
-	
+
 	// ensure coll2 has enough elements to overwrite their values:
 	coll2.resize(coll1.size());
-	
+
 	// print out size and values:
 	print("coll1", coll1);
 	print("coll2", coll2);
@@ -49,16 +49,16 @@ int main(int argc, char** argv)
 	// - not changing any size
 	std::move(coll1.begin(), coll1.end(), // source range
 	coll2.begin()); // destination range
-	
+
 	// print out size and values:
 	print("coll1", coll1);
 	print("coll2", coll2);
-	
+
 	// move assign the first three values inside coll2 to the end
 	// - not changing any size
 	std::move_backward(coll2.begin(), coll2.begin()+3, // source range
 	coll2.end()); // destination range
-	
+
 	// print out size and values:
 	print("coll1", coll1);
 	print("coll2", coll2);
@@ -89,57 +89,26 @@ std::move_backward(coll2.begin(), coll2.begin()+3, // source range
 
 因此，整个程序的输出是这样的(?表示不确定的值):
 
-\begin{shell}
-	coll1 (5 elems): 'love' 'is' 'all' 'you' 'need' _
-	coll2 (5 elems): '' '' '' '' '' _
-	coll1 (5 elems): '?' '?' '?' '?' '?' _
-	coll2 (5 elems): 'love' 'is' 'all' 'you' 'need' _
-	coll1 (5 elems): '?' '?' '?' '?' '?' _
-	coll2 (5 elems): '?' '?' 'love' 'is' 'all'
-\end{shell}
+\begin{outputcode}
+coll1 (5 elems): 'love' 'is' 'all' 'you' 'need'
+coll2 (5 elems): '' '' '' '' ''
+coll1 (5 elems): '?' '?' '?' '?' '?'
+coll2 (5 elems): 'love' 'is' 'all' 'you' 'need'
+coll1 (5 elems): '?' '?' '?' '?' '?'
+coll2 (5 elems): '?' '?' 'love' 'is' 'all'
+\end{outputcode}
 
 字符串移动后通常是空的，但这不能保证。实践中，我甚至在某个平台上发现了这样的输出:
 
-\begin{shell}
-	coll1 (5 elems): 'love' 'is' 'all' 'you' 'need' _
-	coll2 (5 elems): '' '' '' '' '' _
-	coll1 (5 elems): '' '' '' '' '' _
-	coll2 (5 elems): 'love' 'is' 'all' 'you' 'need' _
-	coll1 (5 elems): '' '' '' '' '' _
-	coll2 (5 elems): 'need' 'you' 'love' 'is' 'all'
-\end{shell}
+\begin{outputcode}
+coll1 (5 elems): 'love' 'is' 'all' 'you' 'need'
+coll2 (5 elems): '' '' '' '' ''
+coll1 (5 elems): '' '' '' '' ''
+coll2 (5 elems): 'love' 'is' 'all' 'you' 'need'
+coll1 (5 elems): '' '' '' '' ''
+coll2 (5 elems): 'need' 'you' 'love' 'is' 'all'
+\end{outputcode}
 
 
 所以，与往常一样:使用已移动元素时要谨慎。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

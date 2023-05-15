@@ -143,10 +143,10 @@ template<typename T, typename Allocator = allocator<T>>
 class vector {
 public:
 	...
-	
+
 	// insert a copy of elem:
 	void push_back (const T& elem);
-	
+
 	// insert elem when the value of elem is no longer needed:
 	void push_back (T&& elem);
 	...

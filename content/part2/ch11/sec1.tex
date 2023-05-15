@@ -45,13 +45,13 @@ const std::string& computeConstLRef(const std::string& str) {
 int main()
 {
 	process(computeConstLRef("tmp")); // calls process(const std::string&)
-	
+
 	std::string str{"lvalue"};
 	process(computeLRef(str)); // calls process(std::string&)
-	
+
 	process(computeRRef("tmp")); // calls process(std::string&&)
 	process(computeRRef(std::move(str))); // calls process(std::string&&)
-	
+
 	process(computeValue("tmp")); // calls process(std::string&&)
 }
 \end{cppcode}

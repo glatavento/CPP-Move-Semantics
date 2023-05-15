@@ -55,21 +55,21 @@ int main()
 
 程序输出如下:
 
-\begin{shell}
-COPY Wolfgang Amadeus Mozart _
-COPY Johann Sebastian Bach _
-COPY Ludwig van Beethoven _
-capacity: 3 _
-MOVE Pjotr Iljitsch Tschaikowski _
-COPY Wolfgang Amadeus Mozart _
-COPY Johann Sebastian Bach _
+\begin{outputcode}
+COPY Wolfgang Amadeus Mozart
+COPY Johann Sebastian Bach
 COPY Ludwig van Beethoven
-\end{shell}
+capacity: 3
+MOVE Pjotr Iljitsch Tschaikowski
+COPY Wolfgang Amadeus Mozart
+COPY Johann Sebastian Bach
+COPY Ludwig van Beethoven
+\end{outputcode}
 
 首先，将初始值复制到vector中(容器的std::initializer_list<>构造函数按值接受传递的参数)。因此，vector通常为三个元素分配内存:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/1}
+	\includegraphics[width=0.8\textwidth]{part1/ch7/images/1}
 \end{center}
 
 接下来会发生什么:用push_back()插入第四个元素，结果如下:
@@ -77,11 +77,11 @@ COPY Ludwig van Beethoven
 \begin{itemize}
 	\item vector在内部需要更多内存，所以会分配新的内存(比如，6个元素)，移动第4个字符串(创建一个临时的\textit{Person}并使用\textit{push_back()}方法将其移动到vector中)，但也会将现有的元素复制到新内存中:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/2}
+		\includegraphics[width=0.8\textwidth]{part1/ch7/images/2}
 	\end{center}
 	\item 这个操作结束时，vector销毁旧的元素，释放这些元素的旧内存，并更新成员:
 \begin{center}
-		\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/3}
+		\includegraphics[width=0.8\textwidth]{part1/ch7/images/3}
 	\end{center}
 \end{itemize}
 
@@ -154,33 +154,33 @@ int main()
 
 可得到以下输出:
 
-\begin{shell}
-COPY Wolfgang Amadeus Mozart _ 
-COPY Johann Sebastian Bach _
-COPY Ludwig van Beethoven _
-capacity: 3 _
-MOVE Pjotr Iljitsch Tschaikowski _
-MOVE Wolfgang Amadeus Mozart _
-MOVE Johann Sebastian Bach _
+\begin{outputcode}
+COPY Wolfgang Amadeus Mozart
+COPY Johann Sebastian Bach
+COPY Ludwig van Beethoven
+capacity: 3
+MOVE Pjotr Iljitsch Tschaikowski
+MOVE Wolfgang Amadeus Mozart
+MOVE Johann Sebastian Bach
 MOVE Ludwig van Beethoven
-\end{shell}
+\end{outputcode}
 
 同样，首先将初始值复制到vector中
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/4}
+	\includegraphics[width=0.8\textwidth]{part1/ch7/images/4}
 \end{center}
 
 然而，随着输出的最后三行可视化，vector现在使用移动构造函数将元素移动到新的重新分配的内存中:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/5}
+	\includegraphics[width=0.8\textwidth]{part1/ch7/images/5}
 \end{center}
 
 最后，vector只需要释放旧内存并更新其成员:
 
 \begin{center}
-	\includegraphics[width=1.0\textwidth]{content/1/chapter7/images/6}
+	\includegraphics[width=0.8\textwidth]{part1/ch7/images/6}
 \end{center}
 
 \subsubsection{具有条件的noexcept声明}
@@ -273,20 +273,20 @@ int main()
 		"Ludwig van Beethoven"};
 	std::cout << "capacity: " << coll.capacity() << '\n';
 	coll.push_back("Pjotr Iljitsch Tschaikowski");
-	
+
 	std::cout << "name of coll[0]: " << coll[0].getName() << '\n';
 }
 \end{cppcode}
 
 会得到以下输出:
 
-\begin{shell}
-COPY Wolfgang Amadeus Mozart _
-COPY Johann Sebastian Bach _
-COPY Ludwig van Beethoven _
-capacity: 3 _
+\begin{outputcode}
+COPY Wolfgang Amadeus Mozart
+COPY Johann Sebastian Bach
+COPY Ludwig van Beethoven
+capacity: 3
 name of coll[0]: Wolfgang Amadeus Mozart
-\end{shell}
+\end{outputcode}
 
 只看到初始化器列表中元素的副本。对于其他任何的操作，包括重新分配，都使用默认的移动构造函数。在重新分配的内存中，第一个人名是正确的。
 
@@ -331,7 +331,7 @@ struct Str
 
 	// enable copying:
 	Str(const Str&) = default;
-	
+
 	// enable moving (with and without noexcept):
 	Str (Str&& s) NOEXCEPT
 	: val{std::move(s.val)} {
@@ -343,12 +343,12 @@ int main()
 	// create vector of 1 Million wrapped strings:
 	std::vector<Str> coll;
 	coll.resize(1000000);
-	
+
 	// measure time to reallocate memory for all elements:
 	auto t0 = std::chrono::steady_clock::now();
 	coll.reserve(coll.capacity() + 1);
 	auto t1 = std::chrono::steady_clock::now();
-	
+
 	std::chrono::duration<double, std::milli> d{t1 - t0};
 	std::cout << d.count() << "ms\n";
 }

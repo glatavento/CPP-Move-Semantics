@@ -88,10 +88,10 @@ int main()
 
 该程序有以下输出:
 
-\begin{shell}
-std::is_nothrow_move_constructible<Base>: false _
+\begin{outputcode}
+std::is_nothrow_move_constructible<Base>: false
 is_nothrow_movable<Base>: true
-\end{shell}
+\end{outputcode}
 
 因此，如果必须在抽象基类派生的类中实现移动构造函数，可以使用helper类型特征来声明移动构造函数。如下所示:
 

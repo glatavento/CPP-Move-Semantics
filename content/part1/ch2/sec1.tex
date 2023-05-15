@@ -49,7 +49,7 @@ std::string&& r3(std::move(s)); // OK, rvalue reference to s
 	\begin{itemize}
 		\item[-] 调用者不再对值感兴趣。因此，可以修改参数所引用的对象。
 		\item[-] 但是，调用者可能仍然对使用对象感兴趣。因此，任何修改都应该使引用的对象保持有效状态。
-	\end{itemize}	
+	\end{itemize}
 \end{itemize}
 
 例如:

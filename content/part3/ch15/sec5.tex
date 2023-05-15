@@ -32,7 +32,7 @@ int main()
 {
 	auto outFile{openToWrite("iostream.tmp")}; // open file
 	storeData(std::move(outFile)); // store data
-	
+
 	// better ensure that the file is closed:
 	if (outFile.is_open()) {
 		outFile.close();

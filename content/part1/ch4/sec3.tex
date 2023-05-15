@@ -29,7 +29,7 @@ Person p{"Ben", "Cook"};
 编译器发现提供的构造函数可以执行初始化，但参数的类型不适合。因此，编译器生成代码首先创建两个临时std::string，由两个字符串字面量的值初始化，并将形参\textit{f}和\textit{l}进行绑定:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/1}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/1}
 \end{center}
 
 一般来说(如果小字符串优化(SSO)不可用或者字符串太长)，这会为每个std::string的值分配内存。
@@ -44,13 +44,13 @@ Person p{"Ben", "Cook"};
 因此，在每个成员初始化时调用string的复制构造函数，会再次为这些值分配内存:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/2}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/2}
 \end{center}
 
 在构造函数的末尾，销毁临时字符串:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/3}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/3}
 \end{center}
 
 这意味着有四个内存分配，尽管只有两个是必要的。所以，使用移动语义的话可以做得更好。
@@ -107,25 +107,25 @@ Person p{"Ben", "Cook"};
 我们首先使用它们来初始化参数\textit{f}和\textit{l}:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/4}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/4}
 \end{center}
 
 通过使用\textit{std::move()}，可以将形参的值移动到成员中。首先，成员首先从\textit{f}中窃取值:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/5}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/5}
 \end{center}
 
 然后，成员\textit{last}从\textit{l}中窃取值:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/6}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/6}
 \end{center}
 
 同样，在构造函数的末尾销毁临时字符串。因为字符串的析构函数不再需要释放分配的内存，所以这一次它花费的时间更少:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/7}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/7}
 \end{center}
 
 如果传入std::string，这种初始化成员的方式也能正常工作:
@@ -179,7 +179,7 @@ Person p{"Ben", "Cook"};
 同样，因为构造函数需要字符串，我们创建\textit{f}和\textit{l}绑定的两个临时字符串:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/8}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/8}
 \end{center}
 
 因为有非\textit{const}引用，所以可以修改。本例中，用\textit{std::move()}标记它们，以便成员的初始化可以窃取值。
@@ -187,19 +187,19 @@ Person p{"Ben", "Cook"};
 首先，成员首先从\textit{f}中窃取值:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/9}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/9}
 \end{center}
 
 然后，成员\textit{last}从\textit{l}中窃取值:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/10}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/10}
 \end{center}
 
 同样，在构造函数的末尾，销毁临时字符串而不需要释放已分配的内存:
 
 \begin{center}
-	\includegraphics[width=0.6\textwidth]{content/1/chapter4/images/11}
+	\includegraphics[width=0.6\textwidth]{part1/ch4/images/11}
 \end{center}
 
 然而，此构造函数并非在所有情况下都有效。
@@ -321,7 +321,7 @@ std::chrono::nanoseconds measure(int num)
 	for (int i = 0; i < num; ++i) {
 		std::string fname = "a firstname a bit too long for SSO";
 		std::string lname = "a lastname a bit too long for SSO";
-		
+
 		// measure how long it takes to create 3 Persons in different ways:
 		auto t0 = std::chrono::steady_clock::now();
 		Person p1{"a firstname too long for SSO", "a lastname too long for SSO"};
@@ -354,11 +354,11 @@ int main(int argc, const char** argv)
 
 	// a few iterations to avoid measuring initial behavior:
 	measure(5);
-	
+
 	// measure (in integral nano- and floating-point milliseconds):
 	std::chrono::nanoseconds nsDur{measure(num)};
 	std::chrono::duration<double, std::milli> msDur{nsDur};
-	
+
 	// print result:
 	std::cout << num << " iterations take: "
 	<< msDur.count() << "ms\n";

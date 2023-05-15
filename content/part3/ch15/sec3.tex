@@ -27,7 +27,7 @@ struct pair {
 	// the members:
 	T1 first;
 	T2 second;
-	
+
 	// constructors:
 	constexpr pair();
 	constexpr pair(const T1& x, const T2& y);
@@ -39,13 +39,13 @@ struct pair {
 	template<typename... Args1, typename... Args2>
 	pair(piecewise_construct_t, tuple<Args1...> first_args,
 	tuple<Args2...> second_args);
-	
+
 	// assignments:
 	pair& operator=(const pair& p);
 	pair& operator=(pair&& p) noexcept( ... );
 	template<typename U, typename V> pair& operator=(const pair<U, V>& p);
 	template<typename U, typename V> pair& operator=(pair<U, V>&& p);
-	
+
 	// other:
 	void swap(pair& p) noexcept( ... );
 };
@@ -77,11 +77,11 @@ std::cout << "p3: " << p3.first << '/' << p3.second << '\n';
 
 有如下输出:
 
-\begin{shell}
-p1: / _
-p2: some value/some other value _
+\begin{outputcode}
+p1: /
+p2: some value/some other value
 p3: some value/some other value
-\end{shell}
+\end{outputcode}
 
 但是，std::pair<>也可以通过处理通用/转发引用支持完美转发:
 
@@ -107,10 +107,10 @@ std::cout << "p4: " << p4.first << '/' << p4.second << '\n';
 
 有如下输出:
 
-\begin{shell}
-s1: _
+\begin{outputcode}
+s1:
 p4: 42/value of s1
-\end{shell}
+\end{outputcode}
 
 相应的成员模板实现为期望的通用/转发引用:
 
@@ -133,10 +133,10 @@ std::cout << "p6: " << p6.first << '/' << p6.second << '\n';
 
 有如下输出:
 
-\begin{shell}
-p5: answer/ _
+\begin{outputcode}
+p5: answer/
 p6: answer/is 42
-\end{shell}
+\end{outputcode}
 
 初始化\textit{p6}时，将\textit{p5}的第一个成员(声明为const char*)转换为std::string，而在使用\textit{p5}的第二个成员初始化\textit{p6}的第二个成员时使用移动语义。
 
@@ -243,7 +243,7 @@ namespace std {
 		constexpr const T& operator*() const&;
 		constexpr T&& operator*() &&;
 		constexpr const T&& operator*() const&&;
-		
+
 		constexpr T& value() &;
 		constexpr const T& value() const&;
 		constexpr T&& value() &&;

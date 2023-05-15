@@ -80,7 +80,7 @@ class Customer {
 private:
 	std::string name; // name of the customer
 	std::vector<int> values; // some values of the customer
-	
+
 public:
 	...
 	// copy constructor (copy all members):
@@ -303,7 +303,7 @@ for (int i=0; i<12; ++i) {
 
 这个初始化可能有以下输出:
 
-\begin{shell}
+\begin{outputcode}
 MOVE TestCustomer -5
 MOVE TestCustomer -4
 COPY TestCustomer -5
@@ -331,7 +331,7 @@ COPY TestCustomer 2
 MOVE TestCustomer 4
 MOVE TestCustomer 5
 MOVE TestCustomer 6
-\end{shell}
+\end{outputcode}
 
 每次插入新对象时，都会创建一个临时对象并将其移动到向量中。因此，对于每个元素，我们都有一个MOVE。
 
@@ -352,40 +352,40 @@ std::sort(coll.begin(), coll.end(),
 
 排序可能会出现以下输出:
 
-\begin{shell}
-MOVE TestCustomer -4 _
-MOVEASSIGN TestCustomer -5 _
-MOVEASSIGN TestCustomer -4 _
-MOVE TestCustomer -3 _
-MOVEASSIGN TestCustomer -5 _
-MOVEASSIGN TestCustomer -4 _
-MOVEASSIGN TestCustomer -3 _
-MOVE TestCustomer -2 _
-MOVEASSIGN TestCustomer -5 _
-MOVEASSIGN TestCustomer -4 _
-MOVEASSIGN TestCustomer -3 _
-MOVEASSIGN TestCustomer -2 _
-MOVE TestCustomer -1 _
-MOVEASSIGN TestCustomer -5 _
-MOVEASSIGN TestCustomer -4 _
-MOVEASSIGN TestCustomer -3 _
-MOVEASSIGN TestCustomer -2 _
-MOVEASSIGN TestCustomer -1 _
-MOVE TestCustomer 0 _
-MOVEASSIGN TestCustomer 0 _
-MOVE TestCustomer 1 _
-MOVEASSIGN TestCustomer 1 _
-MOVE TestCustomer 2 _
-MOVEASSIGN TestCustomer 2 _
-MOVE TestCustomer 3 _
-MOVEASSIGN TestCustomer 3 _
-MOVE TestCustomer 4 _
-MOVEASSIGN TestCustomer 4 _
-MOVE TestCustomer 5 _
-MOVEASSIGN TestCustomer 5 _ 
-MOVE TestCustomer 6 _
-MOVEASSIGN TestCustomer 6 _
-\end{shell}
+\begin{outputcode}
+MOVE TestCustomer -4
+MOVEASSIGN TestCustomer -5
+MOVEASSIGN TestCustomer -4
+MOVE TestCustomer -3
+MOVEASSIGN TestCustomer -5
+MOVEASSIGN TestCustomer -4
+MOVEASSIGN TestCustomer -3
+MOVE TestCustomer -2
+MOVEASSIGN TestCustomer -5
+MOVEASSIGN TestCustomer -4
+MOVEASSIGN TestCustomer -3
+MOVEASSIGN TestCustomer -2
+MOVE TestCustomer -1
+MOVEASSIGN TestCustomer -5
+MOVEASSIGN TestCustomer -4
+MOVEASSIGN TestCustomer -3
+MOVEASSIGN TestCustomer -2
+MOVEASSIGN TestCustomer -1
+MOVE TestCustomer 0
+MOVEASSIGN TestCustomer 0
+MOVE TestCustomer 1
+MOVEASSIGN TestCustomer 1
+MOVE TestCustomer 2
+MOVEASSIGN TestCustomer 2
+MOVE TestCustomer 3
+MOVEASSIGN TestCustomer 3
+MOVE TestCustomer 4
+MOVEASSIGN TestCustomer 4
+MOVE TestCustomer 5
+MOVEASSIGN TestCustomer 5
+MOVE TestCustomer 6
+MOVEASSIGN TestCustomer 6
+\end{outputcode}
 
 整个排序只有元素移动，有时是创建一个新的临时对象(MOVE)，有时是分配值到不同的位置(MOVEASSIGN)。
 

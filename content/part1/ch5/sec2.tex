@@ -39,7 +39,7 @@ int main()
 	x.foo(); // calls foo() &
 	C{}.foo(); // calls foo() &&
 	std::move(x).foo(); // calls foo() &&
-	
+
 	const C cx;
 	cx.foo(); // calls foo() const&
 	std::move(cx).foo(); // calls foo() const&&
