@@ -13,7 +13,7 @@
 1 3 4 5 4 3 1 2 1
 \end{outputcode}
 
-所有不是2的元素都移到前面，作为新的结束(“last”元素后面的位置)，返回2的位置。
+所有不是2的元素都移到前面，作为新的结束（“last”元素后面的位置），返回2的位置。
 
 可能的话，这些算法会移动，会以已移状态保留元素。本例中，如果元素是字符串，那么最后2个元素将保持不变，但最后1个元素将向前移动到2之前，以便最后一个元素处于已移动状态。
 
@@ -125,7 +125,7 @@ all elements:
 "MOVED-FROM"
 \end{outputcode}
 
-“删除”以“.de”结尾的元素之后，新的结束位置是第二个元素后面的位置。但在容器中，第三个元素没有移动，第四个元素处于已移动状态，因为它移动赋值给了第二个元素(之前移动到第一个元素)。
+“删除”以“.de”结尾的元素之后，新的结束位置是第二个元素后面的位置。但在容器中，第三个元素没有移动，第四个元素处于已移动状态，因为它移动赋值给了第二个元素（之前移动到第一个元素）。
 
 使用这些已移动对象时要小心，原因在关于已移动状态的章节中已经讨论过了。
 
@@ -135,7 +135,7 @@ all elements:
 
 \begin{itemize}
 	\item 要求源的输入迭代器类别和目标的输出迭代器类别
-	\item 或者保证每个元素只使用一次(例如，为\cppinline{std::for_each()}算法指定)
+	\item 或者保证每个元素只使用一次（例如，为\cppinline{std::for_each()}算法指定）
 \end{itemize}
 
 对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\cppinline{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理:
@@ -196,9 +196,9 @@ std::make_move_iterator(coll.end()),
 });
 \end{cppcode}
 
-为此，将标记的元素(移动迭代器标记为\cppinline{std::move()})通过通用引用传递给\cppinline{process()}，并将其与\cppinline{std::move()}一起传递给\cppinline{process()}。因为\cppinline{process()}按值接受参数，所以值实际上已经移走。
+为此，将标记的元素（移动迭代器标记为\cppinline{std::move()}）通过通用引用传递给\cppinline{process()}，并将其与\cppinline{std::move()}一起传递给\cppinline{process()}。因为\cppinline{process()}按值接受参数，所以值实际上已经移走。
 
-因此，所有大小不为4的元素都从容器\cppinline{coll}中的对象中移出。该程序的输出如下(?表示未知值):
+因此，所有大小不为4的元素都从容器\cppinline{coll}中的对象中移出。该程序的输出如下（?表示未知值）:
 
 \begin{outputcode}
 coll (4 elems): "don't" "vote" "for" "liars"
@@ -228,7 +228,7 @@ std::move_iterator{coll.end()},
 
 \subsection{在构造函数和成员函数中移动迭代器}
 
-也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器(相同或不同类型的)。例如:
+也可以在只读取一次元素的算法中使用移动迭代器，场景可能是将源容器的元素移动到另一个容器（相同或不同类型的）。例如:
 
 \filename{lib/moveitor.cpp}
 \begin{cppcode}
@@ -258,7 +258,7 @@ int main()
 }
 \end{cppcode}
 
-该程序有以下输出:(?表示未知值):
+该程序有以下输出:（?表示未知值）:
 
 \begin{outputcode}
 src (4 elems): "?" "?" "?" "?"

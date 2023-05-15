@@ -8,7 +8,7 @@ process(compute(t)); // OK, uses perfect forwarding of returned value
 
 非泛型代码中，需要知道所涉及的类型。然而，泛型代码中，也希望\cppinline{compute()}的返回值完全传递给\cppinline{process()}。
 
-好消息是：如果直接将返回值传递给另一个函数，该值会完美传递，保持其类型和值类别。不必担心移动语义(如果支持将自动使用)。
+好消息是：如果直接将返回值传递给另一个函数，该值会完美传递，保持其类型和值类别。不必担心移动语义（如果支持将自动使用）。
 
 \subsection{默认完美传递的细节}
 

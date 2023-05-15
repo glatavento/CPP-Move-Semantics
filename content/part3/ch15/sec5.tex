@@ -1,5 +1,5 @@
 \section{输入输出流的移动语义}
-IOStreams在C++98中引入，作为一种可以读写的抽象(标准I/O，文件，甚至字符串)。这是早期的设定，不可能复制这些对象(复制打开的文件的对象意味着什么，对相同的文件有两个句柄或复制文件，以及如何同步访问?)
+IOStreams在C++98中引入，作为一种可以读写的抽象（标准I/O，文件，甚至字符串）。这是早期的设定，不可能复制这些对象（复制打开的文件的对象意味着什么，对相同的文件有两个句柄或复制文件，以及如何同步访问?）
 
 自从C++11以来，移动语义允许我们移动IOStream对象，并使用临时流。
 
@@ -87,7 +87,7 @@ std::string s = "hello, world";
 std::ofstream("fstream1.tmp") << s << '\n'; // OK since C++11
 \end{cppcode}
 
-甚至可以这样向流中写一个字符串字面值(使用C++11标准之前编译，其使用operator<<(const void*)输出字符串字面值的地址):
+甚至可以这样向流中写一个字符串字面值（使用C++11标准之前编译，其使用operator<<(const void*)输出字符串字面值的地址:
 
 \begin{cppcode}
 std::ofstream("fstream1.tmp") << "hello, world\n"; // correct since C++11

@@ -81,7 +81,7 @@ const std::string getValue();
 foo(getValue()); // would call a function declared as const rvalue reference
 \end{cppcode}
 
-这种情况通常由用于\cppinline{const}左值引用重载。可能会进行特定实现，但通常没有意义(C++标准库类\cppinline{std::optional<>}使用\cppinline{const}右值引用)。
+这种情况通常由用于\cppinline{const}左值引用重载。可能会进行特定实现，但通常没有意义（C++标准库类\cppinline{std::optional<>}使用\cppinline{const}右值引用）。
 
 
 

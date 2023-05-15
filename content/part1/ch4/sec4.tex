@@ -45,9 +45,9 @@ GeoObj& geoRef{c1};
 geoRef = c2; // OOPS: uses GeoObj::operator=() and assigns no Circle members
 \end{cppcode}
 
-为\cppinline{GeoObj}调用赋值操作符，而且该操作符不是虚操作符，所以编译器调用\cppinline{GeoObj::operator=()}，不处理任何派生类的成员。即使用\cppinline{virtual}声明赋值操作符也没有帮助，因为派生类的操作符不会覆盖基类的赋值操作符(第二个操作数的形参类型不同)。
+为\cppinline{GeoObj}调用赋值操作符，而且该操作符不是虚操作符，所以编译器调用\cppinline{GeoObj::operator=()}，不处理任何派生类的成员。即使用\cppinline{virtual}声明赋值操作符也没有帮助，因为派生类的操作符不会覆盖基类的赋值操作符（第二个操作数的形参类型不同）。
 
-为了避免这个问题，应该禁用在多态类层次结构中使用赋值操作符。此外，如果不是抽象类，还应该避免使用公共复制构造函数来禁用到基类的隐式类型转换。因此，具有移动语义(和成员)的多态基类应该如下声明:
+为了避免这个问题，应该禁用在多态类层次结构中使用赋值操作符。此外，如果不是抽象类，还应该避免使用公共复制构造函数来禁用到基类的隐式类型转换。因此，具有移动语义（和成员）的多态基类应该如下声明:
 
 \begin{cppcode}
 class GeoObj {
@@ -74,7 +74,7 @@ protected:
 
 \subsection{实现派生类的多态}
 
-派生类的多态看起来如下所示(参见poly/polygon.hpp的完整头文件):
+派生类的多态看起来如下所示（参见poly/polygon.hpp的完整头文件）:
 
 \begin{cppcode}
 class Polygon : public GeoObj {
@@ -86,7 +86,7 @@ public:
 };
 \end{cppcode}
 
-通常，多态派生类中不需要声明特殊的成员函数。特别是，不需要再次声明虚析构函数(除非必须实现)。再次声明析构函数(无论是否是虚函数)将禁用派生类成员(这里是vector)对移动语义的支持:
+通常，多态派生类中不需要声明特殊的成员函数。特别是，不需要再次声明虚析构函数（除非必须实现）。再次声明析构函数（无论是否是虚函数）将禁用派生类成员（这里是vector）对移动语义的支持:
 
 \begin{cppcode}
 class Polygon : public GeoObj {

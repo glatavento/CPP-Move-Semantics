@@ -14,7 +14,7 @@
 
 \subsection{字符串分配和容量}
 
-字符串的容量(当前可用于该值的内存)通常不会减少。只有移动操作、swap()或shrink_to_fit()可以减小容量。
+字符串的容量（当前可用于该值的内存）通常不会减少。只有移动操作、swap()或shrink_to_fit()可以减小容量。
 
 考虑下面例子:
 
@@ -74,9 +74,9 @@ s2 capa: 47 ('a string with an extraordinarily long value')
 	\end{outputcode}
 \end{itemize}
 
-这里，两个平台都支持SSO(最多15或22个字符)，当只需要43个字符的内存时，第二个平台为47个字符分配内存。
+这里，两个平台都支持SSO（最多15或22个字符），当只需要43个字符的内存时，第二个平台为47个字符分配内存。
 
-所有平台上，已移动字符串通常为空，即使值没有存储在外部分配的内存中(因此我们必须复制所有字符)。
+所有平台上，已移动字符串通常为空，即使值没有存储在外部分配的内存中（因此我们必须复制所有字符）。
 
 \begin{cppcode}
 std::string s3{std::move(s1)};
@@ -122,7 +122,7 @@ s5 capa: 24 ('quite a reasonable value')
 - s4 capa: 24 ('quite a reasonable value')
 s5 capa: 43 ('')
 	\end{outputcode}
-	\item 移动内存(释放旧内存后):
+	\item 移动内存（释放旧内存后）:
 	\begin{outputcode}
 - s4 capa: 47 ('a string with an extraordinarily long value')
 s5 capa: 31 ('quite a reasonable value')

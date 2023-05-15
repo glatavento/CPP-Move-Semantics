@@ -33,7 +33,7 @@ for ( ; pos != end; ++pos ) {
 }
 \end{cppcode}
 
-将range声明为一个通用引用，希望能够将其绑定到每个range，所以可以使用它两次(一次是开始，一次是结束)没有创建副本或丢失信息。
+将range声明为一个通用引用，希望能够将其绑定到每个range，所以可以使用它两次（一次是开始，一次是结束）没有创建副本或丢失信息。
 
 循环应该为:
 
@@ -65,7 +65,7 @@ for (int i : std::vector<int>{0, 8, 15}) {
 注意，对于这些情况，没有其他方法声明range:
 
 \begin{itemize}
-	\item 使用auto，将创建range的副本(这需要花费时间并禁用对元素的修改)。
+	\item 使用auto，将创建range的副本（这需要花费时间并禁用对元素的修改）。
 	\item 使用auto\&，可以用临时的prvalue禁用range的初始化。
 	\item 使用const auto\&，将失去所遍历range的非常量性。
 \end{itemize}
@@ -94,7 +94,7 @@ for ( ; pos != end; ++pos ) {
 }
 \end{cppcode}
 
-所有有效引用都延长了所绑定值的生命周期，这也适用于rvalue引用。但是，没有绑定到\cppinline{createString()}的返回值(这样可以正常工作);而是绑定到引用，该引用指向由\cppinline{at()}返回的\cppinline{createStrings()}的返回类型，扩展了引用的生命周期。因此，该循环将遍历已经销毁的字符串。
+所有有效引用都延长了所绑定值的生命周期，这也适用于rvalue引用。但是，没有绑定到\cppinline{createString()}的返回值（这样可以正常工作）;而是绑定到引用，该引用指向由\cppinline{at()}返回的\cppinline{createStrings()}的返回类型，扩展了引用的生命周期。因此，该循环将遍历已经销毁的字符串。
 
 \subsubsection{使用基于范围的for循环}
 
@@ -111,7 +111,7 @@ void assign(Coll& coll, const T& value) {
 }
 \end{cppcode}
 
-看起来适用于所有容器类型和元素类型(其中支持赋值):
+看起来适用于所有容器类型和元素类型（其中支持赋值）:
 
 \begin{cppcode}
 std::vector<int> coll1{0, 8, 15};
@@ -182,7 +182,7 @@ void assign(Coll& coll, const T& value) {
 }
 \end{cppcode}
 
-因为通用引用可以绑定到任何对象(甚至是prvalue)，所以vector<bool>的代码现在可以编译:
+因为通用引用可以绑定到任何对象（甚至是prvalue），所以vector<bool>的代码现在可以编译:
 
 \begin{cppcode}
 std::vector<bool> collB{false, true, false};

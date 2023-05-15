@@ -1,7 +1,7 @@
 \section{实现移动语义}
 用前面的例子来了解移动语义是如何实现的。
 
-实现移动语义之前，\cppinline{std::vector<>}只有一个\cppinline{push_back()}的实现(这里简化了vector的声明):
+实现移动语义之前，\cppinline{std::vector<>}只有一个\cppinline{push_back()}的实现（这里简化了vector的声明）:
 
 \begin{cppcode}
 template<typename T>
@@ -37,7 +37,7 @@ class vector {
 	\item 使用\cppinline{push_back(const T\&)}，可以保证不修改传递的值。
 
 	当调用者仍然需要传递的值时，将调用此函数。
-	\item 通过\cppinline{push_back(T\&\&)}，可以修改传递的实参(因此它不是\cppinline{const})来“窃取”值。语义上的含义是，新元素接收传递的值，但可以使用优化实现，将值移动到vector中。
+	\item 通过\cppinline{push_back(T\&\&)}，可以修改传递的实参（因此它不是\cppinline{const}）来“窃取”值。语义上的含义是，新元素接收传递的值，但可以使用优化实现，将值移动到vector中。
 
 	当调用者不再需要传递的值时，将调用此函数。实现必须确保传递的参数仍然处于有效状态，但值可以更改。因此，在调用此参数之后，调用者仍然可以使用传递的参数，只要调用者不对其值做任何操作。
 \end{itemize}
@@ -81,7 +81,7 @@ std::string b = a; // create b as a copy of a
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/18}
 \end{center}
 
-上面的复制构造函数将复制成员len以获取字符数，为数据指针分配新的内存，并将源a(作为s传递)中的所有字符复制到新字符串:
+上面的复制构造函数将复制成员len以获取字符数，为数据指针分配新的内存，并将源a（作为s传递）中的所有字符复制到新字符串:
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/19}
@@ -120,7 +120,7 @@ class string {
 std::string c = std::move(b); // init c with the value of b (no longer needing its value here)
 \end{cppcode}
 
-移动构造函数首先复制成员len和data，这意味着新字符串获得\cppinline{b}值的所有权(作为\cppinline{s}传递)。
+移动构造函数首先复制成员len和data，这意味着新字符串获得\cppinline{b}值的所有权（作为\cppinline{s}传递）。
 
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/21}
@@ -132,7 +132,7 @@ std::string c = std::move(b); // init c with the value of b (no longer needing i
 	\includegraphics[width=0.8\textwidth]{part1/ch1/images/22}
 \end{center}
 
-结果是，\cppinline{c}现在有了\cppinline{b}的值，而且\cppinline{b}是空字符串。注意，唯一的保证是\cppinline{b}随后处于有效但未定义的状态。根据C++库中移动构造函数的实现方式，可能不为空(但通常是空的，因为这是提高性能的最简单和最好的方法)。
+结果是，\cppinline{c}现在有了\cppinline{b}的值，而且\cppinline{b}是空字符串。注意，唯一的保证是\cppinline{b}随后处于有效但未定义的状态。根据C++库中移动构造函数的实现方式，可能不为空（但通常是空的，因为这是提高性能的最简单和最好的方法）。
 
 
 

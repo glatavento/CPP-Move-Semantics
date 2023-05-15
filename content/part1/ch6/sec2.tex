@@ -7,7 +7,7 @@
 
 \begin{itemize}
 	\item 通过从相应的源成员中获取状态，赋值将覆盖该成员的未定义状态。
-	\item 析构函数将销毁成员(具有未定义状态)。
+	\item 析构函数将销毁成员（具有未定义状态）。
 \end{itemize}
 
 通常应该从对象中移动的成员，但对象处于有效但未定义的状态，所以生成的移动操作通常只对创建成员状态正确的对象进行操作。
@@ -23,7 +23,7 @@ private:
 };
 \end{cppcode}
 
-当\cppinline{customer}移走时，保证\cppinline{name}和\cppinline{values}都处于有效的状态，以便析构函数(由\cppinline{customer}的析构函数调用)可以正常工作:
+当\cppinline{customer}移走时，保证\cppinline{name}和\cppinline{values}都处于有效的状态，以便析构函数（由\cppinline{customer}的析构函数调用）可以正常工作:
 
 \begin{cppcode}
 void foo()
@@ -91,7 +91,7 @@ int main()
 \end{cppcode}
 
 现在通过生成默认的移动操作来启用移动语义
-(详见\fninline{basics/tasksbug.cpp}):
+（详见\fninline{basics/tasksbug.cpp}）:
 
 \begin{cppcode}
 class Tasks {
@@ -140,21 +140,21 @@ int main()
 }
 \end{cppcode}
 
-开始时，通过将两个任务传递给\cppinline{Tasks}对象\cppinline{ts}来启动它们。因此，在\cppinline{ts}中线程数组有两个元素，\cppinline{numThreads}为2。但是，容器的移动操作会移动元素，因此在\cppinline{std::move()}之后，\cppinline{ts}不再包含任何运行的线程对象。因此，\cppinline{numThreads}只是复制而已，也就是创建了一个无效的任务。析构函数最终会对前两个任务调用join()，这会抛出一个异常(这将导致析构函数中出现致命错误)。
+开始时，通过将两个任务传递给\cppinline{Tasks}对象\cppinline{ts}来启动它们。因此，在\cppinline{ts}中线程数组有两个元素，\cppinline{numThreads}为2。但是，容器的移动操作会移动元素，因此在\cppinline{std::move()}之后，\cppinline{ts}不再包含任何运行的线程对象。因此，\cppinline{numThreads}只是复制而已，也就是创建了一个无效的任务。析构函数最终会对前两个任务调用join()，这会抛出一个异常（这将导致析构函数中出现致命错误）。
 
 目前的问题是，需要两个成员一起才能定义一个有效的状态，而默认生成的移动语义会产生不一致的状态，因此会让析构函数失败。但不可能总是避免这个问题，因为对象销毁时，可能需要显式地对象元素的子集做一些操作。这样，默认生成的移动操作可能不起作用，应该禁用或修复它们。
 
 可能的使用办法是:
 
 \begin{itemize}
-	\item 使用析构函数处理已移动状态(本例中，如果线程对象的joinable()为true，就只能调用join())
+	\item 使用析构函数处理已移动状态（本例中，如果线程对象的joinable()为true，就只能调用join()）
 	\item 自己实现移动操作
-	\item 禁用移动语义(这是特殊移动成员函数的行为)
+	\item 禁用移动语义（这是特殊移动成员函数的行为）
 \end{itemize}
 
-根据规则0，应该将容易出错的资源管理封装在helper类型中，以便应用程序开发者实现0号特殊成员函数。这样，就可以使用一个助手类(模板)，其既提供了成员(std::array和用于实际使用的元素数量的成员)，又提供了移动操作的正确实现。
+根据规则0，应该将容易出错的资源管理封装在helper类型中，以便应用程序开发者实现0号特殊成员函数。这样，就可以使用一个助手类（模板），其既提供了成员（std::array和用于实际使用的元素数量的成员），又提供了移动操作的正确实现。
 
-整个问题也是std::thread类设计错误的副作用，该类型不遵循RAII原则。对于所有运行线程的std::thread，必须在调用析构函数之前调用join()(或detach());否则，线程的析构函数将抛出异常。C++20中，可以使用std::jthread类，如果对象为一个正在运行的线程，会自动调用join()。
+整个问题也是std::thread类设计错误的副作用，该类型不遵循RAII原则。对于所有运行线程的std::thread，必须在调用析构函数之前调用join()（或detach()）;否则，线程的析构函数将抛出异常。C++20中，可以使用std::jthread类，如果对象为一个正在运行的线程，会自动调用join()。
 
 
 

@@ -10,7 +10,7 @@
 
 \subsection{传值返回}
 
-按值返回的getter看起来是这样的(记住:不要使用\cppinline{const}按值返回，否则禁用移动语义):
+按值返回的getter看起来是这样的（记住:不要使用\cppinline{const}按值返回，否则禁用移动语义）:
 
 \begin{cppcode}
 class Person
@@ -39,7 +39,7 @@ for (const auto& person : coll) {
 }
 \end{cppcode}
 
-如果将此方法与返回引用的方法进行比较，可以看到按值返回字符串的版本的性能开销是引用的2到100倍(前提是名称的长度较大，这样SSO就没有帮助了)。对图像或数千个元素的集合的成员可能更糟糕。在这种情况下，getter通常返回(const)引用以提高性能。
+如果将此方法与返回引用的方法进行比较，可以看到按值返回字符串的版本的性能开销是引用的2到100倍（前提是名称的长度较大，这样SSO就没有帮助了）。对图像或数千个元素的集合的成员可能更糟糕。在这种情况下，getter通常返回(const)引用以提高性能。
 
 \subsection{引用返回}
 
@@ -83,9 +83,9 @@ for (auto pos = range.begin(), end = range.end(); pos != end; ++pos) {
 }
 \end{cppcode}
 
-开始迭代之前，初始化\cppinline{reference1}，必须使用传递的范围两次(一次调用begin()，一次调用end())，并希望避免创建副本(这可能代价很高，甚至不可能)。一般来说，引用会延长所引用内容的生命周期。在本例中，\cppinline{range}并不引用由\cppinline{returnPersonByValue()}返回的\cppinline{Person}，而\cppinline{range}指向\cppinline{getName()}的返回值，是对返回的\cppinline{Person}的引用。因此，\cppinline{range}扩展了引用的生命周期。因此，在第一个语句的末尾，返回的临时对象将销毁，并且在遍历名称的字符时使用对已销毁对象名称的引用。
+开始迭代之前，初始化\cppinline{reference1}，必须使用传递的范围两次（一次调用begin()，一次调用end()），并希望避免创建副本（这可能代价很高，甚至不可能）。一般来说，引用会延长所引用内容的生命周期。在本例中，\cppinline{range}并不引用由\cppinline{returnPersonByValue()}返回的\cppinline{Person}，而\cppinline{range}指向\cppinline{getName()}的返回值，是对返回的\cppinline{Person}的引用。因此，\cppinline{range}扩展了引用的生命周期。因此，在第一个语句的末尾，返回的临时对象将销毁，并且在遍历名称的字符时使用对已销毁对象名称的引用。
 
-最好的情况下，在这里会得到一个核心转储(段错误)，这样就可以看到出现了明显的错误。最坏的情况是，发布了软件，并出现了未定义行为。
+最好的情况下，在这里会得到一个核心转储（段错误），这样就可以看到出现了明显的错误。最坏的情况是，发布了软件，并出现了未定义行为。
 
 如果getter按值返回名称，这样的代码就不会有问题。这样，\cppinline{range}将扩展名称副本的生存期，以便我们使用该名称直到\cppinline{range}的生存期结束。
 
@@ -114,7 +114,7 @@ public:
 用不同的引用限定符重载getter，方法与重载带有\&\&和\cppinline{const}\&形参的函数相同:
 
 \begin{itemize}
-	\item 带有\&\&限定符的是有不再需要值的对象时使用(一个即将死亡的对象或用\cppinline{std::move()}标记的对象)。
+	\item 带有\&\&限定符的是有不再需要值的对象时使用（一个即将死亡的对象或用\cppinline{std::move()}标记的对象）。
 	\item 带有\cppinline{const}\&限定符的版本用于所有其他情况。总是合适的，但只是无法获得\&\&版本时的备选方案。因此，如果有一个不会销毁的对象或没标记为\cppinline{std::move()}，就会使用此函数。
 \end{itemize}
 
@@ -159,7 +159,7 @@ void foo()
 }
 \end{cppcode}
 
-使用\cppinline{getName()}时，使用\cppinline{std::move()}将提高程序的性能。不返回对\cppinline{const} std::string的引用(只能复制)，返回值是作为非\cppinline{const}字符串返回的\cppinline{p}的移动名，因此\cppinline{push_back()}可以使用移动语义将其移动到\cppinline{coll}中。通常，在这之后，\cppinline{p}处于有效但未定义的状态。
+使用\cppinline{getName()}时，使用\cppinline{std::move()}将提高程序的性能。不返回对\cppinline{const} std::string的引用（只能复制），返回值是作为非\cppinline{const}字符串返回的\cppinline{p}的移动名，因此\cppinline{push_back()}可以使用移动语义将其移动到\cppinline{coll}中。通常，在这之后，\cppinline{p}处于有效但未定义的状态。
 
 关于在C++标准库中使用此特性的示例，请参见std::optional<>。
 

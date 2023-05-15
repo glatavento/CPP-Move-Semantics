@@ -1,5 +1,5 @@
 \section{右值引用与通用引用}
-不幸的是，通用/转发引用使用与普通rvalue引用相同的语法(形式上，是特殊的rvalue引用)。这是混乱的根源，如果看到有两个\&符号的声明，必须再次检查使用的是真实类型名，还是函数模板形参名。
+不幸的是，通用/转发引用使用与普通rvalue引用相同的语法（形式上，是特殊的rvalue引用）。这是混乱的根源，如果看到有两个\&符号的声明，必须再次检查使用的是真实类型名，还是函数模板形参名。
 
 换句话说，两者之间有很大的区别
 
@@ -18,7 +18,7 @@ void foo(Coll&& arg) // arg is a universal/forwarding reference of any type
 
 \subsection{实际类型的rvalue引用}
 
-普通的rvalue引用就不是使用函数的模板形参名(或者该引用是用\cppinline{const}或\cppinline{volatile}声明的)，所以只能将这些引用绑定到rvalue。此外，传递的实参还不是\cppinline{const}:
+普通的rvalue引用就不是使用函数的模板形参名（或者该引用是用\cppinline{const}或\cppinline{volatile}声明的），所以只能将这些引用绑定到rvalue。此外，传递的实参还不是\cppinline{const}:
 
 \begin{cppcode}
 using Coll = std::vector<std::string>;
@@ -44,7 +44,7 @@ foo(std::move(c)); // ERROR: can’t bind non-const rvalue reference to const xv
 
 \begin{itemize}
 	\item \cppinline{arg}的类型\cppinline{Coll}绝不是\cppinline{const}。
-	\item 使用\cppinline{std::forward<>()}没有意义。只有不再需要该值，并想将其转发给另一个函数时，使用\cppinline{std::move()}才有意义(这里可以使用\cppinline{std::forward<>()}，因为当使用rvalue引用时，它等同于\cppinline{std::move()})。
+	\item 使用\cppinline{std::forward<>()}没有意义。只有不再需要该值，并想将其转发给另一个函数时，使用\cppinline{std::move()}才有意义（这里可以使用\cppinline{std::forward<>()}，因为当使用rvalue引用时，它等同于\cppinline{std::move()}）。
 \end{itemize}
 
 \subsection{函数模板形参的rvalue引用}
@@ -74,7 +74,7 @@ foo(std::move(c)); // OK, arg binds to a const xvalue
 
 \begin{itemize}
 	\item \cppinline{arg}的类型现在可以是\cppinline{const}，也可以不是。
-	\item 这种情况下，使用\cppinline{std::move()}没有意义。只有不再需要该值，并想要将其转发给另一个函数时，才有必要使用\cppinline{std::forward<>()}(也可以使用\cppinline{std::move()}，但会将所有参数传递给带有移动语义的\cppinline{foo()}，将非\cppinline{const} lvalue \cppinline{v}作为xvalue传递)。
+	\item 这种情况下，使用\cppinline{std::move()}没有意义。只有不再需要该值，并想要将其转发给另一个函数时，才有必要使用\cppinline{std::forward<>()}（也可以使用\cppinline{std::move()}，但会将所有参数传递给带有移动语义的\cppinline{foo()}，将非\cppinline{const} lvalue \cppinline{v}作为xvalue传递）。
 \end{itemize}
 
 

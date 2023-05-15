@@ -35,7 +35,7 @@ std::string s{createString()}; // OK
 std::string s{std::move(createString())}; // BAD: don’t do this
 \end{cppcode}
 
-编译器可能(可以选择)对任何适得其反或不必要的\cppinline{std::move()}使用发出警告。例如，gcc有选项-Wpessimizing-move(通过-Wall启用)和-Wredundancy-move(通过-Wextra启用)。
+编译器可能（可以选择）对任何适得其反或不必要的\cppinline{std::move()}使用发出警告。例如，gcc有选项-Wpessimizing-move（通过-Wall启用）和-Wredundancy-move（通过-Wextra启用）。
 
 在某些应用程序中，返回语句中的\cppinline{std::move()}是合适的。一个是移出成员的值，另一个是返回带有移动语义的参数。
 

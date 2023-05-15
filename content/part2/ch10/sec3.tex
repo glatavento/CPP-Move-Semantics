@@ -20,7 +20,7 @@ f(MyType{}); // T is deduced as MyType, so arg is declared as MyType&&
 f(std::move(v)); // T is deduced as MyType, so arg is declared as MyType&&
 \end{cppcode}
 
-然而，对于通用引用传递lvalue，有一个特殊的规则(参见C++标准的[temp.debit.call]节):
+然而，对于通用引用传递lvalue，有一个特殊的规则（参见C++标准的[temp.debit.call]节）:
 
 如果形参类型是对cv-非限定模板形参的右值引用，实参是lvalue，类型“对T的lvalue引用”将用来代替T进行类型推断。
 
@@ -47,7 +47,7 @@ f(v); // T is deduced as MyType&
 f(c); // T is deduced as const MyType&
 \end{cppcode}
 
-但已经将\cppinline{arg}声明为T\&\&。如果T是T\&，那这里C++的引用折叠规则(参见[dcl.]一节。参考]的C++标准)给出了一个答案:
+但已经将\cppinline{arg}声明为T\&\&。如果T是T\&，那这里C++的引用折叠规则（参见[dcl.]一节。参考]的C++标准）给出了一个答案:
 
 \begin{itemize}
 	\item Type\& \& 成为 Type\&
@@ -73,15 +73,15 @@ f(c); // T is deduced as const MyType& and arg has this type
 	\begin{cppcode}
 static_cast<remove_reference_t<T>&&>(t)
 	\end{cppcode}
-	它删除引用并转换为相应的rvalue引用类型(删除任何\&并添加\&\&)。
+	它删除引用并转换为相应的rvalue引用类型（删除任何\&并添加\&\&）。
 	\item \cppinline{std::forward<>()}只向传递的类型参数添加rvalue引用:
 	\begin{cppcode}
 static_cast<T&&>(t)
 	\end{cppcode}
 	引用折叠规则再次适用:
 	\begin{itemize}
-		\item[-] 如果类型T是lvalue引用，T\&\&仍然是lvalue引用(\&\&无效)。因此，将\cppinline{arg}强制转换为lvalue引用，这意味着\cppinline{arg}没有移动语义。
-		\item[-] 但是，如果T是rvalue引用(或者根本不是引用)，T\&\&(仍然)是rvalue引用。因此，将\cppinline{arg}强制转换为rvalue引用，这样就将值类别更改为xvalue，这是\cppinline{std::move()}的效果。
+		\item[-] 如果类型T是lvalue引用，T\&\&仍然是lvalue引用（\&\&无效）。因此，将\cppinline{arg}强制转换为lvalue引用，这意味着\cppinline{arg}没有移动语义。
+		\item[-] 但是，如果T是rvalue引用（或者根本不是引用），T\&\&（仍然）是rvalue引用。因此，将\cppinline{arg}强制转换为rvalue引用，这样就将值类别更改为xvalue，这是\cppinline{std::move()}的效果。
 	\end{itemize}
 \end{itemize}
 
@@ -139,7 +139,7 @@ f<std::string&&>( ... ); // arg is a raw rvalue reference binding to rvalues onl
 
 因此，有了明确的规范，通用引用不再作为通用引用。作为调用者，可以指定获得的引用的具体类型。
 
-因此，要传递lvalue(这里仍然需要值)，请确保将模板参数指定为lvalue引用。否则，代码将无法编译:
+因此，要传递lvalue（这里仍然需要值），请确保将模板参数指定为lvalue引用。否则，代码将无法编译:
 
 \begin{cppcode}
 template<typename T>
@@ -168,7 +168,7 @@ void f(auto&& arg) {
 
 \subsection{与通用引用冲突的模板参数推断}
 
-推导通用引用模板参数的特殊规则(当传递lvalue时，将类型作为lvalue引用进行推导)可能会导致看似正确的代码出现意外错误。
+推导通用引用模板参数的特殊规则（当传递lvalue时，将类型作为lvalue引用进行推导）可能会导致看似正确的代码出现意外错误。
 
 以下代码无法编译时，开发者通常会感到惊讶:
 
@@ -230,7 +230,7 @@ void insert(Coll& coll, T&& elem)
 
 \subsection{泛型类型的纯rvalue引用}
 
-通过导出通用引用的模板形参的特殊规则(当传递左值时，将类型作为lvalue引用)，可以约束泛型引用形参仅绑定到rvalue:
+通过导出通用引用的模板形参的特殊规则（当传递左值时，将类型作为lvalue引用），可以约束泛型引用形参仅绑定到rvalue:
 
 \begin{cppcode}
 template<typename T>

@@ -17,7 +17,7 @@ void rvFunc(std::string&& str)
 }
 \end{cppcode}
 
-decltype(str)表达式总是表示\cppinline{str}的类型，即std::string\&\&。在表达式中任何需要该类型的地方都可以使用该类型。类型特征(类型函数如std::is_same<>)会帮助我们处理这些类型。
+decltype(str)表达式总是表示\cppinline{str}的类型，即std::string\&\&。在表达式中任何需要该类型的地方都可以使用该类型。类型特征（类型函数如std::is_same<>）会帮助我们处理这些类型。
 
 例如，要声明传递的形参类型不是引用的新对象，可以声明:
 
@@ -29,11 +29,11 @@ void rvFunc(std::string&& str)
 }
 \end{cppcode}
 
-\cppinline{tmp}在这个函数中是std::string类型(也可以显式地声明，如果使它成为T类型对象的泛型函数，代码仍可以工作)。
+\cppinline{tmp}在这个函数中是std::string类型（也可以显式地声明，如果使它成为T类型对象的泛型函数，代码仍可以工作）。
 
 \subsection{使用decltype检查值类型}
 
-目前为止，只向decltype传递了名称来查询类型。但是，也可以将表达式(不仅仅是名称)传递给decltype，会根据以下约定生成值类型:
+目前为止，只向decltype传递了名称来查询类型。但是，也可以将表达式（不仅仅是名称）传递给decltype，会根据以下约定生成值类型:
 
 \begin{itemize}
 	\item 对于prvalue，产生值类型:type
@@ -52,7 +52,7 @@ void rvFunc(std::string&& str)
 }
 \end{cppcode}
 
-这意味着，如果只是传递一个放在圆括号内的名称(这是一个表达式，而不再只是名称)，decltype将生成其类型。行为如下:
+这意味着，如果只是传递一个放在圆括号内的名称（这是一个表达式，而不再只是名称），decltype将生成其类型。行为如下:
 
 \begin{cppcode}
 void rvFunc(std::string&& str)

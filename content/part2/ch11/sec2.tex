@@ -47,7 +47,7 @@ template<typename T>
 void callFoo(T&& ref); // ref is a universal/forwarding reference
 \end{cppcode}
 
-根据规则，ref(即auto\&\&或T\&\&类型)的类型是
+根据规则，ref（即auto\&\&或T\&\&类型）的类型是
 
 \begin{itemize}
 	\item 如果引用lvalue，则为lvalue引用
@@ -76,11 +76,11 @@ auto&& r6{retByConstRef()}; // const std::string&
 auto&& r7{retByConstRefRef()}; // const std::string&&
 \end{cppcode}
 
-当使用rvalue(prvalue或xvalue)初始化用auto\&\&声明的引用时，就声明了一个rvalue引用。例如，将引用绑定到标记为\cppinline{std::move()}的对象或返回的普通值或rvalue引用时，就会出现这种情况。
+当使用rvalue（prvalue或xvalue）初始化用auto\&\&声明的引用时，就声明了一个rvalue引用。例如，将引用绑定到标记为\cppinline{std::move()}的对象或返回的普通值或rvalue引用时，就会出现这种情况。
 
 但是，当使用lvalue初始化用auto\&\&声明的引用时，就声明了一个lvalue引用。例如，将引用绑定到已命名的对象或返回lvalue引用的函数的返回值时，就会出现这种情况。
 
-因为字符串字面值是lvalue(以字符数组为类型)，所以将通用引用绑定到字符串字面值时，也会得到lvalue引用:
+因为字符串字面值是lvalue（以字符数组为类型），所以将通用引用绑定到字符串字面值时，也会得到lvalue引用:
 
 \begin{cppcode}
 auto&& r8{"hello"}; // const char(&)[6]
@@ -132,7 +132,7 @@ auto&& ret{compute(t)}; // initialize a universal reference with the return valu
 process(std::forward<decltype(ret)>(ret)); // perfectly forward the return value
 \end{cppcode}
 
-当\cppinline{compute()}返回rvalue(如临时对象或rvalue引用)时，扩展为
+当\cppinline{compute()}返回rvalue（如临时对象或rvalue引用）时，扩展为
 
 \begin{cppcode}
 process(std::move(ret));

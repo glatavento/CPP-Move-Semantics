@@ -49,7 +49,7 @@ C++11添加的Move语义已经成为现代C++的标志，也使语言变得复�
 
 ## 作者简介
 
-Nicolai Josuttis (http://www.josuttis.com)在编程界很有名，因为他的发言和著作都很有权威，还是世界范围内畅销书的(共同)作者：
+Nicolai Josuttis (http://www.josuttis.com)在编程界很有名，因为他的发言和著作都很有权威，还是世界范围内畅销书的（共同）作者：
 
 * 《The C++ Standard Library》
 

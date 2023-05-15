@@ -123,7 +123,7 @@
     \subfile{content/2/chapter10/2.tex}
     \subsubsection{10.3 C++标准如何指定完美转发}
     \subfile{content/2/chapter10/3.tex}
-    \subsubsection{10.4 完美转发(不美丽的)细节}
+    \subsubsection{10.4 完美转发（不美丽的）细节}
     \subfile{content/2/chapter10/4.tex}
     \subsubsection{10.5 总结}
     \subfile{content/2/chapter10/5.tex}

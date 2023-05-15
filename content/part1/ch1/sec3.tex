@@ -1,5 +1,5 @@
 \section{复制是一种应急方式}
-可以通过移动语义，移动临时对象或用\cppinline{std::move()}标记的对象，可以通过“窃取”源值来优化值的复制(采用非\cppinline{const}右值引用)。但是，如果没有针对移动语义的优化版本，则使用复制。
+可以通过移动语义，移动临时对象或用\cppinline{std::move()}标记的对象，可以通过“窃取”源值来优化值的复制（采用非\cppinline{const}右值引用）。但是，如果没有针对移动语义的优化版本，则使用复制。
 
 例如，像vector这样的容器类缺少\cppinline{push_back()}的重载:
 
@@ -27,13 +27,13 @@ coll.push_back(std::move(s)); // OK, uses copy semantics
 
 \begin{itemize}
 	\item 函数/类是在移动语义支持之前实现，或者没有考虑支持移动语义
-	\item 没有什么需要优化的(只有数字成员的类就是一个例子)
+	\item 没有什么需要优化的（只有数字成员的类就是一个例子）
 \end{itemize}
 
 对于泛型代码，如果不再需要一个对象的值，可以用\cppinline{std::move()}。即使没有移动语义的支持，相应的代码也会编译通过。
 
 
-出于同样的原因，甚至可以用\cppinline{std::move()}来标记基本数据类型的对象，如int(或指针)。仍然会使用复制的值(地址)方式:
+出于同样的原因，甚至可以用\cppinline{std::move()}来标记基本数据类型的对象，如int（或指针）。仍然会使用复制的值（地址）方式:
 
 
 \begin{cppcode}

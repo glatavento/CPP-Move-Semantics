@@ -1,5 +1,5 @@
 \section{绑定引用时值类别的影响}
-将引用绑定到对象时，值类型起着重要的作用。例如，在C++98/C++03中，定义了可以将rvalue(没有名称的临时对象或标有\cppinline{std::move()}的对象)赋值或传递给\cppinline{const} lvalue引用，但不能传递给非\cppinline{const} lvalue引用:
+将引用绑定到对象时，值类型起着重要的作用。例如，在C++98/C++03中，定义了可以将rvalue（没有名称的临时对象或标有\cppinline{std::move()}的对象）赋值或传递给\cppinline{const} lvalue引用，但不能传递给非\cppinline{const} lvalue引用:
 
 \begin{cppcode}
 std::string createString(); // forward declaration
@@ -45,9 +45,9 @@ void f(X&&); // can steal value (object usually about to die)
 void f(const X&&); // no clear semantic meaning
 \end{cppcode}
 
-数字列出了重载解析的优先级，以便了解在提供多个重载时调用了哪个函数。数字越小，优先级越高(优先级1表示最优先)。
+数字列出了重载解析的优先级，以便了解在提供多个重载时调用了哪个函数。数字越小，优先级越高（优先级1表示最优先）。
 
-注意，只能将rvalue(prvalues，如没有名称的临时对象)或xvalues(用std::move()标记的对象)传递给rvalue引用。
+注意，只能将rvalue（prvalues，如没有名称的临时对象）或xvalues（用std::move()标记的对象）传递给rvalue引用。
 
 通常可以忽略表的最后一列，因为\cppinline{const} rvalue引用在语义上没有多大意义，这意味着我们有以下规则:
 
@@ -70,11 +70,11 @@ void f(const X&&); // no clear semantic meaning
 	\includegraphics[width=0.6\textwidth]{part1/ch8/images/4}
 \end{center}
 
-如果向函数传递rvalue(临时对象或标记为\cppinline{std::move()}的对象)，而移动语义没有特定的实现(通过接受rvalue引用声明)，则使用通常的复制语义，\cppinline{const}\&接受实参。
+如果向函数传递rvalue（临时对象或标记为\cppinline{std::move()}的对象），而移动语义没有特定的实现（通过接受rvalue引用声明），则使用通常的复制语义，\cppinline{const}\&接受实参。
 
 请注意，在介绍通用引用/转发引用时会扩展此表。
 
-有时可以将lvalue传递给rvalue引用(当使用模板形参时)。请注意，并非每个带有\&\&的声明都遵循相同的规则。这里的规则适用于使用\&\&声明类型(或类型别名)的情况。
+有时可以将lvalue传递给rvalue引用（当使用模板形参时）。请注意，并非每个带有\&\&的声明都遵循相同的规则。这里的规则适用于使用\&\&声明类型（或类型别名）的情况。
 
 \subsection{通过引用和值进行重载}
 
@@ -88,9 +88,9 @@ void f(X&&);
 void f(const X&&);
 \end{cppcode}
 
-原则上，这些重载的声明没问题。但是，按值调用和按引用调用之间没有特定的优先级。如果函数声明以值作为参数(它可以接受任何值类别的任何参数)，那么任何匹配声明以引用作为参数都会造成歧义。
+原则上，这些重载的声明没问题。但是，按值调用和按引用调用之间没有特定的优先级。如果函数声明以值作为参数（它可以接受任何值类别的任何参数），那么任何匹配声明以引用作为参数都会造成歧义。
 
-因此，只能通过值或引用(使用认为有用的尽可能多的引用重载)接受参数，但永远不要两者都接受。
+因此，只能通过值或引用（使用认为有用的尽可能多的引用重载）接受参数，但永远不要两者都接受。
 
 
 

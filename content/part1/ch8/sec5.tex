@@ -36,7 +36,7 @@ void rvFunc(std::string&& str) {
 
 这是没有传递移动语义规则的规范。这是特性，而不是bug。如果传递了移动语义，就不能使用两次传递了移动语义的对象，因为第一次使用后，就会失去它的值。或者，需要临时禁用移动语义的特性。
 
-如果将rvalue引用参数绑定到rvalue(prvalue或xvalue)，该对象将作为lvalue，必须再次将其转换为rvalue，以便传递给rvalue引用。
+如果将rvalue引用参数绑定到rvalue（prvalue或xvalue），该对象将作为lvalue，必须再次将其转换为rvalue，以便传递给rvalue引用。
 
 现在，请记住\cppinline{std::move()}只不过是对rvalue引用的\cppinline{static_cast}。也就是说，可以在递归调用中编写如下程序:
 

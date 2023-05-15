@@ -1,5 +1,5 @@
 \section{noexcept声明的细节}
-正如所见，noexcept的引入是为了允许条件保证不抛出异常。通常，在编译时知道函数不能抛出异常可以改进代码和优化，因为不必处理由于抛出异常而进行的清理。注意，如果违反了noexcept保证，程序会调用std::terminate()，而后者通常会调用std::abort()来导致“异常的程序终止”(例如，core dump)。
+正如所见，noexcept的引入是为了允许条件保证不抛出异常。通常，在编译时知道函数不能抛出异常可以改进代码和优化，因为不必处理由于抛出异常而进行的清理。注意，如果违反了noexcept保证，程序会调用std::terminate()，而后者通常会调用std::abort()来导致“异常的程序终止”（例如，core dump）。
 
 \subsection{声明noexcept的函数的规则}
 

@@ -21,7 +21,7 @@ auto& ar = std::move(f); // OK: ar is lvalue of type void(&)(int)
 
 \subsection{数据成员的值类型}
 
-如果使用对象的数据成员(例如，使用std::pair<>的第一个和第二个成员时)，将使用特殊规则。
+如果使用对象的数据成员（例如，使用std::pair<>的第一个和第二个成员时），将使用特殊规则。
 
 通常，数据成员的值类型如下:
 
@@ -50,7 +50,7 @@ coll.push_back(foo().second); // copies because second is an lvalue here
 coll.push_back(std::move(foo().second)); // moves
 \end{cppcode}
 
-如果有lvalue(一个有名字的对象)，就有两种使用\cppinline{std::move}的方式来移动成员:
+如果有lvalue（一个有名字的对象），就有两种使用\cppinline{std::move}的方式来移动成员:
 
 \begin{itemize}
 	\item std::move(obj).member
@@ -90,7 +90,7 @@ coll.push_back(std::move(sp).second); // move string second into coll
 
 \subsubsection{\cppinline{std::move()}用于引用或静态成员}
 
-如果成员是引用或静态的，则使用不同的规则:rvalue的引用或静态成员是lvalue。同样，这条规则反映了，成员的值并不是对象的一部分。“不再需要对象的值”并不意味着“不再需要不属于对象的值(成员的值)”。
+如果成员是引用或静态的，则使用不同的规则:rvalue的引用或静态成员是lvalue。同样，这条规则反映了，成员的值并不是对象的一部分。“不再需要对象的值”并不意味着“不再需要不属于对象的值（成员的值）”。
 
 因此，如果有引用或静态成员，那么如何使用\cppinline{std::move()}是有区别的:
 

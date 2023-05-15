@@ -33,7 +33,7 @@ coll.push_back(std::move(s)); // OK, calls push_back(const std::string&)
 
 \cppinline{const}禁用移动语义对声明返回类型也有影响。\cppinline{const}返回值不能移动。
 
-因此，从C++11开始，用\cppinline{const}返回值就不再是好的方式了(正如过去的一些风格指南所推荐的那样)。例如:
+因此，从C++11开始，用\cppinline{const}返回值就不再是好的方式了（正如过去的一些风格指南所推荐的那样）。例如:
 
 \begin{cppcode}
 const std::string getValue();
@@ -43,7 +43,7 @@ std::vector<std::string> coll;
 coll.push_back(getValue()); // copies (because the return value is const)
 \end{cppcode}
 
-当按值返回时，不要将整个返回值声明为\cppinline{const}。仅在声明部分返回类型时使用\cppinline{const}(例如：返回的引用或指针所指向的对象):
+当按值返回时，不要将整个返回值声明为\cppinline{const}。仅在声明部分返回类型时使用\cppinline{const}（例如：返回的引用或指针所指向的对象）:
 
 \begin{cppcode}
 const std::string getValue(); // BAD: disables move semantics for return values
