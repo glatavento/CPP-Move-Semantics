@@ -37,7 +37,7 @@ public:
 };
 \end{cppcode}
 
-这个类有两个（可能）开销很大的成员，一个是字符串\cppinline{name}，一个是整型vector \cppinline{values}:
+这个类有两个（可能）开销很大的成员，一个是字符串 \cppinline{name}，一个是整型vector \cppinline{values}:
 
 \begin{cppcode}
 class Customer {
@@ -51,7 +51,7 @@ private:
 复制这两个成员的成本很高
 
 \begin{itemize}
-	\item 要复制\cppinline{name}，我们必须为字符串的字符分配内存（除非\cppinline{name}很短，并且使用小字符串优化(SSO)实现字符串）。
+	\item 要复制 \cppinline{name}，我们必须为字符串的字符分配内存（除非 \cppinline{name} 很短，并且使用小字符串优化(SSO)实现字符串）。
 	\item 要复制这些值，必须为vector的元素分配内存。
 \end{itemize}
 
@@ -62,10 +62,10 @@ private:
 这样会有以下效果：
 
 \begin{itemize}
-	\item 按值返回本地\cppinline{Customer}将使用移动语义（如果它没有优化掉的话）。
-	\item 通过值传递未命名的\cppinline{Customer}对象将使用移动语义（如果没有优化掉的话）。
-	\item 按值传递临时的\cppinline{Customer}对象（例如，由另一个函数返回）将使用移动语义（如果它没有优化掉的话）。
-	\item 通过值传递一个标有\cppinline{std::move()}的\cppinline{Customer}对象将使用移动语义（如果它没有被优化掉的话）。
+	\item 按值返回本地 \cppinline{Customer} 将使用移动语义（如果它没有优化掉的话）。
+	\item 通过值传递未命名的 \cppinline{Customer} 对象将使用移动语义（如果没有优化掉的话）。
+	\item 按值传递临时的 \cppinline{Customer} 对象（例如，由另一个函数返回）将使用移动语义（如果它没有优化掉的话）。
+	\item 通过值传递一个标有 \cppinline{std::move()} 的 \cppinline{std::move()} 对象将使用移动语义（如果它没有被优化掉的话）。
 \end{itemize}
 
 例如：
@@ -101,26 +101,26 @@ int main()
 }
 \end{cppcode}
 
-这里，创建并初始化一个\cppinline{customer c}（为了避免SSO，我们使用一个相当长的名称）。初始化\cppinline{c}后，第一个输出如下：
+这里，创建并初始化一个 \cppinline{customer c}（为了避免SSO，我们使用一个相当长的名称）。初始化 \cppinline{c} 后，第一个输出如下：
 
 \begin{outputcode}
 c: [Wolfgang Amadeus Mozart: 0 8 15 ]
 \end{outputcode}
 
-然后将这个\cppinline{customer}插入到vector中两次：复制一次，移动一次：
+然后将这个 \cppinline{customer} 插入到vector中两次：复制一次，移动一次：
 
 \begin{cppcode}
 customers.push_back(c); // copy into the vector
 customers.push_back(std::move(c)); // move into the vector
 \end{cppcode}
 
-然后，\cppinline{c}的输出：
+然后，\cppinline{c} 的输出：
 
 \begin{outputcode}
 c: [: ]
 \end{outputcode}
 
-第二次调用push_back()时，名称和值都移到了vector的第二个元素中。但是，已移动的对象处于有效但未定义的状态。因此，第二个输出可以有任何值\cppinline{name}和\cppinline{values}:
+第二次调用push_back()时，名称和值都移到了vector的第二个元素中。但是，已移动的对象处于有效但未定义的状态。因此，第二个输出可以有任何值 \cppinline{name} 和 \cppinline{values}:
 
 \begin{itemize}
 	\item 可能仍然有相同的值：
@@ -137,7 +137,7 @@ c: [value was moved away: 0 ]
 
 然而，移动语义是为了优化性能而提供，而分配不同的值并不一定是提高性能，所以在实现中通常把字符串和vector都设为空。
 
-任何情况下，我们都可以看到为\cppinline{Customer}类自动启用了移动语义。出于同样的原因，可以保证以下代码的高效：
+任何情况下，我们都可以看到为 \cppinline{Customer} 类自动启用了移动语义。出于同样的原因，可以保证以下代码的高效：
 
 \begin{cppcode}
 Customer createCustomer()
@@ -235,14 +235,14 @@ class Base {
 \begin{itemize}
 	\item 对成员变量有限制
 	\begin{itemize}
-		\item[-] 值有限制
-		\item[-] 值相互依赖
+		\item 值有限制
+		\item 值相互依赖
 	\end{itemize}
 	\item 使用了引用语义的成员（指针，智能指针，…）
 	\item 对象没有默认构造
 \end{itemize}
 
-可能出现的问题是，已移动的对象可能不再有效：可能破坏不变量，或者对象的析构函数失败。例如，本章中的\cppinline{Customer}类的对象可能会有空名称（即使我们有断言来避免这种情况）。关于已移动的那一章将对此进行详细讨论。
+可能出现的问题是，已移动的对象可能不再有效：可能破坏不变量，或者对象的析构函数失败。例如，本章中的 \cppinline{Customer} 类的对象可能会有空名称（即使我们有断言来避免这种情况）。关于已移动的那一章将对此进行详细讨论。
 
 
 

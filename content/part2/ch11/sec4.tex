@@ -1,5 +1,5 @@
 \section{完美的Lambda转发}
-如果想要完美地转发通用Lambda的参数，必须使用通用引用和\cppinline{std::forward<>()}。但现在只需使用auto\&\&来声明通用引用。
+如果想要完美地转发通用Lambda的参数，必须使用通用引用和 \cppinline{std::forward<>()}。但现在只需使用auto\&\&来声明通用引用。
 
 已经有了一个函数模板：
 
@@ -38,7 +38,7 @@ class NameDefinedByCompiler {
 };
 \end{cppcode}
 
-再次注意，用\cppinline{const}（或\cppinline{volatile}）限定的泛型rvalue引用不是通用引用，这也适用于Lambda。如果形参用\cppinline{const} auto\&\&声明，只能传递rvalue:
+再次注意，用 \cppinline{const}（或 \cppinline{const}）限定的泛型rvalue引用不是通用引用，这也适用于Lambda。如果形参用 \cppinline{const} auto\&\&声明，只能传递rvalue:
 
 \begin{cppcode}
 auto callFoo = [](const auto&& arg) { // arg is not a universal reference
@@ -50,7 +50,7 @@ callFoo(cs); // ERROR: s is not an rvalue
 callFoo(std::move(cs)); // OK, arg is const std::string&&
 \end{cppcode}
 
-Lambda内部，使用\cppinline{std::move()}完美传递传递参数就可以了。
+Lambda内部，使用 \cppinline{std::move()} 完美传递传递参数就可以了。
 
 
 

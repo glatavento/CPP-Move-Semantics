@@ -47,7 +47,7 @@ threads.push_back(std::thread{doThis, someArg});
 threads.push_back(std::thread{doThat, std::move(someArg)});
 \end{cppcode}
 
-通过声明std::thread类型的对象（从C++20开始，最好使用std::jthread）来启动一个线程，并将临时对象移动到线程中。在可调用对象（函数, Lambda, 函数对象）的参数后面，可以传递额外的参数，这些参数在线程启动时传递给可调用对象。默认情况下，线程类的构造函数会复制这些参数。使用\cppinline{std::move()}切换到移动语义。因此，\cppinline{doThis()}获得传递给\cppinline{someArg}字符串的副本，而\cppinline{doThat()}获得该字符串的移动值。
+通过声明std::thread类型的对象（从C++20开始，最好使用std::jthread）来启动一个线程，并将临时对象移动到线程中。在可调用对象（函数, Lambda, 函数对象）的参数后面，可以传递额外的参数，这些参数在线程启动时传递给可调用对象。默认情况下，线程类的构造函数会复制这些参数。使用 \cppinline{std::move()} 切换到移动语义。因此，\cppinline{doThis()} 获得传递给 \cppinline{std::move()} 字符串的副本，而 \cppinline{std::move()} 获得该字符串的移动值。
 
 最后，等待所有线程的结束（使用std::thread时，这是避免段错误的必要条件）:
 
@@ -119,7 +119,7 @@ future移动到future的集合中：
 results.push_back(std::move(f));
 \end{cppcode}
 
-也可以将\cppinline{p.get_future()}的结果直接传递给\cppinline{push_back()}:
+也可以将 \cppinline{p.get_future()} 的结果直接传递给 \cppinline{push_back()}:
 
 \begin{cppcode}
 results.push_back(p.get_future());
@@ -131,7 +131,7 @@ promise移动到已启动的线程：
 std::thread t{getValue, move(p)};
 \end{cppcode}
 
-线程将作为\cppinline{getValue()}的参数，\cppinline{getValue()}按值接受传递的promise:
+线程将作为 \cppinline{getValue()} 的参数，\cppinline{getValue()} 按值接受传递的promise:
 
 \begin{cppcode}
 void getValue(std::promise<std::string> p)

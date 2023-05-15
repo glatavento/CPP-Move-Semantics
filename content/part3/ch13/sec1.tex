@@ -22,7 +22,7 @@ public:
 };
 \end{cppcode}
 
-按照规则，声明移动特殊成员函数就足够了（因为声明特殊移动成员将复制成员标记为已删除）。但是，显式地将复制特殊成员函数标记为\cppinline{=delete}会使意图更加明确。
+按照规则，声明移动特殊成员函数就足够了（因为声明特殊移动成员将复制成员标记为已删除）。但是，显式地将复制特殊成员函数标记为 \cppinline{=delete} 会使意图更加明确。
 
 \subsection{使用只移动类型}
 
@@ -38,7 +38,7 @@ coll.push_back(mo); // ERROR: can’t copy mo into coll
 coll.push_back(std::move(mo)); // OK, moves mo into coll
 \end{cppcode}
 
-要将只移动元素的值移出容器，需要使用\cppinline{std::move()}作为元素的引用。例如：
+要将只移动元素的值移出容器，需要使用 \cppinline{std::move()} 作为元素的引用。例如：
 
 \begin{cppcode}
 mo = std::move(coll[0]); // move assign first element (still there with moved-from state)
@@ -94,7 +94,7 @@ sink(std::move(mo)); // OK, moves mo to arg because passed by value
 
 从语义上讲，这里将相关资源的所有权传递给函数。但请注意，只有当参数按值接受时才会出现这种情况。
 
-\cppinline{sink()}函数也可以通过（rvalue或通用）引用声明为只接受移动对象，仍然需要通过\cppinline{std::move()}传递lvalue。但是，不知道传递的资源的所有权是否由\cppinline{sink()}获取。
+\cppinline{sink()} 函数也可以通过（rvalue或通用）引用声明为只接受移动对象，仍然需要通过 \cppinline{std::move()} 传递lvalue。但是，不知道传递的资源的所有权是否由 \cppinline{std::move()} 获取。
 
 \begin{cppcode}
 void sink(MoveOnly&& arg); // sink() might take ownership of the passed argument
@@ -106,7 +106,7 @@ sink(std::move(mo)); // OK, might move mo to something inside sink()
 
 Scott Meyers和Herb Sutter（C++社区的两位主要作者）讨论了应该如何声明只移动类型的接收器函数。Herb的立场是通过值来取参数，Scott的立场是通过rvalue引用来取参数。
 
-据我所知，他们后来一致认为最好采用rvalue引用的方法。然而，真正的答案不重要。\cppinline{std::move()}的规则也应该适用于这里：如果用\cppinline{std::move()}传递只移动的对象，可能会丢失值，也可能不会。如果放弃所有权很重要（希望确保文件已关闭、线程已停止或相关的资源已释放），请在调用后使用相应语句直接明示。例如：
+据我所知，他们后来一致认为最好采用rvalue引用的方法。然而，真正的答案不重要。\cppinline{std::move()} 的规则也应该适用于这里：如果用 \cppinline{std::move()} 传递只移动的对象，可能会丢失值，也可能不会。如果放弃所有权很重要（希望确保文件已关闭、线程已停止或相关的资源已释放），请在调用后使用相应语句直接明示。例如：
 
 \begin{cppcode}
 MoveOnly mo;
@@ -116,7 +116,7 @@ foo(std::move(mo)); // might move ownership
 mo.close(); // or mo.reset() or mo.release() or so
 \end{cppcode}
 
-只移动对象通常有这样的函数，但名称不同（例如，在C++标准库中，称为流的\cppinline{close()}，线程的\cppinline{join()}，或unique指针的\cppinline{reset()}）。这些函数通常将对象带入默认构造状态。
+只移动对象通常有这样的函数，但名称不同（例如，在C++标准库中，称为流的 \cppinline{close()}，线程的 \cppinline{close()}，或unique指针的 \cppinline{close()}）。这些函数通常将对象带入默认构造状态。
 
 \subsection{按值返回只移动的对象}
 
@@ -135,7 +135,7 @@ MoveOnly source()
 MoveOnly m{source()}; // takes ownership of the associated value/resource
 \end{cppcode}
 
-有非本地数据时，才可能需要在return语句中使用\cppinline{std::move()}（例如，成员函数中移出成员的值）。
+有非本地数据时，才可能需要在return语句中使用 \cppinline{std::move()}（例如，成员函数中移出成员的值）。
 
 \subsection{只移动对象的状态}
 

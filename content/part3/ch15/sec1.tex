@@ -7,7 +7,7 @@
 	\item 将字符串移动到某个vector中
 	\item 为字符串实现移动构造函数
 	\item 成员初始化字符串
-	\item 循环中读取字符串，并在\cppinline{move()}之后使用它们
+	\item 循环中读取字符串，并在 \cppinline{move()} 之后使用它们
 \end{itemize}
 
 本节中，将更详细地介绍移动语义对字符串的影响。
@@ -102,7 +102,7 @@ s4 capa: 47 ('a string with an extraordinarily long value')
 	\end{outputcode}
 \end{itemize}
 
-注意，这里不能保证\cppinline{s1}变成空的。C++标准库只保证从字符串中移动的字符串处于有效但未指定的状态，这意味着\cppinline{s1}的值仍然可以是“short”，或是其他值。
+注意，这里不能保证 \cppinline{s1} 变成空的。C++标准库只保证从字符串中移动的字符串处于有效但未指定的状态，这意味着 \cppinline{s1} 的值仍然可以是“short”，或是其他值。
 
 移动时分配不同的字符串值可能会缩小容量。示例程序的最后两个步骤基本上执行：
 
@@ -131,4 +131,4 @@ s5 capa: 22 ('')
 	\end{outputcode}
 \end{itemize}
 
-\cppinline{s4}的容量通常会缩小，有时缩小到目标的容量，有时缩小到空字符串的最小容量。然而，两者都不能完全保证。
+\cppinline{s4} 的容量通常会缩小，有时缩小到目标的容量，有时缩小到空字符串的最小容量。然而，两者都不能完全保证。

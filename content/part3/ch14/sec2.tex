@@ -7,7 +7,7 @@
 1 2 3 4 5 4 3 2 1
 \end{outputcode}
 
-调用\cppinline{std::remove()}算法来删除值为2的所有元素，修改后的序列：
+调用 \cppinline{std::remove()} 算法来删除值为2的所有元素，修改后的序列：
 
 \begin{outputcode}
 1 3 4 5 4 3 1 2 1
@@ -20,7 +20,7 @@
 因此，这些算法也可以将元素保留为已移动状态。事实上，以下算法可以创建已移动状态：
 
 \begin{itemize}
-	\item \cppinline{std::remove()}和\cppinline{std::remove_if()}
+	\item \cppinline{std::remove()} 和 \cppinline{std::remove_if()}
 	\item \cppinline{std::unique()}
 \end{itemize}
 
@@ -74,9 +74,9 @@ class Email {
 };
 \end{cppcode}
 
-通过实现移动构造函数和移动赋值操作符，设置了一个成员\cppinline{movedFrom}，并在输出操作符中求值。
+通过实现移动构造函数和移动赋值操作符，设置了一个成员 \cppinline{movedFrom}，并在输出操作符中求值。
 
-现在让我们将该类中的一些元素放入vector中，并使用算法\cppinline{std::remove_if()}删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址：
+现在让我们将该类中的一些元素放入vector中，并使用算法 \cppinline{std::remove_if()} 删除一些元素。本例中，我们删除所有以".de"结尾的电子邮件地址：
 
 \filename{lib/removeif.cpp}
 \begin{cppcode}
@@ -135,10 +135,10 @@ all elements:
 
 \begin{itemize}
 	\item 要求源的输入迭代器类别和目标的输出迭代器类别
-	\item 或者保证每个元素只使用一次（例如，为\cppinline{std::for_each()}算法指定）
+	\item 或者保证每个元素只使用一次（例如，为 \cppinline{std::for_each()} 算法指定）
 \end{itemize}
 
-对于具有可调用对象的算法，允许规范提供详细的功能，元素通过\cppinline{std::move()}传递给可调用对象。在可调用对象内部，可以决定如何处理：
+对于具有可调用对象的算法，允许规范提供详细的功能，元素通过 \cppinline{std::move()} 传递给可调用对象。在可调用对象内部，可以决定如何处理：
 
 \begin{itemize}
 	\item 按值接受参数，总是移动/窃取值或资源
@@ -183,7 +183,7 @@ int main()
 }
 \end{cppcode}
 
-代码中，将所有大小为4的元素移动到helper函数\cppinline{process()}中：
+代码中，将所有大小为4的元素移动到helper函数 \cppinline{process()} 中：
 
 \begin{cppcode}
 // move away only the elements processed:
@@ -196,9 +196,9 @@ std::make_move_iterator(coll.end()),
 });
 \end{cppcode}
 
-为此，将标记的元素（移动迭代器标记为\cppinline{std::move()}）通过通用引用传递给\cppinline{process()}，并将其与\cppinline{std::move()}一起传递给\cppinline{process()}。因为\cppinline{process()}按值接受参数，所以值实际上已经移走。
+为此，将标记的元素（移动迭代器标记为 \cppinline{std::move()}）通过通用引用传递给 \cppinline{process()}，并将其与 \cppinline{process()} 一起传递给 \cppinline{std::move()}）通过通用引用传递给 \cppinline{process()}，并将其与 \cppinline{process()} 按值接受参数，所以值实际上已经移走。
 
-因此，所有大小不为4的元素都从容器\cppinline{coll}中的对象中移出。该程序的输出如下（?表示未知值）:
+因此，所有大小不为4的元素都从容器 \cppinline{coll} 中的对象中移出。该程序的输出如下（?表示未知值）:
 
 \begin{outputcode}
 coll (4 elems): "don't" "vote" "for" "liars"
@@ -214,7 +214,7 @@ coll (4 elems): "?" "vote" "?" "?"
 coll (4 elems): "" "vote" "" ""
 \end{outputcode}
 
-这里使用了辅助函数\cppinline{std::make_move_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型\cppinline{std::move_iterator}，而不需要指定元素类型：
+这里使用了辅助函数 \cppinline{std::make_move_iterator()}，这样在声明迭代器时就不必指定元素类型了。从C++17开始，类模板实参推导(CTAD)允许直接声明类型 \cppinline{std::make_move_iterator()}，而不需要指定元素类型：
 
 \begin{cppcode}
 std::for_each(std::move_iterator{coll.begin()},

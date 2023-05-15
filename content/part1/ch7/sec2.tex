@@ -60,7 +60,7 @@ class Derived : public Base {
 };
 \end{cppcode}
 
-这种情况下，如果int的大小为4，将出现编译时错误，因为基类保证在调用\cppinline{func()}时不抛出，而派生类不再为\cppinline{func()}提供这种保证。当int的大小小于4时，两者都是noexcept，这挺不错。当int的大小至少为8时，两者都不是noexcept，这也没问题。因此，派生类只需要进一步限制异常保证。
+这种情况下，如果int的大小为4，将出现编译时错误，因为基类保证在调用 \cppinline{func()} 时不抛出，而派生类不再为 \cppinline{func()} 提供这种保证。当int的大小小于4时，两者都是noexcept，这挺不错。当int的大小至少为8时，两者都不是noexcept，这也没问题。因此，派生类只需要进一步限制异常保证。
 
 \subsection{noexcept的特殊成员函数}
 
@@ -105,7 +105,7 @@ true
 
 生成的复制构造函数和复制赋值操作符可能会抛出异常，因为复制std::string可能会抛出异常。但生成的默认构造函数、移动构造函数和移动赋值操作符保证不会抛出异常，因为类std::string的默认构造函数、移动构造函数和移动赋值操作符保证不会抛出异常。
 
-请注意，noexcept条件甚至在这些特殊成员函数使用\cppinline{=default}进行声明时也会生成。因此，如果像下面这样声明B类，效果是一样的：
+请注意，noexcept条件甚至在这些特殊成员函数使用 \cppinline{=default} 进行声明时也会生成。因此，如果像下面这样声明B类，效果是一样的：
 
 \begin{cppcode}
 class B

@@ -1,7 +1,7 @@
 \section{使用通用引用的重载}
 已经讨论了将对象绑定到普通引用时的规则。现在，在引入通用引用之后，必须扩展这些规则。
 
-再次假设有一个类X，有一个非\cppinline{const}变量\cppinline{v}，有一个\cppinline{const}变量\cppinline{c}:
+再次假设有一个类X，有一个非 \cppinline{const} 变量 \cppinline{const} 变量 \cppinline{c}:
 
 \begin{cppcode}
 class X {
@@ -12,7 +12,7 @@ X v;
 const X c{ ... };
 \end{cppcode}
 
-如果提供函数\cppinline{f()}的所有重载，根据正式规则，就是下面列出所有重载：
+如果提供函数 \cppinline{f()} 的所有重载，根据正式规则，就是下面列出所有重载：
 
 \begin{cppcode}
 void f(const X&); // read-only access
@@ -30,15 +30,15 @@ void f(T&&); // to use perfect forwarding
 
 同样，这些数字列出了重载解析的优先级（最小的数字具有最高的优先级），以便确定重载时调用了哪个函数。
 
-请注意，通用引用总是次优选择。完美匹配总是优先，但是需要转换类型（例如使其为\cppinline{const}或将rvalue转换为lvalue）是比为精确类型实例化函数模板更糟糕的匹配方式。
+请注意，通用引用总是次优选择。完美匹配总是优先，但是需要转换类型（例如使其为 \cppinline{const} 或将rvalue转换为lvalue）是比为精确类型实例化函数模板更糟糕的匹配方式。
 
 \subsection{用通用引用修正重载解析}
 
 重载解析中，通用引用绑定比类型转换更好，这有一个非常糟糕的副作用：如果有一个接受单个通用引用的构造函数，那么这个匹配就要比以下方式更优
 
 \begin{itemize}
-	\item 如果传递非\cppinline{const}对象，则使用复制构造函数
-	\item 如果传递\cppinline{const}对象，则使用移动构造函数
+	\item 如果传递非 \cppinline{const} 对象，则使用复制构造函数
+	\item 如果传递 \cppinline{const} 对象，则使用移动构造函数
 \end{itemize}
 
 因此，实现只有一个通用引用参数的构造函数时，必须谨慎。

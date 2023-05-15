@@ -1,5 +1,5 @@
 \section{auto\&\&的非转发引用}
-再次注意，通用引用是将引用绑定到任何类型和值类别的任何对象，并且仍然保留其值类别和是否为\cppinline{const}的唯一方法。这也适用于用auto\&\&声明的通用引用。
+再次注意，通用引用是将引用绑定到任何类型和值类别的任何对象，并且仍然保留其值类别和是否为 \cppinline{const} 的唯一方法。这也适用于用auto\&\&声明的通用引用。
 
 \subsection{通用引用和基于范围的for循环}
 
@@ -38,7 +38,7 @@ for ( ; pos != end; ++pos ) {
 循环应该为：
 
 \begin{itemize}
-\item 非\cppinline{const} lvalue:
+\item 非 \cppinline{const} lvalue:
 \begin{cppcode}
 std::vector<int> coll;
 ...
@@ -94,13 +94,13 @@ for ( ; pos != end; ++pos ) {
 }
 \end{cppcode}
 
-所有有效引用都延长了所绑定值的生命周期，这也适用于rvalue引用。但是，没有绑定到\cppinline{createString()}的返回值（这样可以正常工作）;而是绑定到引用，该引用指向由\cppinline{at()}返回的\cppinline{createStrings()}的返回类型，扩展了引用的生命周期。因此，该循环将遍历已经销毁的字符串。
+所有有效引用都延长了所绑定值的生命周期，这也适用于rvalue引用。但是，没有绑定到 \cppinline{createString()} 的返回值（这样可以正常工作）;而是绑定到引用，该引用指向由 \cppinline{createString()} 返回的 \cppinline{createString()} 的返回类型，扩展了引用的生命周期。因此，该循环将遍历已经销毁的字符串。
 
 \subsubsection{使用基于范围的for循环}
 
 即使在调用基于范围的for循环时，通用引用也有意义。
 
-要在迭代时修改元素，必须使用非\cppinline{const}引用。考虑函数模板，将传递值赋给传递集合中的所有元素：
+要在迭代时修改元素，必须使用非 \cppinline{const} 引用。考虑函数模板，将传递值赋给传递集合中的所有元素：
 
 \begin{cppcode}
 template<typename Coll, typename T>
@@ -169,7 +169,7 @@ namespace std {
 auto& elem = *pos;
 \end{cppcode}
 
-尝试将非\cppinline{const} lvalue引用绑定到临时对象(prvalue)，这是不允许的。
+尝试将非 \cppinline{const} lvalue引用绑定到临时对象(prvalue)，这是不允许的。
 
 然而，这个问题有一个解决方案：调用基于范围的for循环时使用通用引用：
 
@@ -190,7 +190,7 @@ std::vector<bool> collB{false, true, false};
 assign(collB, true); // OK (universal reference used to bind to an element)
 \end{cppcode}
 
-因此，找到了使用非转发通用引用的另一个原因：绑定到没有作为引用实现的引用类型。或者说：允许绑定作为代理类型提供的非\cppinline{const}对象来进行操作。
+因此，找到了使用非转发通用引用的另一个原因：绑定到没有作为引用实现的引用类型。或者说：允许绑定作为代理类型提供的非 \cppinline{const} 对象来进行操作。
 
 
 

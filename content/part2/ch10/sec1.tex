@@ -1,15 +1,15 @@
 \section{通用引用作为非转发引用}
-有一些通用引用（也称为转发引用）的应用与转发无关，因为可以绑定所有对象，同时仍然知道值的类别和/或对象是否为\cppinline{const}。
+有一些通用引用（也称为转发引用）的应用与转发无关，因为可以绑定所有对象，同时仍然知道值的类别和/或对象是否为 \cppinline{const}。
 
 本章中，将讨论一些例子。介绍了第二种通用引用auto\&\&之后，将讨论使用通用引用作为非转发引用的实际示例。
 
-\subsection{通用引用和\cppinline{const}}
+\subsection{通用引用和 \cppinline{const}}
 
-根据绑定引用的正式规则，通用引用是将引用绑定到任何值类别的对象，并需要保持其为\cppinline{const}的唯一方法。另一个绑定到所有对象的引用是\cppinline{const}\&，但丢失了传递参数是否为\cppinline{const}的信息。
+根据绑定引用的正式规则，通用引用是将引用绑定到任何值类别的对象，并需要保持其为 \cppinline{const} 的唯一方法。另一个绑定到所有对象的引用是 \cppinline{const} 的信息。
 
 \subsubsection{转发常量}
 
-如果想避免重载，但又希望对\cppinline{const}和非\cppinline{const}参数有不同的行为，并支持所有值类别，就必须使用通用引用。
+如果想避免重载，但又希望对 \cppinline{const} 和非 \cppinline{const} 参数有不同的行为，并支持所有值类别，就必须使用通用引用。
 
 考虑以下代码：
 
@@ -57,9 +57,9 @@ do some non-const stuff with the passed range
 do some const stuff with the passed range
 \end{outputcode}
 
-代码中，用一个形参声明\cppinline{process()}作为对集合（容器、字符串等）的通用引用。与通用引用一样，可以传递所有可能值类别的字符串。
+代码中，用一个形参声明 \cppinline{process()} 作为对集合（容器、字符串等）的通用引用。与通用引用一样，可以传递所有可能值类别的字符串。
 
-\cppinline{process()}内部，可以根据实参是否为\cppinline{const}，有不同的行为。本例中，调用\cppinline{begin()}和\cppinline{end()}来传递传递的集合，将它们作为一个半开范围传递给遍历所有元素的函数：
+\cppinline{process()} 内部，可以根据实参是否为 \cppinline{const}，有不同的行为。本例中，调用 \cppinline{begin()} 和 \cppinline{const}，有不同的行为。本例中，调用 \cppinline{begin()} 来传递传递的集合，将它们作为一个半开范围传递给遍历所有元素的函数：
 
 \begin{cppcode}
 template<typename T>
@@ -69,13 +69,13 @@ void process(T&& coll)
 }
 \end{cppcode}
 
-但这里调用了\cppinline{iterate()}函数的不同实现：一个用于\cppinline{iterator}（能够修改元素），另一个用于\cppinline{const_iterator}（不能修改元素）。通用引用保留了传递的\cppinline{const}对象，所以调用与传递集合匹配的\cppinline{iterate()}。
+但这里调用了 \cppinline{iterate()} 函数的不同实现：一个用于 \cppinline{iterate()} 对象，所以调用与传递集合匹配的 \cppinline{iterate()}。
 
-注意，\cppinline{process()}内部没有使用（完美）转发。只想通用引用\cppinline{const}和非\cppinline{const}对象，甚至可以遍历所有元素后使用\cppinline{coll}。
+注意，\cppinline{process()} 内部没有使用（完美）转发。只想通用引用 \cppinline{const} 和非 \cppinline{const} 对象，甚至可以遍历所有元素后使用 \cppinline{coll}。
 
-您可能会认为，应该知道在迭代元素时是否修改了它们。假设这个泛型函数允许为每个元素调用进行操作，则可以读取或修改元素，因此\cppinline{const}的正确性非常重要。
+您可能会认为，应该知道在迭代元素时是否修改了它们。假设这个泛型函数允许为每个元素调用进行操作，则可以读取或修改元素，因此 \cppinline{const} 的正确性非常重要。
 
-注意，这里使用\cppinline{std::forward<>()}是有问题的：
+注意，这里使用 \cppinline{std::forward<>()} 是有问题的：
 
 \begin{cppcode}
 template<typename T>
@@ -85,9 +85,9 @@ void process(T&& coll)
 }
 \end{cppcode}
 
-在两个不同的位置，声明不再需要同一对象是一切麻烦的起源，因为两个位置都可能将此解释为从对象中窃取值的原因。因此，窃取\cppinline{last}的位置可能没有获得正确的值。对于同一个对象，永远不要使用\cppinline{std::move()}或\cppinline{std::forward<>()}两次（除非该对象在第二次使用之前重新初始化）。
+在两个不同的位置，声明不再需要同一对象是一切麻烦的起源，因为两个位置都可能将此解释为从对象中窃取值的原因。因此，窃取 \cppinline{last} 的位置可能没有获得正确的值。对于同一个对象，永远不要使用 \cppinline{last} 或 \cppinline{last} 两次（除非该对象在第二次使用之前重新初始化）。
 
-这里只使用\cppinline{std::forward<>()}一次也是麻烦，因为不保证函数调用参数的求值顺序：
+这里只使用 \cppinline{std::forward<>()} 一次也是麻烦，因为不保证函数调用参数的求值顺序：
 
 \begin{cppcode}
 template<typename T>
@@ -97,7 +97,7 @@ void process(T&& coll)
 }
 \end{cppcode}
 
-这个特定的例子中，使用\cppinline{std::forward<>()}一次或两次可能有效，因为\cppinline{begin()}和\cppinline{end()}不会从传递的对象中窃取/修改值。但是，除非确切地知道如何使用这些信息，否则就是错误。
+这个特定的例子中，使用 \cppinline{std::forward<>()} 一次或两次可能有效，因为 \cppinline{std::forward<>()} 和 \cppinline{std::forward<>()} 不会从传递的对象中窃取/修改值。但是，除非确切地知道如何使用这些信息，否则就是错误。
 
 \subsection{通用引用的细节}
 
@@ -112,7 +112,7 @@ void foo(T&& arg) {
 }
 \end{cppcode}
 
-当声明\cppinline{arg}时，有一个引用，可以统一地绑定到所有类型和值类别。对于非\cppinline{const}对象\cppinline{v}和\cppinline{const}对象\cppinline{c}，类型T和参数类型推导如下：
+当声明 \cppinline{arg} 时，有一个引用，可以统一地绑定到所有类型和值类别。对于非 \cppinline{arg} 对象 \cppinline{arg} 和 \cppinline{arg} 对象 \cppinline{c}，类型T和参数类型推导如下：
 
 \begin{table}[H]
 	\begin{tabular}{lll}
@@ -128,15 +128,15 @@ void foo(T&& arg) {
 关于传递的参数的信息拆分如下：
 
 \begin{itemize}
-	\item \cppinline{arg}知道值及其类型，包括是否为\cppinline{const}。如果传递了lvalue，则为lvalue引用；如果传递了rvalue，则为rvalue引用。
-	\item \cppinline{T}类型拥有关于传递参数的值类别的一些信息（是传递lvalue还是rvalue）。根据特定模板类型的推导规则，如果传递了一个lvalue，T就是一个lvalue引用；否则，T不是一个引用。
+	\item \cppinline{arg} 知道值及其类型，包括是否为 \cppinline{const}。如果传递了lvalue，则为lvalue引用；如果传递了rvalue，则为rvalue引用。
+	\item \cppinline{T} 类型拥有关于传递参数的值类别的一些信息（是传递lvalue还是rvalue）。根据特定模板类型的推导规则，如果传递了一个lvalue，T就是一个lvalue引用；否则，T不是一个引用。
 \end{itemize}
 
-调用\cppinline{std::forward<t>(arg)}将所有信息再次集合在一起，以恢复常量和值类别，以完美地转发传递的参数及其当前值。但是，如果不需要传递参数的值类别来实现完美转发，则不需要\cppinline{std::forward<>()}。
+调用 \cppinline{std::forward<t>(arg)} 将所有信息再次集合在一起，以恢复常量和值类别，以完美地转发传递的参数及其当前值。但是，如果不需要传递参数的值类别来实现完美转发，则不需要 \cppinline{std::forward<>()}。
 
 \subsubsection{依赖常量的代码}
 
-如果只需要知道传递的参数是否为\cppinline{const}，可以同时使用\cppinline{arg}和\cppinline{t}:
+如果只需要知道传递的参数是否为 \cppinline{const}，可以同时使用 \cppinline{arg} 和 \cppinline{arg}:
 
 \begin{cppcode}
 template<typename T>
@@ -151,9 +151,9 @@ void foo(T&& arg)
 }
 \end{cppcode}
 
-这里，我们使用if constexpr （C++17引入的编译时if）根据传递的实参是否为\cppinline{const}来执行不同的操作。
+这里，我们使用if constexpr （C++17引入的编译时if）根据传递的实参是否为 \cppinline{const} 来执行不同的操作。
 
-注意，在检查T的一致性之前，使用\cppinline{std::remove_reference<>}来删除对T的引用是很重要的。\cppinline{const}类型的引用不是整体的\cppinline{const}:
+注意，在检查T的一致性之前，使用 \cppinline{std::remove_reference<>} 来删除对T的引用是很重要的。\cppinline{const} 类型的引用不是整体的 \cppinline{const}:
 
 \begin{cppcode}
 std::is_const_v<int> // false
@@ -201,9 +201,9 @@ void processString(T&& arg);
 
 %根据这个声明，arg可以有任何类型。这个函数可以调用该模板支持操作对的所有参数。
 
-希望将该函数限制为只接受字符串（\cppinline{const}和非\cppinline{const}都可以，且不丢失信息），但并非轻易就能做到。
+希望将该函数限制为只接受字符串（\cppinline{const} 和非 \cppinline{const} 都可以，且不丢失信息），但并非轻易就能做到。
 
-因为C++20，用关键字\cppinline{require}来约束对特定类型的通用引用成为可能。但是，必须确定是否支持，以及支持哪种类型的类型转换：
+因为C++20，用关键字 \cppinline{require} 来约束对特定类型的通用引用成为可能。但是，必须确定是否支持，以及支持哪种类型的类型转换：
 
 \begin{itemize}
 	\item 当类型必须匹配时（不允许隐式转换）:

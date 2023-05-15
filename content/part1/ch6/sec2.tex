@@ -23,7 +23,7 @@ private:
 };
 \end{cppcode}
 
-当\cppinline{customer}移走时，保证\cppinline{name}和\cppinline{values}都处于有效的状态，以便析构函数（由\cppinline{customer}的析构函数调用）可以正常工作：
+当 \cppinline{customer} 移走时，保证 \cppinline{customer} 和 \cppinline{customer} 都处于有效的状态，以便析构函数（由 \cppinline{customer} 的析构函数调用）可以正常工作：
 
 \begin{cppcode}
 void foo()
@@ -36,7 +36,7 @@ void foo()
 } // destructor of c will clean up name and values (whatever their state is)
 \end{cppcode}
 
-另外，给\cppinline{c}赋一个新值也可以，所以就同时赋了\cppinline{name}和\cppinline{values}。
+另外，给 \cppinline{c} 赋一个新值也可以，所以就同时赋了 \cppinline{c} 和 \cppinline{values}。
 
 \subsection{不可销毁的已移动对象}
 
@@ -70,7 +70,7 @@ class Tasks {
 };
 \end{cppcode}
 
-目前为止，该类还不支持移动语义，因为用户声明了析构函数。因为禁用复制std::thread，所以也不能复制\cppinline{Tasks}对象。但是，可以启动多个任务并等待结束：
+目前为止，该类还不支持移动语义，因为用户声明了析构函数。因为禁用复制std::thread，所以也不能复制 \cppinline{Tasks} 对象。但是，可以启动多个任务并等待结束：
 
 \filename{basics/tasks.cpp}
 \begin{cppcode}
@@ -140,7 +140,7 @@ int main()
 }
 \end{cppcode}
 
-开始时，通过将两个任务传递给\cppinline{Tasks}对象\cppinline{ts}来启动它们。因此，在\cppinline{ts}中线程数组有两个元素，\cppinline{numThreads}为2。但是，容器的移动操作会移动元素，因此在\cppinline{std::move()}之后，\cppinline{ts}不再包含任何运行的线程对象。因此，\cppinline{numThreads}只是复制而已，也就是创建了一个无效的任务。析构函数最终会对前两个任务调用join()，这会抛出一个异常（这将导致析构函数中出现致命错误）。
+开始时，通过将两个任务传递给 \cppinline{Tasks} 对象 \cppinline{Tasks} 来启动它们。因此，在 \cppinline{Tasks} 中线程数组有两个元素，\cppinline{numThreads} 为2。但是，容器的移动操作会移动元素，因此在 \cppinline{Tasks} 对象 \cppinline{Tasks} 来启动它们。因此，在 \cppinline{Tasks} 中线程数组有两个元素，\cppinline{numThreads} 不再包含任何运行的线程对象。因此，\cppinline{Tasks} 对象 \cppinline{Tasks} 来启动它们。因此，在 \cppinline{Tasks} 中线程数组有两个元素，\cppinline{numThreads} 只是复制而已，也就是创建了一个无效的任务。析构函数最终会对前两个任务调用join()，这会抛出一个异常（这将导致析构函数中出现致命错误）。
 
 目前的问题是，需要两个成员一起才能定义一个有效的状态，而默认生成的移动语义会产生不一致的状态，因此会让析构函数失败。但不可能总是避免这个问题，因为对象销毁时，可能需要显式地对象元素的子集做一些操作。这样，默认生成的移动操作可能不起作用，应该禁用或修复它们。
 

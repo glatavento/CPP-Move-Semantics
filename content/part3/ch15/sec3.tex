@@ -138,9 +138,9 @@ p5: answer/
 p6: answer/is 42
 \end{outputcode}
 
-初始化\cppinline{p6}时，将\cppinline{p5}的第一个成员（声明为const char*）转换为std::string，而在使用\cppinline{p5}的第二个成员初始化\cppinline{p6}的第二个成员时使用移动语义。
+初始化 \cppinline{p6} 时，将 \cppinline{p6} 的第一个成员（声明为const char*）转换为std::string，而在使用 \cppinline{p6} 的第二个成员初始化 \cppinline{p6} 的第二个成员时使用移动语义。
 
-最后，注意std::pair<>支持具有引用类型的成员。在这种情况下，当为这些成员使用\cppinline{std::move()}时将应用特殊规则。参见basics/members.cpp获取完整的示例。
+最后，注意std::pair<>支持具有引用类型的成员。在这种情况下，当为这些成员使用 \cppinline{std::move()} 时将应用特殊规则。参见basics/members.cpp获取完整的示例。
 
 \subsubsection{std::make_pair()}
 
@@ -161,7 +161,7 @@ pair<T1,T2> make_pair (const T1& a, const T2& b)
 	return pair<T1,T2>(a,b);
 }
 \end{cppcode}
-然而，当使用成对的字符串字面值或原始数组时，会导致了严重的问题。例如，当"hello"作为第二个实参传递时，对应形参\cppinline{b}的类型成为对const char数组(const char(\&)[6])的引用。因此，char类型[6]推导为T2类型，并用作第二个成员的类型。但是，不能使用数组初始化数组成员，因为不能复制数组。
+然而，当使用成对的字符串字面值或原始数组时，会导致了严重的问题。例如，当"hello"作为第二个实参传递时，对应形参 \cppinline{b} 的类型成为对const char数组(const char(\&)[6])的引用。因此，char类型[6]推导为T2类型，并用作第二个成员的类型。但是，不能使用数组初始化数组成员，因为不能复制数组。
 
 这种情况下，应该使用衰变的类型作为成员类型，这是按值传递参数时获得的类型（const char*表示字符串）。
 
@@ -197,7 +197,7 @@ make_pair (T1&& a, T2&& b)
 \end{cppcode}
 \end{itemize}
 
-真正的实现更加复杂，因为C++11:为了支持\cppinline{std::ref()}和\cppinline{std::cref()}，还使用了\cppinline{std::reference_wrapper<>}。
+真正的实现更加复杂，因为C++11:为了支持 \cppinline{std::ref()} 和 \cppinline{std::cref()}，还使用了 \cppinline{std::cref()}。
 
 C++标准库以类似的方式在许多地方完美地转发参数，通常还会结合使用std::decay<>。
 
@@ -217,7 +217,7 @@ std::string s2 = *os; // OK, copies
 std::string s3 = std::move(*os); // OK, moves
 \end{cppcode}
 
-注意，在最后一次调用之后，\cppinline{os}仍然有一个字符串值，但与通常的已移动对象一样，这个值未定义。因此，只要不对其值做任何假设，就可以使用它。甚至可以在那里赋一个新的字符串值。
+注意，在最后一次调用之后，\cppinline{os} 仍然有一个字符串值，但与通常的已移动对象一样，这个值未定义。因此，只要不对其值做任何假设，就可以使用它。甚至可以在那里赋一个新的字符串值。
 
 还请注意，有些重载确保临时optional可移动。考虑一个返回可选字符串的函数：
 
@@ -252,7 +252,7 @@ namespace std {
 }
 \end{cppcode}
 
-通过使用引用限定符，类可以在对rvalue（临时对象或标记为\cppinline{std::move()}的对象）调用操作时返回移动值。:
+通过使用引用限定符，类可以在对rvalue（临时对象或标记为 \cppinline{std::move()} 的对象）调用操作时返回移动值。:
 
 \begin{cppcode}
 std::vector<std::string> coll;
@@ -261,7 +261,7 @@ std::optional<std::string> optStr;
 coll.push_back(std::move(optStr).value()); // OK, moves from member into coll
 \end{cppcode}
 
-注意，std::optional<>是C++标准库中少数使用\cppinline{const} ravlue引用的类型。原因是std::optional<>是一个包装器类型，它希望确保操作正确，即使\cppinline{const}对象标记为\cppinline{std::move()}，并且所包含的类型为const rvalue引用提供了特殊行为。
+注意，std::optional<>是C++标准库中少数使用 \cppinline{const} ravlue引用的类型。原因是std::optional<>是一个包装器类型，它希望确保操作正确，即使 \cppinline{const} 对象标记为 \cppinline{const}，并且所包含的类型为const rvalue引用提供了特殊行为。
 
 
 

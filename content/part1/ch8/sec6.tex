@@ -17,7 +17,7 @@ void rvFunc(std::string&& str)
 }
 \end{cppcode}
 
-decltype(str)表达式总是表示\cppinline{str}的类型，即std::string\&\&。在表达式中任何需要该类型的地方都可以使用该类型。类型特征（类型函数如std::is_same<>）会帮助我们处理这些类型。
+decltype(str)表达式总是表示 \cppinline{str} 的类型，即std::string\&\&。在表达式中任何需要该类型的地方都可以使用该类型。类型特征（类型函数如std::is_same<>）会帮助我们处理这些类型。
 
 例如，要声明传递的形参类型不是引用的新对象，可以声明：
 
@@ -29,7 +29,7 @@ void rvFunc(std::string&& str)
 }
 \end{cppcode}
 
-\cppinline{tmp}在这个函数中是std::string类型（也可以显式地声明，如果使它成为T类型对象的泛型函数，代码仍可以工作）。
+\cppinline{tmp} 在这个函数中是std::string类型（也可以显式地声明，如果使它成为T类型对象的泛型函数，代码仍可以工作）。
 
 \subsection{使用decltype检查值类型}
 
@@ -85,7 +85,7 @@ void rvFunc(std::string&& str)
 	检查expr是否为rvalue。
 \end{itemize}
 
-请再次注意这里使用的括号，以确保即使只传递名称\cppinline{expr}，也使用decltype的值-类别检查形式。
+请再次注意这里使用的括号，以确保即使只传递名称 \cppinline{expr}，也使用decltype的值-类别检查形式。
 
 C++20之前，必须使用::value来替代后缀_v。
 

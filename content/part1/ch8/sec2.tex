@@ -17,7 +17,7 @@ void(&&fref2)(int) = f; // fref2 is also an lvalue
 auto& ar = std::move(f); // OK: ar is lvalue of type void(&)(int)
 \end{cppcode}
 
-与对象类型相反，可以将非\cppinline{const} lvalue引用绑定到标记为\cppinline{std::move()}的函数指针，因为标记为\cppinline{std::move()}的函数指针仍然是lvalue。
+与对象类型相反，可以将非 \cppinline{const} lvalue引用绑定到标记为 \cppinline{std::move()} 的函数指针，因为标记为 \cppinline{const} lvalue引用绑定到标记为 \cppinline{std::move()} 的函数指针仍然是lvalue。
 
 \subsection{数据成员的值类型}
 
@@ -44,24 +44,24 @@ coll.push_back(foo().first); // moves because first is an xvalue here
 coll.push_back(foo().second); // copies because second is an lvalue here
 \end{cppcode}
 
-需要使用\cppinline{std::move()}来移动第二个成员：
+需要使用 \cppinline{std::move()} 来移动第二个成员：
 
 \begin{cppcode}
 coll.push_back(std::move(foo().second)); // moves
 \end{cppcode}
 
-如果有lvalue（一个有名字的对象），就有两种使用\cppinline{std::move}的方式来移动成员：
+如果有lvalue（一个有名字的对象），就有两种使用 \cppinline{std::move} 的方式来移动成员：
 
 \begin{itemize}
 	\item std::move(obj).member
 	\item std::move(obj.member)
 \end{itemize}
 
-\cppinline{std::move()}的意思是“不再需要这个值”，所以不再需要对象的值，应该标记\cppinline{obj}。如果不再需要成员的值，应该标记\cppinline{member}。然而，实际情况会比较复杂。
+\cppinline{std::move()} 的意思是“不再需要这个值”，所以不再需要对象的值，应该标记 \cppinline{obj}。如果不再需要成员的值，应该标记 \cppinline{obj}。然而，实际情况会比较复杂。
 
-\subsubsection{\cppinline{std::move()}用于普通数据成员}
+\subsubsection{\cppinline{std::move()} 用于普通数据成员}
 
-如果成员既不是静态也不是引用\cppinline{，std::move()}能将成员转换为xvalue，以便能够使用移动语义。
+如果成员既不是静态也不是引用 \cppinline{，std::move()} 能将成员转换为xvalue，以便能够使用移动语义。
 
 考虑声明了以下内容：
 
@@ -70,7 +70,7 @@ std::vector<std::string> coll;
 std::pair<std::string, std::string> sp;
 \end{cppcode}
 
-以下代码先将成员移动，然后再将成员移动到\cppinline{coll}中：
+以下代码先将成员移动，然后再将成员移动到 \cppinline{coll} 中：
 
 \begin{cppcode}
 sp = ... ;
@@ -86,16 +86,16 @@ coll.push_back(std::move(sp).first); // move string first into coll
 coll.push_back(std::move(sp).second); // move string second into coll
 \end{cppcode}
 
-看起来有点奇怪，\cppinline{std::move()}标记对象之后仍然使用obj。在本例中，知道对象的哪个部分可以移动，所以可以使用未移动的部分。因此，当必须实现移动构造函数时，我更喜欢用\cppinline{std::move()}标记成员。
+看起来有点奇怪，\cppinline{std::move()} 标记对象之后仍然使用obj。在本例中，知道对象的哪个部分可以移动，所以可以使用未移动的部分。因此，当必须实现移动构造函数时，我更喜欢用 \cppinline{std::move()} 标记成员。
 
-\subsubsection{\cppinline{std::move()}用于引用或静态成员}
+\subsubsection{\cppinline{std::move()} 用于引用或静态成员}
 
 如果成员是引用或静态的，则使用不同的规则：rvalue的引用或静态成员是lvalue。同样，这条规则反映了，成员的值并不是对象的一部分。“不再需要对象的值”并不意味着“不再需要不属于对象的值（成员的值）”。
 
-因此，如果有引用或静态成员，那么如何使用\cppinline{std::move()}是有区别的：
+因此，如果有引用或静态成员，那么如何使用 \cppinline{std::move()} 是有区别的：
 
 \begin{itemize}
-	\item 对对象使用\cppinline{std::move()}不起作用：
+	\item 对对象使用 \cppinline{std::move()} 不起作用：
 
 	\begin{cppcode}
 struct S {
@@ -107,7 +107,7 @@ S obj;
 coll.push_back(std::move(obj).statString); // copies statString
 coll.push_back(std::move(obj).refString); // copies refString
 	\end{cppcode}
-	\item 对成员使用\cppinline{std::move(})具有的效果：
+	\item 对成员使用 \cppinline{std::move(})具有的效果：
 
 	\begin{cppcode}
 struct S {
@@ -123,14 +123,14 @@ coll.push_back(std::move(obj.refString); // moves refString
 
 \end{itemize}
 
-泛型代码中，可能不知道成员是静态的还是引用的。因此，使用\cppinline{std::move()}来标记对象是不那么危险的，就是看起来奇怪：
+泛型代码中，可能不知道成员是静态的还是引用的。因此，使用 \cppinline{std::move()} 来标记对象是不那么危险的，就是看起来奇怪：
 
 \begin{cppcode}
 coll.push_back(std::move(obj).mem1); // move value, copy reference/static
 coll.push_back(std::move(obj).mem2); // move value, copy reference/static
 \end{cppcode}
 
-稍后将介绍的\cppinline{std::forward<>()}可以用来完美地转发对象的成员。参见basics/members.cpp获取完整的示例。
+稍后将介绍的 \cppinline{std::forward<>()} 可以用来完美地转发对象的成员。参见basics/members.cpp获取完整的示例。
 
 
 

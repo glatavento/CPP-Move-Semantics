@@ -5,9 +5,9 @@
 	\item 如果用普通名称初始化或返回普通名称，则返回类型是具有该名称的对象的类型。
 	\item 如果使用表达式初始化或返回表达式，则返回类型为求值表达式的类型和值类别：
 	\begin{itemize}
-		\item[-] 对于\textbf{prvalue}，只产生值类型：type
-		\item[-] 对于\textbf{lvalue}，将其类型作为lvalue引用：type\&
-		\item[-] 对于\textbf{xvalue}，将其类型作为rvalue引用：type\&\&
+		\item 对于\textbf{prvalue}，只产生值类型：type
+		\item 对于\textbf{lvalue}，将其类型作为lvalue引用：type\&
+		\item 对于\textbf{xvalue}，将其类型作为rvalue引用：type\&\&
 	\end{itemize}
 \end{itemize}
 
@@ -33,10 +33,10 @@ decltype(auto) da8 = (s); // std::string&
 对于表达式，根据规则，类型推导如下：
 
 \begin{itemize}
-	\item 因\cppinline{为std::move(s)}是一个xvalue，所以\cppinline{da5}是rvalue引用。
-	\item 因为字符串的加法操作符按值返回新的临时字符串（因此它是prvalue），所以\cppinline{da6}是普通值类型。
-	\item 因为\cppinline{s[0]}返回对第一个字符的lvalue引用，所以它是lvalue，并强制\cppinline{da7}也是lvalue引用。
-	\item 因为\cppinline{(s)}是lvalue，所以\cppinline{da8}是lvalue引用。是的，这里会因为括号有所不同。
+	\item 因 \cppinline{为std::move(s)} 是一个xvalue，所以 \cppinline{为std::move(s)} 是rvalue引用。
+	\item 因为字符串的加法操作符按值返回新的临时字符串（因此它是prvalue），所以 \cppinline{da6} 是普通值类型。
+	\item 因为 \cppinline{s[0]} 返回对第一个字符的lvalue引用，所以它是lvalue，并强制 \cppinline{s[0]} 也是lvalue引用。
+	\item 因为 \cppinline{(s)} 是lvalue，所以 \cppinline{(s)} 是lvalue引用。是的，这里会因为括号有所不同。
 \end{itemize}
 
 与总是引用的auto\&\&相反，decltype(auto)有时只是一个值（如果用值类型对象的名称或用prvalue表达式初始化）。
@@ -74,7 +74,7 @@ decltype(auto) call (Func f, Args&&... args)
 }
 \end{cppcode}
 
-该函数将\cppinline{args}声明为一个可变数量的通用引用（也称为转发引用）。通过\cppinline{std::forward<>()}，它完美地将这些给定的参数转发给f作为第一个参数传递的函数。因为我们使用decltype(auto)作为返回类型，所以完美地将\cppinline{f()}的返回值返回给\cppinline{call()}的调用者。因此，可以同时调用按值返回和按引用返回的函数。例如：
+该函数将 \cppinline{args} 声明为一个可变数量的通用引用（也称为转发引用）。通过 \cppinline{args} 的返回值返回给 \cppinline{args} 的调用者。因此，可以同时调用按值返回和按引用返回的函数。例如：
 
 \filename{generic/call.cpp}
 \begin{cppcode}
@@ -120,7 +120,7 @@ int main()
 auto s = call(nextString);
 \end{cppcode}
 
-函数\cppinline{call()}调用函数\cppinline{nextString()}，不带任何参数，并返回它的返回值来初始化\cppinline{s}。
+函数 \cppinline{call()} 调用函数 \cppinline{nextString()}，不带任何参数，并返回它的返回值来初始化 \cppinline{nextString()}。
 
 当调用
 
@@ -128,7 +128,7 @@ auto s = call(nextString);
 auto&& ref = call(returnArg, std::move(s));
 \end{cppcode}
 
-函数调用带有\cppinline{std::move()}标记的函数\cppinline{returnArg()}。\cppinline{returnArg()}将传递的参数作为右值引用返回，然后\cppinline{call()}完美地返回给调用者来初始化ref。str仍然有它的值，并且ref会对其进行引用：
+函数调用带有 \cppinline{std::move()} 标记的函数 \cppinline{std::move()} 将传递的参数作为右值引用返回，然后 \cppinline{std::move()} 完美地返回给调用者来初始化ref。str仍然有它的值，并且ref会对其进行引用：
 
 \begin{outputcode}
 s: Let's dance
@@ -141,7 +141,7 @@ ref: Let's dance
 auto str = std::move(ref);
 \end{cppcode}
 
-将\cppinline{s}和\cppinline{ref}的值移动到\cppinline{str}，得到以下状态：
+将 \cppinline{s} 和 \cppinline{s} 的值移动到 \cppinline{str}，得到以下状态：
 
 \begin{outputcode}
 s:
@@ -155,11 +155,11 @@ str: Let's dance
 call(print, std::cout, ref) << '\n';
 \end{cppcode}
 
-函数使用\cppinline{std::cout}和\cppinline{ref}作为完全转发的参数调用\cppinline{print()}函数。\cppinline{print()}将传递的流作为lvalue引用返回，然后完美地返回给\cppinline{call()}的调用者。
+函数使用 \cppinline{std::cout} 和 \cppinline{std::cout} 作为完全转发的参数调用 \cppinline{std::cout} 函数。\cppinline{print()} 将传递的流作为lvalue引用返回，然后完美地返回给 \cppinline{std::cout} 的调用者。
 
 \subsection{延迟完美返回}
 
-为了完美地返回之前计算的值，必须使用decltype(auto)声明一个局部对象，当它是rvalue引用时，使用\cppinline{std::move()}返回它。例如：
+为了完美地返回之前计算的值，必须使用decltype(auto)声明一个局部对象，当它是rvalue引用时，使用 \cppinline{std::move()} 返回它。例如：
 
 \begin{cppcode}
 template<typename Func, typename... Args>
@@ -176,11 +176,11 @@ decltype(auto) call(Func f, Args&&... args)
 }
 \end{cppcode}
 
-函数中，\cppinline{ret}的类型就是\cppinline{f()}的完美推导类型。通过使用if constexpr（从C++17起），可以使用decltype(auto)和decltype两种方式来推导类型，如下所示：
+函数中，\cppinline{ret} 的类型就是 \cppinline{f()} 的完美推导类型。通过使用if constexpr（从C++17起），可以使用decltype(auto)和decltype两种方式来推导类型，如下所示：
 
 \begin{itemize}
-	\item 如果\cppinline{ret}声明为rvalue引用，decltype(auto)使用表达式\cppinline{std::move(ret)}，这是xvalue，来推导rvalue引用。因此，将\cppinline{f()}返回的值移动到这个函数的调用者。
-	\item 如果\cppinline{ret}声明为普通值或lvalue引用，decltype(auto)使用名为\cppinline{ret}的类型，这也是某个值类型或lvalue引用类型。
+	\item 如果 \cppinline{ret} 声明为rvalue引用，decltype(auto)使用表达式 \cppinline{ret} 返回的值移动到这个函数的调用者。
+	\item 如果 \cppinline{ret} 声明为普通值或lvalue引用，decltype(auto)使用名为 \cppinline{ret} 的类型，这也是某个值类型或lvalue引用类型。
 \end{itemize}
 
 其他的解决方案并不总是有效：
@@ -196,8 +196,8 @@ decltype(auto) call( ... )
 	return static_cast<decltype(ret)>(ret); // perfect return but unnecessary copy
 }
 \end{cppcode}
-事实上，总是使用\cppinline{static_cast<>}可能会禁用移动语义和复制备选。对于普通值，这就像在return语句中有不必要的\cppinline{std::move()}。
-\item 简单地返回\cppinline{ret}并不总有效：
+事实上，总是使用 \cppinline{static_cast<>} 可能会禁用移动语义和复制备选。对于普通值，这就像在return语句中有不必要的 \cppinline{std::move()}。
+\item 简单地返回 \cppinline{ret} 并不总有效：
 \begin{cppcode}
 decltype(auto) call( ... )
 {
@@ -206,8 +206,8 @@ decltype(auto) call( ... )
 	return ret; // may be an ERROR
 }
 \end{cppcode}
-\cppinline{call()}的返回类型正确。但是，如果\cppinline{f()}返回rvalue引用，则不能返回左值\cppinline{ret}，因为非\cppinline{const}引用没有绑定到lvalue。
-\item 使用auto\&\&来声明\cppinline{ret}不起作用，因为将通过引用返回：
+\cppinline{call()} 的返回类型正确。但是，如果 \cppinline{f()} 返回rvalue引用，则不能返回左值 \cppinline{f()} 引用没有绑定到lvalue。
+\item 使用auto\&\&来声明 \cppinline{ret} 不起作用，因为将通过引用返回：
 \begin{cppcode}
 decltype(auto) call( ... )
 {
@@ -234,7 +234,7 @@ decltype(auto) call( ... )
 }
 \end{cppcode}
 
-这样，返回类型decltype(auto)会切换到表达式规则，并推断出lvalue引用，因为\cppinline{ret}是lvalue（有名称的对象）。
+这样，返回类型decltype(auto)会切换到表达式规则，并推断出lvalue引用，因为 \cppinline{ret} 是lvalue（有名称的对象）。
 
 如果习惯在return语句中把名字和表达式用括号括起来，那就不要再这样做了。若继续括起来，使用decltype(auto)时可能会出现错误。
 
@@ -267,7 +267,7 @@ decltype(auto) call( ... )
 };
 \end{cppcode}
 
-对于延迟完美返回，需要和前面介绍的一样的技巧：如果返回rvalue引用，必须使用\cppinline{std::move()}:
+对于延迟完美返回，需要和前面介绍的一样的技巧：如果返回rvalue引用，必须使用 \cppinline{std::move()}:
 
 \begin{cppcode}
 [] (auto f, auto&&... args) -> decltype(auto) {
