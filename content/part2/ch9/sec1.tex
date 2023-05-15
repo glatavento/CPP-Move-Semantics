@@ -3,7 +3,7 @@
 
 \subsection{为什么需要完美转发}
 
-要将带有移动语义的对象转发给函数，不仅需要绑定到rvalue引用，还需要再次使用\textit{std::move()}将其移动语义转发给另一个函数。
+要将带有移动语义的对象转发给函数，不仅需要绑定到rvalue引用，还需要再次使用\cppinline{std::move()}将其移动语义转发给另一个函数。
 
 例如，引用重载函数的规则:
 
@@ -31,7 +31,7 @@ foo(std::move(v)); // calls foo(X&&)
 foo(std::move(c)); // calls foo(const X&)
 \end{cppcode}
 
-假设通过协助函数\textit{callFoo()}间接地调用相同的参数\textit{foo()}。函数还需要三个重载:
+假设通过协助函数\cppinline{callFoo()}间接地调用相同的参数\cppinline{foo()}。函数还需要三个重载:
 
 \begin{cppcode}
 void callFoo(const X& arg) { // arg binds to all const objects
@@ -45,16 +45,16 @@ void callFoo(X&& arg) { // arg binds to rvalues
 }
 \end{cppcode}
 
-这里，\textit{arg}都用作lvalue(具有名称的对象)。第一个版本将其作为\textit{const}对象转发，但其他两种情况实现了转发非\textit{const}参数的两种不同方式:
+这里，\cppinline{arg}都用作lvalue(具有名称的对象)。第一个版本将其作为\cppinline{const}对象转发，但其他两种情况实现了转发非\cppinline{const}参数的两种不同方式:
 
 \begin{itemize}
 	\item 声明为lvalue引用(绑定到没有移动语义的对象)的参数按原样传递。
-	\item 声明为rvalue引用(绑定到具有移动语义的对象)的参数通过\textit{std::move()}传递。
+	\item 声明为rvalue引用(绑定到具有移动语义的对象)的参数通过\cppinline{std::move()}传递。
 \end{itemize}
 
 这可以完美地转发移动语义:对于任何通过移动语义传递的参数，保持移动语义。当遇到没有移动语义的参数时，不添加移动语义。
 
-看下\textit{callFoo()}如何调用不同的\textit{foo()}:
+看下\cppinline{callFoo()}如何调用不同的\cppinline{foo()}:
 
 \begin{cppcode}
 X v;
@@ -66,15 +66,15 @@ callFoo(std::move(v)); // calls foo(X&&)
 callFoo(std::move(c)); // calls foo(const X&)
 \end{cppcode}
 
-请记住，传递给rlvalue引用的rvalue在使用时成为lvalue，需要\textit{std::move()}再次将其作为rvalue传递。但是，有些地方不能使用\textit{std::move()}。对于其他重载，当传递rvalue时，使用\textit{std::move()}将调用\textit{foo()}的重载实现来获取rvalue引用。
+请记住，传递给rlvalue引用的rvalue在使用时成为lvalue，需要\cppinline{std::move()}再次将其作为rvalue传递。但是，有些地方不能使用\cppinline{std::move()}。对于其他重载，当传递rvalue时，使用\cppinline{std::move()}将调用\cppinline{foo()}的重载实现来获取rvalue引用。
 
 为了在泛型代码中实现完美转发，需要为每个参数进行重载。为了支持所有组合，对2个泛型参数有9个重载，对3个泛型参数有27个重载。
 
 因此，C++11引入了一种方式来完美地转发给定的参数，不需要任何重载，仍然保持类型和具体值。
 
-\subsubsection{完美转发\textit{const} rvalue引用}
+\subsubsection{完美转发\cppinline{const} rvalue引用}
 
-虽然\textit{const} rvalue引用没有语义上的含义，但想要用\textit{std::move()}标记的常量对象的类型和值，还需要第四个重载:
+虽然\cppinline{const} rvalue引用没有语义上的含义，但想要用\cppinline{std::move()}标记的常量对象的类型和值，还需要第四个重载:
 
 \begin{cppcode}
 void callFoo(const X&& arg) { // arg binds to const rvalues
@@ -82,7 +82,7 @@ void callFoo(const X&& arg) { // arg binds to const rvalues
 }
 \end{cppcode}
 
-否则，将调用\textit{foo(const X\&)}。这通常没问题的，但在某些情况下，可能希望保留传递\textit{const} rvalue引用的信息(例如，出于某种原因，提供了\textit{foo(const X\&\&)}的重载)。
+否则，将调用\cppinline{foo(const X\&)}。这通常没问题的，但在某些情况下，可能希望保留传递\cppinline{const} rvalue引用的信息(例如，出于某种原因，提供了\cppinline{foo(const X\&\&)}的重载)。
 
 有了完美转发的特性，泛型代码就没必要为了对两个或三个参数，进行16和64次重载了。
 

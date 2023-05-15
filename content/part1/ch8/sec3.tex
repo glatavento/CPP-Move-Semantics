@@ -1,5 +1,5 @@
 \section{绑定引用时值类别的影响}
-将引用绑定到对象时，值类型起着重要的作用。例如，在C++98/C++03中，定义了可以将rvalue(没有名称的临时对象或标有\textit{std::move()}的对象)赋值或传递给\textit{const} lvalue引用，但不能传递给非\textit{const} lvalue引用:
+将引用绑定到对象时，值类型起着重要的作用。例如，在C++98/C++03中，定义了可以将rvalue(没有名称的临时对象或标有\cppinline{std::move()}的对象)赋值或传递给\cppinline{const} lvalue引用，但不能传递给非\cppinline{const} lvalue引用:
 
 \begin{cppcode}
 std::string createString(); // forward declaration
@@ -9,9 +9,9 @@ const std::string& r1{createString()}; // OK
 std::string& r2{createString()}; // ERROR
 \end{cppcode}
 
-这里编译器打印的错误消息是“不能将非\textit{const} lvalue引用绑定到rvalue”。
+这里编译器打印的错误消息是“不能将非\cppinline{const} lvalue引用绑定到rvalue”。
 
-调用\textit{foo2()}时也会得到这个错误消息:
+调用\cppinline{foo2()}时也会得到这个错误消息:
 
 \begin{cppcode}
 void foo1(const std::string&); // forward declaration
@@ -25,7 +25,7 @@ foo2(std::string{"hello"}); // ERROR
 
 让我们看看传递对象给引用时的规则。
 
-假设类\textit{X}中有一个非\textit{const}变量\textit{v}和一个\textit{const}变量\textit{c}:
+假设类\cppinline{X}中有一个非\cppinline{const}变量\cppinline{v}和一个\cppinline{const}变量\cppinline{c}:
 
 \begin{cppcode}
 class X {
@@ -36,7 +36,7 @@ X v{ ... };
 const X c{ ... };
 \end{cppcode}
 
-如果提供了函数\textit{f()}的所有引用重载，则绑定引用的规则表会列出了传递参数的绑定引用的规则:
+如果提供了函数\cppinline{f()}的所有引用重载，则绑定引用的规则表会列出了传递参数的绑定引用的规则:
 
 \begin{cppcode}
 void f(const X&); // read-only access
@@ -49,7 +49,7 @@ void f(const X&&); // no clear semantic meaning
 
 注意，只能将rvalue(prvalues，如没有名称的临时对象)或xvalues(用std::move()标记的对象)传递给rvalue引用。
 
-通常可以忽略表的最后一列，因为\textit{const} rvalue引用在语义上没有多大意义，这意味着我们有以下规则:
+通常可以忽略表的最后一列，因为\cppinline{const} rvalue引用在语义上没有多大意义，这意味着我们有以下规则:
 
 \hspace*{\fill}  %插入空行
 表8.1 绑定引用规则表
@@ -59,9 +59,9 @@ void f(const X&&); // no clear semantic meaning
 \end{center}
 
 \begin{itemize}
-	\item 非\textit{const} lvalue引用只接受非\textit{const} lvalue。
-	\item rvalue引用只接受非\textit{const} rvalue。
-	\item \textit{const} lvalue引用可以接受所有内容，并在没有提供其他重载的情况下充当备选机制。
+	\item 非\cppinline{const} lvalue引用只接受非\cppinline{const} lvalue。
+	\item rvalue引用只接受非\cppinline{const} rvalue。
+	\item \cppinline{const} lvalue引用可以接受所有内容，并在没有提供其他重载的情况下充当备选机制。
 \end{itemize}
 
 下面是从表中提取的移动语义的备选机制规则:
@@ -70,7 +70,7 @@ void f(const X&&); // no clear semantic meaning
 	\includegraphics[width=0.6\textwidth]{part1/ch8/images/4}
 \end{center}
 
-如果向函数传递rvalue(临时对象或标记为\textit{std::move()}的对象)，而移动语义没有特定的实现(通过接受rvalue引用声明)，则使用通常的复制语义，\textit{const}\&接受实参。
+如果向函数传递rvalue(临时对象或标记为\cppinline{std::move()}的对象)，而移动语义没有特定的实现(通过接受rvalue引用声明)，则使用通常的复制语义，\cppinline{const}\&接受实参。
 
 请注意，在介绍通用引用/转发引用时会扩展此表。
 

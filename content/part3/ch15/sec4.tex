@@ -107,7 +107,7 @@ int main()
 } // last-owned object of p is deleted
 \end{cppcode}
 
-和已移动类型一样，要将所有权传递给接收器函数，只能通过\textit{std::move()}传递:
+和已移动类型一样，要将所有权传递给接收器函数，只能通过\cppinline{std::move()}传递:
 
 \begin{cppcode}
 std::vector<std::unique_ptr<std::string>> coll;

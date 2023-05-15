@@ -1,12 +1,12 @@
 \section{处理已破坏的不变量}
 已移动对象可能会破坏“有效但未定义的状态”，这比破坏可销毁要容易得多。我们可以将对象带入一种状态，从而破坏它们的不变量。
 
-幸运的是，只有在显式请求移动语义时才会出现这个问题，因为临时对象无论如何都会立即销毁。然而，明确的移动请求不仅仅是用\textit{std::move()}标记对象。可以用以下方法创建已移动对象:
+幸运的是，只有在显式请求移动语义时才会出现这个问题，因为临时对象无论如何都会立即销毁。然而，明确的移动请求不仅仅是用\cppinline{std::move()}标记对象。可以用以下方法创建已移动对象:
 
 \begin{itemize}
-	\item 对对象使用\textit{std::move()}
-	\item 移动算法(\textit{std::move()}和\textit{std::move_backward()})
-	\item 通过将“未删除”的元素移到前面来“删除”元素的算法(例如:\textit{std::remove()}，\textit{std::remove_if()}，\textit{std::unique()})
+	\item 对对象使用\cppinline{std::move()}
+	\item 移动算法(\cppinline{std::move()}和\cppinline{std::move_backward()})
+	\item 通过将“未删除”的元素移到前面来“删除”元素的算法(例如:\cppinline{std::remove()}，\cppinline{std::remove_if()}，\cppinline{std::unique()})
 	\item 移动迭代器
 \end{itemize}
 
@@ -16,7 +16,7 @@
 	\item 修复移动操作，使已移动对象进入不变量稳定的状态。
 	\item 禁用移动语义。
 	\item 将定义已移动状态的不变量放宽为有效。特别是，成员函数和使用对象的函数必须以不同的方式实现，以处理新的可能状态。
-	\item 提供一个成员函数来检查“不变量”的状态，这样类型的用户在用\textit{std::move()}标记后就不会使用这种类型的对象了(或者只使用一组有限制的操作)。
+	\item 提供一个成员函数来检查“不变量”的状态，这样类型的用户在用\cppinline{std::move()}标记后就不会使用这种类型的对象了(或者只使用一组有限制的操作)。
 \end{itemize}
 
 来看一些不变量破坏的例子，并讨论如何修复它们。
@@ -44,7 +44,7 @@ public:
 
 这个类中，生成的特殊移动成员函数创建了一个无效状态，它破坏了类的不变条件，即花色和数值(比如“红心皇后”)。
 
-只要我们不使用\textit{std::move()}或其他移动操作，这就不是问题(该类型的析构函数可以从字符串中移动)，但是当调用\textit{std::move()}时，就会遇到麻烦。给新值赋值没什么问题:
+只要我们不使用\cppinline{std::move()}或其他移动操作，这就不是问题(该类型的析构函数可以从字符串中移动)，但是当调用\cppinline{std::move()}时，就会遇到麻烦。给新值赋值没什么问题:
 
 \begin{cppcode}
 std::vector<Card> deck;
@@ -73,7 +73,7 @@ void print(const Card& c) {
 }
 \end{cppcode}
 
-此代码可能在运行时失败，因为对于从移动的卡片，不再保证该值包含“-of-”。在这种情况下，\textit{find()}用std::string::npos初始化pos，当pos+4用作substr()的第一个参数时，会抛出类型为std::out_of_range的异常。
+此代码可能在运行时失败，因为对于从移动的卡片，不再保证该值包含“-of-”。在这种情况下，\cppinline{find()}用std::string::npos初始化pos，当pos+4用作substr()的第一个参数时，会抛出类型为std::out_of_range的异常。
 
 完整示例请参见basics/card.hpp和basics/card.cpp。
 
@@ -163,7 +163,7 @@ class IntString
 };
 \end{cppcode}
 
-这个类中，确保成员\textit{val}和成员\textit{sval}只是相同值的两种不同表示。这意味着在该类的实现和使用中，通常期望其状态的int和string表示一致。如果在这里使用移动操作，将保留值\textit{val}，但是\textit{sval}不再保证可用\textit{val}的字符串表示。
+这个类中，确保成员\cppinline{val}和成员\cppinline{sval}只是相同值的两种不同表示。这意味着在该类的实现和使用中，通常期望其状态的int和string表示一致。如果在这里使用移动操作，将保留值\cppinline{val}，但是\cppinline{sval}不再保证可用\cppinline{val}的字符串表示。
 
 请看下面程序代码:
 
@@ -213,7 +213,7 @@ is1 and is2 after move:
 
 \begin{itemize}
 	\item 对相同值有不同的表示，但是其中一些已移走。
-	\item 像\textit{counter}这样的成员对应于成员中的元素数量。
+	\item 像\cppinline{counter}这样的成员对应于成员中的元素数量。
 	\item 用布尔值声明字符串的值已验证，但是该验证值已移走。
 	\item 所有元素的平均值的缓存值仍然存在，但是值(在容器成员中)已移走。
 \end{itemize}
@@ -249,7 +249,7 @@ SharedInt si2{si1}; // si1 and si2 share the value 42
 std::cout << si1.asString() << '\n'; // OK
 \end{cppcode}
 
-由于只是复制，\textit{SharedInt}成员\textit{sp}总是为它的值分配内存(从std::make_shared<>()或从已分配内存的现有共享指针复制)。
+由于只是复制，\cppinline{SharedInt}成员\cppinline{sp}总是为它的值分配内存(从std::make_shared<>()或从已分配内存的现有共享指针复制)。
 
 然而，当使用移动语义时，如果使用已移动对象，就会遇到未定义行为:
 
@@ -260,9 +260,9 @@ SharedInt si3{std::move(si1)}; // OOPS: moves away the allocated memory in si1
 std::cout << si1.asString() << '\n'; // undefined behavior (probably core dump)
 \end{cppcode}
 
-问题是在类内部，没有正确处理值可能已移走，因为默认生成的移动操作调用了共享指针的移动操作，该操作将所有权从原始对象移走。这意味着从\textit{SharedInt}的状态移动到成员\textit{sp}不再拥有对象的情况，其成员函数\textit{asString()}无法正确处理。
+问题是在类内部，没有正确处理值可能已移走，因为默认生成的移动操作调用了共享指针的移动操作，该操作将所有权从原始对象移走。这意味着从\cppinline{SharedInt}的状态移动到成员\cppinline{sp}不再拥有对象的情况，其成员函数\cppinline{asString()}无法正确处理。
 
-您可能会争辩说，为具有已移动状态的对象调用\textit{asString()}没有意义，因为使用的是未定义的值，但至少标准库保证已移动类型的对象处于有效状态，因此可以调用没有限制的所有操作。如果在用户定义的类型中不提供相同的保证，该类型的用户可能会感到非常惊讶。
+您可能会争辩说，为具有已移动状态的对象调用\cppinline{asString()}没有意义，因为使用的是未定义的值，但至少标准库保证已移动类型的对象处于有效状态，因此可以调用没有限制的所有操作。如果在用户定义的类型中不提供相同的保证，该类型的用户可能会感到非常惊讶。
 
 从鲁棒编程(避免意外、陷阱和未定义行为)的角度来看，我建议您遵循C++标准库的规则。也就是说:移动操作不应该将对象带入破坏不变量的状态。
 
@@ -272,7 +272,7 @@ std::cout << si1.asString() << '\n'; // undefined behavior (probably core dump)
 	\item 通过正确处理所有可能的已移动状态来修复类的所有错误操作
 	\item 禁用移动语义，在复制对象时没有优化
 	\item 显式实现移动操作
-	\item 调整并记录类或特定操作的不变量(约束/先决条件)(例如“为已移动对象调用\textit{asString()}是未定义的行为”)。
+	\item 调整并记录类或特定操作的不变量(约束/先决条件)(例如“为已移动对象调用\cppinline{asString()}是未定义的行为”)。
 \end{itemize}
 
 分配内存非常昂贵，最好的解决办法是正确处理所有权移走的情况。这将使用默认构造函数创建对象应具有的状态，这样就可以引入这个状态了。
@@ -323,7 +323,7 @@ class SharedInt {
 
 \subsubsection{禁用移动语义}
 
-第二个选项是禁用移动语义，只使用复制语义。我们前面描述了如何禁用移动语义，必须声明另一个特殊成员函数。通常，对复制特殊成员函数使用\textit{=default}:
+第二个选项是禁用移动语义，只使用复制语义。我们前面描述了如何禁用移动语义，必须声明另一个特殊成员函数。通常，对复制特殊成员函数使用\cppinline{=default}:
 
 \begin{cppcode}
 class SharedInt {
@@ -338,7 +338,7 @@ class SharedInt {
 
 第三种选择是实现移动操作，这样就不会破坏类的不变量。
 
-为此，必须确定已移动对象的状态应该是什么。为了支持\textit{asString()}可以调用operator*(解引用)而不检查值是否存在，所以必须提供一个值。例如，可以有一个静态的已移动的值，把它赋给那些已移动的对象:
+为此，必须确定已移动对象的状态应该是什么。为了支持\cppinline{asString()}可以调用operator*(解引用)而不检查值是否存在，所以必须提供一个值。例如，可以有一个静态的已移动的值，把它赋给那些已移动的对象:
 
 \filename{basics/sharedint.hpp}
 \begin{cppcode}
@@ -374,7 +374,7 @@ class SharedInt {
 };
 \end{cppcode}
 
-注意，我们必须对复制特殊成员的函数使用\textit{=default}，因为当我们有声明特殊成员移动函数时，这些函数的默认版本会删除。
+注意，我们必须对复制特殊成员的函数使用\cppinline{=default}，因为当我们有声明特殊成员移动函数时，这些函数的默认版本会删除。
 
 
 

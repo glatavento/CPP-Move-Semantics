@@ -51,14 +51,14 @@ std::ofstream openToWrite(const std::string& name)
 }
 \end{cppcode}
 
-使用返回值初始化\textit{outFile}，并将其传递给\textit{storeData()}:
+使用返回值初始化\cppinline{outFile}，并将其传递给\cppinline{storeData()}:
 
 \begin{cppcode}
 auto outFile{openToWrite("iostream.tmp")}; // open file
 storeData(std::move(outFile)); // store data
 \end{cppcode}
 
-因为\textit{storeData()}按值接受参数，所以它有打开文件的所有权。因此，在\textit{storeData()}的末尾，文件关闭:
+因为\cppinline{storeData()}按值接受参数，所以它有打开文件的所有权。因此，在\cppinline{storeData()}的末尾，文件关闭:
 
 \begin{cppcode}
 void storeData(std::ofstream fstrm) // takes ownership of file (but this might change)
@@ -67,7 +67,7 @@ void storeData(std::ofstream fstrm) // takes ownership of file (but this might c
 } // closes the file
 \end{cppcode}
 
-但是，\textit{storeData()}也可以通过引用来获取参数，这意味着它不一定需要获取所有权。这种情况下，需要再次检查传递参数\textit{outFile}的状态:
+但是，\cppinline{storeData()}也可以通过引用来获取参数，这意味着它不一定需要获取所有权。这种情况下，需要再次检查传递参数\cppinline{outFile}的状态:
 
 \begin{cppcode}
 // better ensure that the file is closed:
@@ -76,7 +76,7 @@ if (!outFile.is_closed()) {
 }
 \end{cppcode}
 
-调用\textit{outFile.close()}通常就足够了，但如果文件流已经关闭，则会设置该文件流的\textit{failbit}。
+调用\cppinline{outFile.close()}通常就足够了，但如果文件流已经关闭，则会设置该文件流的\cppinline{failbit}。
 
 \subsection{使用临时IOStreams}
 

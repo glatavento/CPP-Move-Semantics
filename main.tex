@@ -1,6 +1,6 @@
 \documentclass[11pt, onecolumn, oneside]{ctexbook}
 
-\usepackage{xpatch,mathtools}
+\usepackage{xpatch,mathtools,ninecolors}
 \usepackage[a5paper, scale=0.8]{geometry}
 \usepackage{subfiles,graphicx,enumitem,titlesec,pdfpages}
 % \usepackage{tabularx,booktabs,multirow}
@@ -94,10 +94,10 @@
 { \end   { tcolorbox } }
 
 % Def \filename
-\NewDocumentCommand { \filename } { m }
-{ \noindent \textit { #1 } \vspace*{ -1ex } \nopagebreak[4] }
 \NewDocumentCommand { \fninline } { m }
-{ \textit { #1 } }
+{ \footnotesize \textcolor { red3 } { \textit { \texttt { #1 } } } }
+\NewDocumentCommand { \filename } { m }
+{ \noindent \fninline { #1 } \vspace*{ -0.5ex } \nopagebreak[4] }
 
 % Def \zhemph
 \NewDocumentCommand { \zhemph } { m }

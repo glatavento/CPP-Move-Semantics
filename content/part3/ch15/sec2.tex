@@ -4,7 +4,7 @@
 书中已经有了几个关于容器如何支持移动语义的例子。最初的例子中，了解了支持的移动语义:
 
 \begin{itemize}
-	\item 通过重载\textit{push_back()}，C++标准支持移动语义来插入新元素。
+	\item 通过重载\cppinline{push_back()}，C++标准支持移动语义来插入新元素。
 	\item 通过提供移动构造函数和移动赋值操作符，降低复制临时对象(比如返回值)的成本。
 \end{itemize}
 
@@ -20,7 +20,7 @@
 
 \subsection{基本移动支持容器整体}
 
-所有容器都定义了一个移动构造函数和移动赋值操作符，以支持未命名临时对象和\textit{std::move()}标记对象的移动语义。
+所有容器都定义了一个移动构造函数和移动赋值操作符，以支持未命名临时对象和\cppinline{std::move()}标记对象的移动语义。
 
 例如，std::list<>的声明如下:
 
@@ -64,7 +64,7 @@ ContainerType cont2{std::move(cont1)}; // move the container
 
 C++标准规定了常量复杂度，移动的持续时间不取决于元素的数量。
 
-有了这种保证，实现者没有其他选择，只能从源对象\textit{cont1}整体窃取元素的内存到目标对象\textit{cont2}，使源对象\textit{cont1}处于初始/空状态。
+有了这种保证，实现者没有其他选择，只能从源对象\cppinline{cont1}整体窃取元素的内存到目标对象\cppinline{cont2}，使源对象\cppinline{cont1}处于初始/空状态。
 
 可能会认为移动构造函数也可以在源对象中创建新值，但这没有多大意义，因为这只会使操作变慢。
 
@@ -97,11 +97,11 @@ ContainerType cont1{ ... }, cont2{ ... };
 cont2 = std::move(cont1); // move assign the container
 \end{cppcode}
 
-C++标准保证此操作会覆盖或销毁目标对象\textit{cont2}的每个元素。这保证了目标容器\textit{dest2}的元素在条目时拥有的所有资源都会进行释放。因此，只有两种方法来实现移动赋值:
+C++标准保证此操作会覆盖或销毁目标对象\cppinline{cont2}的每个元素。这保证了目标容器\cppinline{dest2}的元素在条目时拥有的所有资源都会进行释放。因此，只有两种方法来实现移动赋值:
 
 \begin{itemize}
 	\item 销毁旧的元素，并将源的全部内容移动到目标(即，将指向内存的指针从源移动到目标)。
-	\item 一个元素一个元素地从源\textit{cont1}移动到目标\textit{cont2}，并销毁目标中未覆盖的所有剩余元素。
+	\item 一个元素一个元素地从源\cppinline{cont1}移动到目标\cppinline{cont2}，并销毁目标中未覆盖的所有剩余元素。
 \end{itemize}
 
 这两种方法的复制度都线性的，在这个定义中，不允许仅交换源和目标的内容。
@@ -136,7 +136,7 @@ noexcept对赋值操作符的保证，排除了将移动赋值实现为逐个元
 
 \subsubsection{Insert函数}
 
-例如，vector通过\textit{push_back()}的两种不同实现来支持移动语义:
+例如，vector通过\cppinline{push_back()}的两种不同实现来支持移动语义:
 
 \begin{cppcode}
 template<typename T, typename Allocator = allocator<T>>
@@ -153,7 +153,7 @@ public:
 };
 \end{cppcode}
 
-rvalue的\textit{push_back()}函数用\textit{std::move()}传递传递的元素，这样就调用了元素类型的移动构造函数，而不是复制构造函数。
+rvalue的\cppinline{push_back()}函数用\cppinline{std::move()}传递传递的元素，这样就调用了元素类型的移动构造函数，而不是复制构造函数。
 
 同样，所有容器都有相应的重载。例如:
 
@@ -171,11 +171,11 @@ class map {
 
 \subsubsection{Emplace函数}
 
-从C++11开始，容器也提供了Emplace函数(比如为向量提供了\textit{emplace_back()})。可以传递多个参数来直接在容器中初始化新元素，而不是传递单个元素类型参数(或可转换为元素类型)。这样就可以保存副本或移动。
+从C++11开始，容器也提供了Emplace函数(比如为向量提供了\cppinline{emplace_back()})。可以传递多个参数来直接在容器中初始化新元素，而不是传递单个元素类型参数(或可转换为元素类型)。这样就可以保存副本或移动。
 
 注意，即使这样，容器也可以通过为构造函数的初始参数支持移动语义，并从移动语义中获益。
 
-像\textit{emplace_back()}这样的函数可以使用完美转发来避免创建所传递参数的副本。例如，对于std::vector<>，emplace_back()成员函数的定义如下:
+像\cppinline{emplace_back()}这样的函数可以使用完美转发来避免创建所传递参数的副本。例如，对于std::vector<>，emplace_back()成员函数的定义如下:
 
 \begin{cppcode}
 template<typename T, typename Allocator = allocator<T>>

@@ -35,7 +35,7 @@ class Person {
 };
 \end{cppcode}
 
-现在创建并初始化一个\textit{Person}的vector，并插入一个\textit{Person}对象:
+现在创建并初始化一个\cppinline{Person}的vector，并插入一个\cppinline{Person}对象:
 
 \filename{basics/person.cpp}
 \begin{cppcode}
@@ -75,7 +75,7 @@ COPY Ludwig van Beethoven
 接下来会发生什么:用push_back()插入第四个元素，结果如下:
 
 \begin{itemize}
-	\item vector在内部需要更多内存，所以会分配新的内存(比如，6个元素)，移动第4个字符串(创建一个临时的\textit{Person}并使用\textit{push_back()}方法将其移动到vector中)，但也会将现有的元素复制到新内存中:
+	\item vector在内部需要更多内存，所以会分配新的内存(比如，6个元素)，移动第4个字符串(创建一个临时的\cppinline{Person}并使用\cppinline{push_back()}方法将其移动到vector中)，但也会将现有的元素复制到新内存中:
 \begin{center}
 		\includegraphics[width=0.8\textwidth]{part1/ch7/images/2}
 	\end{center}
@@ -89,7 +89,7 @@ COPY Ludwig van Beethoven
 
 \subsubsection{强异常安全保证}
 
-vector的重新分配不使用移动语义的原因是，\textit{push_back()}提供了强异常处理保证:在vector的重新分配过程中抛出异常时，C++标准库保证将vector回退到之前的状态。也就是说，\textit{push_back()}提供了一种保证:要么成功，要么无效。
+vector的重新分配不使用移动语义的原因是，\cppinline{push_back()}提供了强异常处理保证:在vector的重新分配过程中抛出异常时，C++标准库保证将vector回退到之前的状态。也就是说，\cppinline{push_back()}提供了一种保证:要么成功，要么无效。
 
 C++标准能够在C++98和C++03中提供这种保证，因为C++只能复制元素。如果在复制元素时出现错误，源对象仍然可用。处理异常的内部代码只需销毁创建的副本，并释放新的内存，使vector返回到之前的状态(C++标准库要求析构函数不抛出异常;否则，无法回退)。
 
@@ -103,7 +103,7 @@ C++标准能够在C++98和C++03中提供这种保证，因为C++只能复制元�
 
 \subsection{使用noexcept的移动构造函数}
 
-因此，保证\textit{Person}类的移动构造函数永远不会抛出异常时，示例程序就改变了行为:
+因此，保证\cppinline{Person}类的移动构造函数永远不会抛出异常时，示例程序就改变了行为:
 
 \filename{basics/personmove.hpp}
 \begin{cppcode}
@@ -134,7 +134,7 @@ class Person {
 };
 \end{cppcode}
 
-如果像以前一样使用\textit{Persons}:
+如果像以前一样使用\cppinline{Persons}:
 
 \filename{basics/personmove.cpp}
 \begin{cppcode}
@@ -185,7 +185,7 @@ MOVE Ludwig van Beethoven
 
 \subsubsection{具有条件的noexcept声明}
 
-然而，是否可以将移动构造函数标记为noexcept?移动\textit{name}(一个std::string)，并向标准输出流写入一些内容。如果在那里抛出异常，就违反了无异常的保证。这种情况下，程序在运行时将调用std::terminate()，后者通常调用std::abort()来发出程序异常结束的信号(通常会出现core dump)。
+然而，是否可以将移动构造函数标记为noexcept?移动\cppinline{name}(一个std::string)，并向标准输出流写入一些内容。如果在那里抛出异常，就违反了无异常的保证。这种情况下，程序在运行时将调用std::terminate()，后者通常调用std::abort()来发出程序异常结束的信号(通常会出现core dump)。
 
 因此，如果string成员和输出操作不抛出异常，则应该保证不抛出异常。引入noexcept关键字是用来指定不抛出的条件保证。(\fninline{basics/personcond.hpp}是一个完整的例子):
 
@@ -258,7 +258,7 @@ class Person {
 
 这意味着只有在复制时才输出。当使用生成的移动构造函数时，只是没有执行复制。
 
-现在用常用的程序在末尾打印一些\textit{Persons}:
+现在用常用的程序在末尾打印一些\cppinline{Persons}:
 
 \filename{basics/persondefault.cpp}
 \begin{cppcode}

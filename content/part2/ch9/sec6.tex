@@ -10,9 +10,9 @@
 		\item[-] lvalue引用(类型\&)：绑定到lvalue
 		\item[-] rvalue引用(类型\&\&)：绑定到rvalue
 	\end{itemize}
-	\item 要完美地传递传递的实参，请使用\textit{std::forward<>()}，并将该形参声明为函数模板形参的通用引用。
-	\item \textit{std::forward<>()}是一个条件\textit{std::move()}。如果参数是rvalue，则扩展为\textit{std::move()}。
-	\item 使用\textit{std::forward<>()}标记对象可能是有意义的，即使在调用成员函数时也是如此。
+	\item 要完美地传递传递的实参，请使用\cppinline{std::forward<>()}，并将该形参声明为函数模板形参的通用引用。
+	\item \cppinline{std::forward<>()}是一个条件\cppinline{std::move()}。如果参数是rvalue，则扩展为\cppinline{std::move()}。
+	\item 使用\cppinline{std::forward<>()}标记对象可能是有意义的，即使在调用成员函数时也是如此。
 	\item 通用引用是所有重载解析的次优选择。
 	\item 不要为通用引用实现泛型构造函数(或为特定类型进行约束)。
 \end{itemize}

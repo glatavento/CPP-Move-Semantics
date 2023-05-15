@@ -10,7 +10,7 @@
 
 \subsection{传值返回}
 
-按值返回的getter看起来是这样的(记住:不要使用\textit{const}按值返回，否则禁用移动语义):
+按值返回的getter看起来是这样的(记住:不要使用\cppinline{const}按值返回，否则禁用移动语义):
 
 \begin{cppcode}
 class Person
@@ -25,7 +25,7 @@ public:
 };
 \end{cppcode}
 
-这段代码是安全的，但每次获取\textit{name}时，都可能复制\textit{name}。
+这段代码是安全的，但每次获取\cppinline{name}时，都可能复制\cppinline{name}。
 
 例如，只是检查是否有没名字的人会有很大的开销:
 
@@ -83,11 +83,11 @@ for (auto pos = range.begin(), end = range.end(); pos != end; ++pos) {
 }
 \end{cppcode}
 
-开始迭代之前，初始化\textit{reference1}，必须使用传递的范围两次(一次调用begin()，一次调用end())，并希望避免创建副本(这可能代价很高，甚至不可能)。一般来说，引用会延长所引用内容的生命周期。在本例中，\textit{range}并不引用由\textit{returnPersonByValue()}返回的\textit{Person}，而\textit{range}指向\textit{getName()}的返回值，是对返回的\textit{Person}的引用。因此，\textit{range}扩展了引用的生命周期。因此，在第一个语句的末尾，返回的临时对象将销毁，并且在遍历名称的字符时使用对已销毁对象名称的引用。
+开始迭代之前，初始化\cppinline{reference1}，必须使用传递的范围两次(一次调用begin()，一次调用end())，并希望避免创建副本(这可能代价很高，甚至不可能)。一般来说，引用会延长所引用内容的生命周期。在本例中，\cppinline{range}并不引用由\cppinline{returnPersonByValue()}返回的\cppinline{Person}，而\cppinline{range}指向\cppinline{getName()}的返回值，是对返回的\cppinline{Person}的引用。因此，\cppinline{range}扩展了引用的生命周期。因此，在第一个语句的末尾，返回的临时对象将销毁，并且在遍历名称的字符时使用对已销毁对象名称的引用。
 
 最好的情况下，在这里会得到一个核心转储(段错误)，这样就可以看到出现了明显的错误。最坏的情况是，发布了软件，并出现了未定义行为。
 
-如果getter按值返回名称，这样的代码就不会有问题。这样，\textit{range}将扩展名称副本的生存期，以便我们使用该名称直到\textit{range}的生存期结束。
+如果getter按值返回名称，这样的代码就不会有问题。这样，\cppinline{range}将扩展名称副本的生存期，以便我们使用该名称直到\cppinline{range}的生存期结束。
 
 \subsection{使用移动语义解决困境}
 
@@ -111,11 +111,11 @@ public:
 };
 \end{cppcode}
 
-用不同的引用限定符重载getter，方法与重载带有\&\&和\textit{const}\&形参的函数相同:
+用不同的引用限定符重载getter，方法与重载带有\&\&和\cppinline{const}\&形参的函数相同:
 
 \begin{itemize}
-	\item 带有\&\&限定符的是有不再需要值的对象时使用(一个即将死亡的对象或用\textit{std::move()}标记的对象)。
-	\item 带有\textit{const}\&限定符的版本用于所有其他情况。总是合适的，但只是无法获得\&\&版本时的备选方案。因此，如果有一个不会销毁的对象或没标记为\textit{std::move()}，就会使用此函数。
+	\item 带有\&\&限定符的是有不再需要值的对象时使用(一个即将死亡的对象或用\cppinline{std::move()}标记的对象)。
+	\item 带有\cppinline{const}\&限定符的版本用于所有其他情况。总是合适的，但只是无法获得\&\&版本时的备选方案。因此，如果有一个不会销毁的对象或没标记为\cppinline{std::move()}，就会使用此函数。
 \end{itemize}
 
 现在的性能和安全性都很好:
@@ -140,13 +140,13 @@ for (char c : returnPersonByValue().getName()) { // 4) safe and fast (uses move(
 }
 \end{cppcode}
 
-语句1)和3)使用\textit{const}\&的版本，因为有一个对象没有使用\textit{std::move()}标记。语句2)和4)使用\&\&的版本，因为我们为一个临时对象调用\textit{getName()}。因为临时对象即将销毁，getter可以将成员名移出作为返回值，这意味着不必为返回值分配新的内存，可以窃取了成员的值。
+语句1)和3)使用\cppinline{const}\&的版本，因为有一个对象没有使用\cppinline{std::move()}标记。语句2)和4)使用\&\&的版本，因为我们为一个临时对象调用\cppinline{getName()}。因为临时对象即将销毁，getter可以将成员名移出作为返回值，这意味着不必为返回值分配新的内存，可以窃取了成员的值。
 
-您可能还记得，return语句不应该使用\textit{std::move()}来返回已经销毁的局部对象。本例中，不返回任何局部对象，而是返回一个成员，其生存期不以成员函数的结束为结束。
+您可能还记得，return语句不应该使用\cppinline{std::move()}来返回已经销毁的局部对象。本例中，不返回任何局部对象，而是返回一个成员，其生存期不以成员函数的结束为结束。
 
-\subsubsection{\textit{std::move()}用于成员函数中}
+\subsubsection{\cppinline{std::move()}用于成员函数中}
 
-请注意，这个特性意味着即使在调用成员函数时也可以使用\textit{std::move()}。例如:
+请注意，这个特性意味着即使在调用成员函数时也可以使用\cppinline{std::move()}。例如:
 
 \begin{cppcode}
 void foo()
@@ -159,7 +159,7 @@ void foo()
 }
 \end{cppcode}
 
-使用\textit{getName()}时，使用\textit{std::move()}将提高程序的性能。不返回对\textit{const} std::string的引用(只能复制)，返回值是作为非\textit{const}字符串返回的\textit{p}的移动名，因此\textit{push_back()}可以使用移动语义将其移动到\textit{coll}中。通常，在这之后，\textit{p}处于有效但未定义的状态。
+使用\cppinline{getName()}时，使用\cppinline{std::move()}将提高程序的性能。不返回对\cppinline{const} std::string的引用(只能复制)，返回值是作为非\cppinline{const}字符串返回的\cppinline{p}的移动名，因此\cppinline{push_back()}可以使用移动语义将其移动到\cppinline{coll}中。通常，在这之后，\cppinline{p}处于有效但未定义的状态。
 
 关于在C++标准库中使用此特性的示例，请参见std::optional<>。
 

@@ -29,7 +29,7 @@ f(std::move(v)); // T is deduced as MyType, so arg is declared as MyType&&
 这意味着在这种情况下:
 
 \begin{itemize}
-	\item 如果形参的类型是用\&\&声明的，而不是用\textit{const}或\textit{volatile}声明的
+	\item 如果形参的类型是用\&\&声明的，而不是用\cppinline{const}或\cppinline{volatile}声明的
 	\item 并且传递的是一个lavlue
 	\item 那么将T推导为T\&。
 \end{itemize}
@@ -47,7 +47,7 @@ f(v); // T is deduced as MyType&
 f(c); // T is deduced as const MyType&
 \end{cppcode}
 
-但已经将\textit{arg}声明为T\&\&。如果T是T\&，那这里C++的引用折叠规则(参见[dcl.]一节。参考]的C++标准)给出了一个答案:
+但已经将\cppinline{arg}声明为T\&\&。如果T是T\&，那这里C++的引用折叠规则(参见[dcl.]一节。参考]的C++标准)给出了一个答案:
 
 \begin{itemize}
 	\item Type\& \& 成为 Type\&
@@ -66,22 +66,22 @@ f(v); // T is deduced as MyType& and arg has this type
 f(c); // T is deduced as const MyType& and arg has this type
 \end{cppcode}
 
-现在考虑一下\textit{std::forward<>()}是如何定义的，与\textit{std::move()}相反:
+现在考虑一下\cppinline{std::forward<>()}是如何定义的，与\cppinline{std::move()}相反:
 
 \begin{itemize}
-	\item \textit{std::move()}总是将类型转换为rvalue引用:
+	\item \cppinline{std::move()}总是将类型转换为rvalue引用:
 	\begin{cppcode}
 static_cast<remove_reference_t<T>&&>(t)
 	\end{cppcode}
 	它删除引用并转换为相应的rvalue引用类型(删除任何\&并添加\&\&)。
-	\item \textit{std::forward<>()}只向传递的类型参数添加rvalue引用:
+	\item \cppinline{std::forward<>()}只向传递的类型参数添加rvalue引用:
 	\begin{cppcode}
 static_cast<T&&>(t)
 	\end{cppcode}
 	引用折叠规则再次适用:
 	\begin{itemize}
-		\item[-] 如果类型T是lvalue引用，T\&\&仍然是lvalue引用(\&\&无效)。因此，将\textit{arg}强制转换为lvalue引用，这意味着\textit{arg}没有移动语义。
-		\item[-] 但是，如果T是rvalue引用(或者根本不是引用)，T\&\&(仍然)是rvalue引用。因此，将\textit{arg}强制转换为rvalue引用，这样就将值类别更改为xvalue，这是\textit{std::move()}的效果。
+		\item[-] 如果类型T是lvalue引用，T\&\&仍然是lvalue引用(\&\&无效)。因此，将\cppinline{arg}强制转换为lvalue引用，这意味着\cppinline{arg}没有移动语义。
+		\item[-] 但是，如果T是rvalue引用(或者根本不是引用)，T\&\&(仍然)是rvalue引用。因此，将\cppinline{arg}强制转换为rvalue引用，这样就将值类别更改为xvalue，这是\cppinline{std::move()}的效果。
 	\end{itemize}
 \end{itemize}
 
@@ -103,7 +103,7 @@ f(MyType{}); // T is MyType, arg is MyType&&, forward() is equivalent to move()
 f(std::move(v)); // T is MyType, arg is MyType&&, forward() is equivalent to move()
 \end{cppcode}
 
-注意，字符串字面值是rvalue，因此我们可以推导出的T和\textit{arg}:
+注意，字符串字面值是rvalue，因此我们可以推导出的T和\cppinline{arg}:
 
 \begin{cppcode}
 f("hi"); // lvalue passed, so T and arg have type const char(&)[3]
@@ -188,8 +188,8 @@ insert(coll, s); // ERROR: no matching function call
 问题是两个参数都可以推导出参数T，但推导出的类型不一样:
 
 \begin{itemize}
-	\item 使用参数\textit{coll}, T将其推导为std::string。
-	\item 但是，根据通用引用的特殊规则，参数\textit{elem}会强制将T推导为std::string\&。
+	\item 使用参数\cppinline{coll}, T将其推导为std::string。
+	\item 但是，根据通用引用的特殊规则，参数\cppinline{elem}会强制将T推导为std::string\&。
 \end{itemize}
 
 因此，编译器会产生歧义错误。

@@ -17,13 +17,13 @@ class Drv : public Base {
 };
 \end{cppcode}
 
-这里，\textit{Drv}类的移动构造函数保证，如果基类\textit{Base}和成员类型\textit{MemType}提供了这个保证，则不会抛出异常。
+这里，\cppinline{Drv}类的移动构造函数保证，如果基类\cppinline{Base}和成员类型\cppinline{MemType}提供了这个保证，则不会抛出异常。
 
 移动赋值操作符可能使用相同的模式。但请注意，多态类型中应该删除移动赋值操作符，所以通常不需要在派生类中实现它们。
 
 \subsection{检查抽象基类中的移动构造函数}
 
-请注意，类型特征std::is_nothrow_move_constructible<>并不会总如预期。对于抽象基类，总是产生\textit{false}，因为还会检查是否可以用移动构造函数创建该类型的对象，而这对于抽象类型是不可能的。
+请注意，类型特征std::is_nothrow_move_constructible<>并不会总如预期。对于抽象基类，总是产生\cppinline{false}，因为还会检查是否可以用移动构造函数创建该类型的对象，而这对于抽象类型是不可能的。
 
 因此，“如果抽象基类保证不抛出异常，则继承类也应该保证不抛出异常”的声明不能使用标准类型特征来表述。通常，只需(必须)知道基类的移动构造函数是否可能抛出。
 
